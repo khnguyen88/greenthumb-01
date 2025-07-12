@@ -6,8 +6,6 @@ Automated Gardening Microcontroller Project
 
 Useful resouces for others who want to try their hands at creating their own arduino projects
 
----
-
 <!-- MICROCONTROLLERS SECTION -->
 
 ## Microcontrollers
@@ -84,8 +82,6 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Raspberry Pi Forum - Take picture every day and upload/send it somewhere](https://forums.raspberrypi.com/viewtopic.php?t=369687)
 -   [Flask, API, GET/POST, JSON](https://forums.raspberrypi.com/viewtopic.php?t=337112)
 
----
-
 <!-- BACKEND SECTION -->
 
 ## Backend
@@ -94,13 +90,9 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 -   [How to connect MySQL Database with Flask Tutorial](https://www.youtube.com/watch?v=14HTiBQEQ9M)
 
----
-
 <!-- FRONTEND SECTION -->
 
 ## Frontend
-
----
 
 <!-- NETWORKING SECTION -->
 
