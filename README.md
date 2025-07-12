@@ -6,6 +6,8 @@ Automated Gardening Microcontroller Project
 
 Useful resouces for others who want to try their hands at creating their own arduino projects
 
+---
+
 <!-- MICROCONTROLLERS SECTION -->
 
 ## Microcontrollers
@@ -46,6 +48,7 @@ Useful resouces for others who want to try their hands at creating their own ard
 -   [Adafruit IO MQTT API](https://io.adafruit.com/api/docs/mqtt.html#adafruit-io-mqtt-api)
 -   [Adafruit IO API Cookbook](https://io.adafruit.com/api/docs/cookbook.html#adafruit-io-api-cookbook)
 -   [GitHub - Adafruit MQTT Library](https://github.com/adafruit/Adafruit_MQTT_Library/tree/master)
+-   [Adafruit Tutorial - MQTT, Adafruit IO & You!](https://cdn-learn.adafruit.com/downloads/pdf/mqtt-adafruit-io-and-you.pdf)
 
 ### WiFi SSL
 
@@ -81,6 +84,8 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Raspberry Pi Forum - Take picture every day and upload/send it somewhere](https://forums.raspberrypi.com/viewtopic.php?t=369687)
 -   [Flask, API, GET/POST, JSON](https://forums.raspberrypi.com/viewtopic.php?t=337112)
 
+---
+
 <!-- BACKEND SECTION -->
 
 ## Backend
@@ -89,9 +94,13 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 -   [How to connect MySQL Database with Flask Tutorial](https://www.youtube.com/watch?v=14HTiBQEQ9M)
 
+---
+
 <!-- FRONTEND SECTION -->
 
 ## Frontend
+
+---
 
 <!-- NETWORKING SECTION -->
 
