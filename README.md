@@ -16,6 +16,10 @@ Useful resouces for others who want to try their hands at creating their own ard
 -   [Arduino - How to Split a Program Into Different Files](https://www.youtube.com/watch?v=BdstuZP6l5E)
 -   [Why do header files even exist?](https://www.youtube.com/watch?v=tOQZlD-0Scc)
 -   [C++ Header Files](https://www.youtube.com/watch?v=9RJTQmK0YPI)
+-   [Understanding header files and .cpp file](https://cplusplus.com/forum/beginner/135636/)
+-   [Simplest way to initialize multiple related const properties in a constructor?](https://stackoverflow.com/questions/15535711/simplest-way-to-initialize-multiple-related-const-properties-in-a-constructor)
+-   [C++ Encapsulation](https://www.w3schools.com/cpp/cpp_encapsulation.asp)
+-   [Chronos Cheat Sheet; Alternative to Millis(), a built-in arduino library function](https://gist.github.com/mortie/bf21c9d2d53b83f3be1b45b76845f090)
 
 ### Tutorials and Sample Codes
 
@@ -60,6 +64,10 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Arduino Forum - WebServer Library vs ESPAsyncWebServer Library Comparison](https://forum.arduino.cc/t/webserver-vs-espasyncwebserver/928293)
 -   [Arduino Forum - Setting up Arduino Webserver for remote access](https://www.youtube.com/watch?v=1p6C-PNl0L0)
 -   [Converting char[] to float or double in C++](https://stackoverflow.com/questions/50300851/converting-char-to-float-or-double-c)
+-   [Passing a function as a parameter in C++](https://www.geeksforgeeks.org/cpp/passing-a-function-as-a-parameter-in-cpp/)
+-   [Function Pointer in C++](https://www.geeksforgeeks.org/cpp/function-pointer-in-cpp/)
+-   [Run C++ and C in Visual Studio Code](https://code.visualstudio.com/docs/languages/cpp)
+-   [C++ Abstract Class / Interface](https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm)
 
 ### Misc
 

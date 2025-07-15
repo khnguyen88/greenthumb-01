@@ -1,1 +1,5 @@
 private/
+dummy.cpp
+dummy.exe
+.vscode
+*_secrets*
