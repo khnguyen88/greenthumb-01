@@ -4,7 +4,7 @@ Automated Gardening Microcontroller Project
 
 # Resource References
 
-Useful resouces for others who want to try their hands at creating their own arduino projects
+Helpful resources for others who want to try their hands at creating their Arduino projects
 
 <!-- MICROCONTROLLERS SECTION -->
 
