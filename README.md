@@ -68,6 +68,8 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Function Pointer in C++](https://www.geeksforgeeks.org/cpp/function-pointer-in-cpp/)
 -   [Run C++ and C in Visual Studio Code](https://code.visualstudio.com/docs/languages/cpp)
 -   [C++ Abstract Class / Interface](https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm)
+-   [How do you add a timed delay to a C++ program?](https://stackoverflow.com/questions/158585/how-do-you-add-a-timed-delay-to-a-c-program)
+-   [C++ chrono system time in milliseconds, time operations](https://stackoverflow.com/questions/9089842/c-chrono-system-time-in-milliseconds-time-operations)
 
 ### Misc
 
