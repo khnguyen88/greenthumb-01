@@ -1,6 +1,6 @@
 # mc-greenthumb-01
 
-Automated Gardening Microcontroller Project
+Automated Gardening Microcontroller Project: IoT Assisted Gardening System
 
 # Resource References
 
