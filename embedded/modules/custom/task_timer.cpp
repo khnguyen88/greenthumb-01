@@ -1,4 +1,5 @@
 #include "task_timer.h"
+#include "chrono_ext.cpp"
 #include <chrono>
 
 
@@ -9,44 +10,86 @@
 TaskTimer::TaskTimer() :
     currentTimeMillis(0), 
     maxPeriodTimeMillis(1000), //default at 1 sec
-    startTimeChrono(std::chrono::steady_clock::now()),
-    currentTimeChrono(std::chrono::steady_clock::now())
+    startChronoTime(getChronoTimeAtNow()),
+    currentChronoTime(getChronoTimeAtNow()),
+    isItTaskTime(false)
 {
-    startTimeMillis = startTimeChrono.time_since_epoch().count();
-    currentTimeMillis = currentTimeChrono.time_since_epoch().count();
+    startChronoDurationSinceEpoch = getChronoDurationSinceEpoch(startChronoTime);
+    startChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(startChronoDurationSinceEpoch);
+    startTimeMillis = startChronoDurationSinceEpochInMillis;
+
+    currentChronoDurationSinceEpoch = getChronoDurationSinceEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(currentChronoDurationSinceEpoch);
+    currentTimeMillis = currentChronoDurationSinceEpochInMillis;
 }
 
 // Public Delegating Constructor
 TaskTimer::TaskTimer(unsigned long maxPerMillis):
-    startTimeChrono(std::chrono::steady_clock::now()),
-    currentTimeChrono(std::chrono::steady_clock::now())
+    startChronoTime(getChronoTimeAtNow()),
+    currentChronoTime(getChronoTimeAtNow()),
+    isItTaskTime(false)
 {
     maxPeriodTimeMillis = maxPerMillis;
-    startTimeMillis = startTimeChrono.time_since_epoch().count();
-    currentTimeMillis = currentTimeChrono.time_since_epoch().count();
+
+    startChronoDurationSinceEpoch = getChronoDurationSinceEpoch(startChronoTime);
+    startChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(startChronoDurationSinceEpoch);
+    startTimeMillis = startTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(startChronoDurationSinceEpochInMillis);
+
+    currentChronoDurationSinceEpoch = getChronoDurationSinceEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(currentChronoDurationSinceEpoch);
+    currentTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(currentChronoDurationSinceEpochInMillis);
 }
 
 void TaskTimer::setMaxPeriod(unsigned long maxPerMillis) {
     maxPeriodTimeMillis = maxPerMillis;
 }
 
-bool TaskTimer::checkisItTaskTime(){
-    bool condition = (currentTimeMillis - startTimeMillis >= maxPeriodTimeMillis);
+void TaskTimer::setCurrentDuration(){
+    currentDurationMillis = currentTimeMillis - startTimeMillis;
+}
 
-    refreshTimer(condition);
+
+bool TaskTimer::checkIsItTaskTime(){
+    refreshTimer(isItTaskTime);
+
+    bool condition = (currentDurationMillis >= maxPeriodTimeMillis);
+
+    isItTaskTime = condition;
 
     return condition;
 }
 
 void TaskTimer::setCurrentTime(){
-    currentTimeChrono = std::chrono::steady_clock::now();
-    currentTimeMillis = currentTimeChrono.time_since_epoch().count();
+    currentChronoTime = getChronoTimeAtNow();;
+    currentChronoDurationSinceEpoch = getChronoDurationSinceEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(currentChronoDurationSinceEpoch);
+    currentTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(currentChronoDurationSinceEpochInMillis);
 }
 
 void TaskTimer::refreshTimer(bool isPassedDuration){
     if(isPassedDuration){
-        startTimeMillis = currentTimeMillis;
-    }
+        startChronoTime = currentChronoTime;
+        startChronoDurationSinceEpoch = currentChronoDurationSinceEpoch;
+        startChronoDurationSinceEpochInMillis = currentChronoDurationSinceEpochInMillis;
+        startTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(startChronoDurationSinceEpochInMillis);
 
+    }
     setCurrentTime();
+    setCurrentDuration();
 }
+
+unsigned long TaskTimer::getStartTimeMillis(){
+    return startTimeMillis;
+};
+
+unsigned long TaskTimer::getMaxPeriodTimeMillis(){
+    return maxPeriodTimeMillis;
+};
+
+unsigned long TaskTimer::getCurrentTimeMillis(){
+    return currentTimeMillis;
+};
+
+unsigned long TaskTimer::getCurrentDuration(){
+    return currentDurationMillis;
+};
