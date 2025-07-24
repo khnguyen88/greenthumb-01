@@ -12,9 +12,11 @@ class TaskTimer {
         unsigned long currentTimeMillis;
         unsigned long startTimeMillis;
         unsigned long maxPeriodTimeMillis;
+
         std::chrono::time_point<std::chrono::steady_clock> startChronoTime;
         std::chrono::steady_clock::duration startChronoDurationSinceEpoch;
         long long startChronoDurationSinceEpochInMillis;
+
         std::chrono::time_point<std::chrono::steady_clock> currentChronoTime;
         std::chrono::steady_clock::duration currentChronoDurationSinceEpoch;
         long long currentChronoDurationSinceEpochInMillis;
@@ -35,6 +37,7 @@ class TaskTimer {
         TaskTimer(unsigned long maxPerMillis);
         
         // Methods
+        void syncStartTime(unsigned long otherStartTimeMillis);
         void setMaxPeriod(unsigned long maxPerMillis);
         bool checkIsItTaskTime();
 

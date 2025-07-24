@@ -2,7 +2,6 @@
 #include "chrono_ext.cpp"
 #include <chrono>
 
-
 //IMPLEMENTATION OF TIMER CLASS
 
 // Constructor
@@ -14,14 +13,15 @@ TaskTimer::TaskTimer() :
     currentChronoTime(getChronoTimeAtNow()),
     isItTaskTime(false)
 {
-    startChronoDurationSinceEpoch = getChronoDurationSinceEpoch(startChronoTime);
-    startChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(startChronoDurationSinceEpoch);
+    startChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(startChronoTime);
+    startChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(startChronoDurationSinceEpoch);
     startTimeMillis = startChronoDurationSinceEpochInMillis;
 
-    currentChronoDurationSinceEpoch = getChronoDurationSinceEpoch(currentChronoTime);
-    currentChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(currentChronoDurationSinceEpoch);
+    currentChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(currentChronoDurationSinceEpoch);
     currentTimeMillis = currentChronoDurationSinceEpochInMillis;
 }
+
 
 // Public Delegating Constructor
 TaskTimer::TaskTimer(unsigned long maxPerMillis):
@@ -31,13 +31,13 @@ TaskTimer::TaskTimer(unsigned long maxPerMillis):
 {
     maxPeriodTimeMillis = maxPerMillis;
 
-    startChronoDurationSinceEpoch = getChronoDurationSinceEpoch(startChronoTime);
-    startChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(startChronoDurationSinceEpoch);
-    startTimeMillis = startTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(startChronoDurationSinceEpochInMillis);
+    startChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(startChronoTime);
+    startChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(startChronoDurationSinceEpoch);
+    startTimeMillis = startTimeMillis = castChronoDurationMillisLongLongToUnsignedLong(startChronoDurationSinceEpochInMillis);
 
-    currentChronoDurationSinceEpoch = getChronoDurationSinceEpoch(currentChronoTime);
-    currentChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(currentChronoDurationSinceEpoch);
-    currentTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(currentChronoDurationSinceEpochInMillis);
+    currentChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(currentChronoDurationSinceEpoch);
+    currentTimeMillis = castChronoDurationMillisLongLongToUnsignedLong(currentChronoDurationSinceEpochInMillis);
 }
 
 void TaskTimer::setMaxPeriod(unsigned long maxPerMillis) {
@@ -61,9 +61,9 @@ bool TaskTimer::checkIsItTaskTime(){
 
 void TaskTimer::setCurrentTime(){
     currentChronoTime = getChronoTimeAtNow();;
-    currentChronoDurationSinceEpoch = getChronoDurationSinceEpoch(currentChronoTime);
-    currentChronoDurationSinceEpochInMillis = getChronoDurationSinceEpochInMillisLongLong(currentChronoDurationSinceEpoch);
-    currentTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(currentChronoDurationSinceEpochInMillis);
+    currentChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(currentChronoDurationSinceEpoch);
+    currentTimeMillis = castChronoDurationMillisLongLongToUnsignedLong(currentChronoDurationSinceEpochInMillis);
 }
 
 void TaskTimer::refreshTimer(bool isPassedDuration){
@@ -71,7 +71,7 @@ void TaskTimer::refreshTimer(bool isPassedDuration){
         startChronoTime = currentChronoTime;
         startChronoDurationSinceEpoch = currentChronoDurationSinceEpoch;
         startChronoDurationSinceEpochInMillis = currentChronoDurationSinceEpochInMillis;
-        startTimeMillis = getChronoDurationSinceEpochInMillisUnsignedLong(startChronoDurationSinceEpochInMillis);
+        startTimeMillis = castChronoDurationMillisLongLongToUnsignedLong(startChronoDurationSinceEpochInMillis);
 
     }
     setCurrentTime();

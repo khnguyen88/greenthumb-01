@@ -18,8 +18,13 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [C++ Header Files](https://www.youtube.com/watch?v=9RJTQmK0YPI)
 -   [Understanding header files and .cpp file](https://cplusplus.com/forum/beginner/135636/)
 -   [Simplest way to initialize multiple related const properties in a constructor?](https://stackoverflow.com/questions/15535711/simplest-way-to-initialize-multiple-related-const-properties-in-a-constructor)
+-   [How to print in C++](https://www.udacity.com/blog/2021/05/how-to-print-in-cpp.html)
+-   [C++ Inheritance](https://www.w3schools.com/cpp/cpp_inheritance.asp)
+    [C++ Inheritance](https://www.geeksforgeeks.org/cpp/inheritance-in-c/)
 -   [C++ Encapsulation](https://www.w3schools.com/cpp/cpp_encapsulation.asp)
+-   [C++ Polymorphism](https://www.w3schools.com/cpp/cpp_polymorphism.asp)
 -   [Chronos Cheat Sheet; Alternative to Millis(), a built-in arduino library function](https://gist.github.com/mortie/bf21c9d2d53b83f3be1b45b76845f090)
+-   [Chronos Library Details](https://en.cppreference.com/w/cpp/header/chrono.html)
 
 ### Tutorials and Sample Codes
 
