@@ -3,48 +3,41 @@
 
 #include <chrono>
 
-//DECLARATION OF TIMER CLASS
-
+//DECLARATION OF ABSTRACT TASK TIMER CLASS
+template <typename T>
 class TaskTimer {
-    private:
+    protected:
         // Properties
         unsigned long currentDurationMillis;
         unsigned long currentTimeMillis;
         unsigned long startTimeMillis;
         unsigned long maxPeriodTimeMillis;
 
-        std::chrono::time_point<std::chrono::steady_clock> startChronoTime;
-        std::chrono::steady_clock::duration startChronoDurationSinceEpoch;
-        long long startChronoDurationSinceEpochInMillis;
+        // Default Destructor
+        virtual ~TaskTimer() = default;
 
-        std::chrono::time_point<std::chrono::steady_clock> currentChronoTime;
-        std::chrono::steady_clock::duration currentChronoDurationSinceEpoch;
-        long long currentChronoDurationSinceEpochInMillis;
-
-        // Default Constructor
-        TaskTimer();
-
+    private:
         // Methods
-        void setCurrentTime();
-        void setCurrentDuration();
-        void refreshTimer(bool isPassedDuration);
+        virtual void setCurrentTime() = 0;
+        virtual void setCurrentDuration() = 0;
+        virtual void refreshTimer(bool isPassedDuration) = 0;
 
     public:
         // Properties
         bool isItTaskTime;
 
-        // Public Delegating Constructor
-        TaskTimer(unsigned long maxPerMillis);
-        
-        // Methods
-        void syncStartTime(unsigned long otherStartTimeMillis);
-        void setMaxPeriod(unsigned long maxPerMillis);
-        bool checkIsItTaskTime();
+        // Default Constructor
+        TaskTimer() = default;
 
-        unsigned long getStartTimeMillis();
-        unsigned long getMaxPeriodTimeMillis();
-        unsigned long getCurrentTimeMillis();
-        unsigned long getCurrentDuration();
+        // Methods
+        virtual void syncStartTime(T otherStartTimeMillis) = 0;
+        virtual void setMaxPeriod(T maxPerMillis) = 0;
+        virtual bool checkIsItTaskTime() = 0;
+
+        virtual T getStartTimeMillis() = 0;
+        virtual T getMaxPeriodTimeMillis() = 0;
+        virtual T getCurrentTimeMillis() = 0;
+        virtual T getCurrentDuration() = 0;
 };
 
 #endif
