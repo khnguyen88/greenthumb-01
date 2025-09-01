@@ -25,6 +25,8 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [C++ Polymorphism](https://www.w3schools.com/cpp/cpp_polymorphism.asp)
 -   [Chronos Cheat Sheet; Alternative to Millis(), a built-in arduino library function](https://gist.github.com/mortie/bf21c9d2d53b83f3be1b45b76845f090)
 -   [Chronos Library Details](https://en.cppreference.com/w/cpp/header/chrono.html)
+-   [C++ Pure vs Regular Virtual Functions](https://www.geeksforgeeks.org/cpp/difference-between-virtual-function-and-pure-virtual-function-in-c/)
+- []()
 
 ### Tutorials and Sample Codes
 
@@ -75,6 +77,13 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [C++ Abstract Class / Interface](https://www.tutorialspoint.com/cplusplus/cpp_interfaces.htm)
 -   [How do you add a timed delay to a C++ program?](https://stackoverflow.com/questions/158585/how-do-you-add-a-timed-delay-to-a-c-program)
 -   [C++ chrono system time in milliseconds, time operations](https://stackoverflow.com/questions/9089842/c-chrono-system-time-in-milliseconds-time-operations)
+-   [C++ Abstract Template Class](https://stackoverflow.com/questions/35905191/c-abstract-template-class)
+-   [How to include just "parent.h" to use child class?](https://stackoverflow.com/questions/77830719/how-to-include-just-parent-h-to-use-child-class)
+-   [C++ Abstract Class: constructor yes or no?](https://stackoverflow.com/questions/19808667/c-abstract-class-constructor-yes-or-no)
+-   [Do I need to have a .cpp file for an abstract class?](https://stackoverflow.com/questions/14001356/do-i-need-to-have-a-cpp-file-for-an-abstract-class)
+-   [Abstract class in .h or .cpp file or both?](https://stackoverflow.com/questions/52578416/abstract-class-in-h-or-cpp-file-or-both)
+-   [How to declare an object of generic abstract class without specifying template type](https://stackoverflow.com/questions/56270381/how-to-declare-an-object-of-generic-abstract-class-without-specifying-template-t)
+-   [When to use virtual destructors?](https://stackoverflow.com/questions/461203/when-to-use-virtual-destructors)
 
 ### Misc
 
