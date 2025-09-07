@@ -2,4 +2,5 @@ private/
 dummy.cpp
 dummy.exe
 .vscode
-*_secrets*
+*_secrets.h
+# *_secrets*
