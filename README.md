@@ -26,7 +26,6 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [Chronos Cheat Sheet; Alternative to Millis(), a built-in arduino library function](https://gist.github.com/mortie/bf21c9d2d53b83f3be1b45b76845f090)
 -   [Chronos Library Details](https://en.cppreference.com/w/cpp/header/chrono.html)
 -   [C++ Pure vs Regular Virtual Functions](https://www.geeksforgeeks.org/cpp/difference-between-virtual-function-and-pure-virtual-function-in-c/)
-- []()
 
 ### Tutorials and Sample Codes
 
@@ -84,6 +83,8 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Abstract class in .h or .cpp file or both?](https://stackoverflow.com/questions/52578416/abstract-class-in-h-or-cpp-file-or-both)
 -   [How to declare an object of generic abstract class without specifying template type](https://stackoverflow.com/questions/56270381/how-to-declare-an-object-of-generic-abstract-class-without-specifying-template-t)
 -   [When to use virtual destructors?](https://stackoverflow.com/questions/461203/when-to-use-virtual-destructors)
+-   [How to create and use Static Template Functions in a Class?](https://stackoverflow.com/questions/9346076/static-template-functions-in-a-class)
+-   [How to access members of objects using pointers](https://stackoverflow.com/questions/32476185/c-accessing-members-of-objects-using-pointers)
 
 ### Misc
 
