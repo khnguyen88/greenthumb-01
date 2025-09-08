@@ -50,12 +50,59 @@ class AdafruitHelper {
             return Adafruit_MQTT_Subscribe(&mqttServer, adafruitFeedPath.c_str());
         }
 
-        static void PublishToFeed(Adafruit_MQTT_Publish& adaMqttFeedPub, T value){
-
+        static void PublishToFeed(Adafruit_MQTT_Publish& adaMqttFeedPub, std::string& feedName, T value){
+            Serial.print(F("\nSending val "));
+            Serial.print(value);
+            Serial.print(F(" to " + feedName + " feed..."));
+            if (! adaMqttFeedPub.publish(value)) {
+            Serial.println(F("Failed"));
+            } else {
+            Serial.println(F("OK!"));
+            }
         }
 
-        static void SubscribeToFeed(Adafruit_MQTT_Subscribe& adaMqttFeedSub, T& refVar){
-            
+        static void UpdateWithSubscribeFeed(Adafruit_MQTT& mqttServer, Adafruit_MQTT_Subscribe& adaMqttFeedSub, std::string& feedName, T& refVariable, std::string& varType, bool flip = false){
+            //MQTT Subscribe ==> Retrieve data from MQTT broker
+            Adafruit_MQTT_Subscribe *subscription;
+
+            while ((subscription = mqttServer.readSubscription(1000))) {
+                if (subscription == &adaMqttFeedSub) {
+                    if(adaMqttFeedSub.lastread != null){
+                        Serial.print(F("MQTT subscription value received for " + feedName + ": "));
+                        Serial.println((char *)adaMqttFeedSub.lastread);
+
+                        Serial.print("The current value for the referenced variable is: ");
+                        Serial.println(refVariable);
+
+                        switch (varType){
+                            case "string":
+                                refVariable = (char *)test_sub.lastread;
+                                break;
+                            case "bool":
+                                refVariable = (bool)atoi((char *)test_sub.lastread);
+
+                                if(flip){
+                                    refVariable = !refVariable;
+                                }
+                                break;
+                            case "int":
+                                refVariable = atoi((char *)test_sub.lastread);
+                                break;
+                            case "float":
+                                refVariable = std::stof((char *)test_sub.lastread);
+                                break;
+                            case "double":
+                                refVariable = std::stod((char *)test_sub.lastread);
+                                break;
+                            default:
+                                Serial.println("The value will not change");
+                        }
+
+                        Serial.print("The new value for the referenced variable is: ");
+                        Serial.println(refVariable);
+                    }
+                }
+            }
         }
 
     private:
