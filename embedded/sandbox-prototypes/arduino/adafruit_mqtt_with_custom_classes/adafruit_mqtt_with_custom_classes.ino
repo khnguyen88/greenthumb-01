@@ -10,6 +10,8 @@
 #include "adafruit_secrets.h"
 #include <ArduinoJson.h>
 
+#include "adafruit_helper.h"
+
 /////START GLOBAL STATES//////////////////
 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
@@ -25,8 +27,7 @@ WiFiSSLClient sslClient;
 
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&sslClient, AIO_SERVER, AIO_SERVERPORT_SECURE, AIO_USERNAME, AIO_KEY);
-
-
+AdafruitHelper mqttHelper(mqtt);
 
 const int ledPin = 4; //LED pin #
 const int dhtPin = 7; //DHT sensor pin #
@@ -45,20 +46,14 @@ bool ledOnState;
 
 DHT11 dht11(dhtPin);
 
-//MOCK WEB API SERVER SETUP
-char *api_server = "api.weather.com";
-
-const char* weather_ca = 
-"";
-
 bool isStartofLoop = false;
 
 /****************************** Feeds ***************************************/
 
 // Setup a feed called 'test' for publishing and subscribing
-// Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
-Adafruit_MQTT_Publish pub_test = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/test");
-Adafruit_MQTT_Subscribe test_sub = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/test");
+
+Adafruit_MQTT_Publish pub_test = mqttHelper.CreateAdaMqttFeedPub(AIO_USERNAME, "test");
+Adafruit_MQTT_Subscribe test_sub = mqttHelper.CreateAdaMqttFeedSub(AIO_USERNAME, "test");
 
 /////END GLOBAL STATE////////////////
 
@@ -130,58 +125,27 @@ void loop() {
     Serial.print("LED State: ");
     Serial.println(digitalRead(ledPin));
 
-    //Web API Call
-    // sslClient.setCACert(weather_ca);
-    // getWeather();
-
     //MQTT Connect
-    MQTT_connect();
+    mqttHelper.AdaMqttClientConnect();
+    // MQTT_connect();
 
     //MQTT Publish ==> Send data to MQTT broker
     // Now we can publish stuff!
     int32_t dummyVal = ledOnState; //int failed because its 16-bit in uno, so we need to specify int32_t, 32bit. bool can easily be converted to int, but not the other way around
-    Serial.print(F("\nSending val "));
-    Serial.print(dummyVal);
-    Serial.print(F(" to test feed..."));
-    if (! pub_test.publish(dummyVal)) {
-      Serial.println(F("Failed"));
-    } else {
-      Serial.println(F("OK!"));
-    }
+    mqttHelper.PublishToFeed<int32_t>(pub_test, "test", dummyVal);
 
     // wait a couple seconds to avoid rate limit
     delay(2000);
 
     //MQTT Subscribe ==> Retrieve data from MQTT broker
-    Adafruit_MQTT_Subscribe *subscription;
+    mqttHelper.UpdateWithSubscribeFeed(test_sub, "test", ledOnState, true);
 
-    //Wait one second for subscription feed from MQTT Adafruit
-    //If the subscription is the test_sub subscription, print value
-    //We could do elseif if we have other subscription like &sub_plant_water or %sub_plant_temp
-    while ((subscription = mqtt.readSubscription(1000))) {
-      if (subscription == &test_sub) {
-        Serial.print(F("MQTT Subscription Value Received: "));
-        Serial.println((char *)test_sub.lastread);
+    Serial.print("Flipped LED State: ");
+    Serial.println(ledOnState);
 
-        Serial.print("Current LED State: ");
-        Serial.println(ledOnState);
-        Serial.println(atoi((char *)test_sub.lastread)); //Convert char to int
-
-        ledOnState = (bool)atoi((char *)test_sub.lastread); //This is critical. How do we convert bool to int. This works
-        // ledOnState = !!atoi((char *)test_sub.lastread); //This is critical. How do we convert bool to int. This works too.
-        ledOnState = !ledOnState;
-
-        Serial.print("Flipped LED State: ");
-        Serial.println(ledOnState);
+    digitalWrite(ledPin, ledOnState ? HIGH : LOW);
 
   
-        digitalWrite(ledPin, ledOnState ? HIGH : LOW);
-
-
-        Serial.print(F("NEW LED State: "));
-        Serial.println(ledOnState);
-      }
-    }
 
     //FIX TIMER
     startMillis = currentMillis;
@@ -244,50 +208,6 @@ void printWifiStatus() {
   Serial.print(rssi);
   Serial.println(" dBm");
 }
-
-//Code copied from Arduino Form
-bool getWeather() {
-  Serial.print("Starting connection to: ");
-  Serial.println(api_server);
-  if (sslClient.connect(api_server, 443)) {               
-    Serial.print("Connected to: ");
-    Serial.println(api_server);
-    sslClient.stop();
-    }
-  else {
-    Serial.println("Connection failed");
-    }
-   return true;
-}
-
-// Function to connect and reconnect as necessary to the MQTT server.
-// Should be called in the loop function and it will take care if connecting.
-void MQTT_connect() {
-  int8_t ret;
-
-  // Stop if already connected.
-  if (mqtt.connected()) {
-    return;
-  }
-
-  Serial.print("Connecting to MQTT... ");
-
-  uint8_t retries = 3;
-  while ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
-       Serial.println(mqtt.connectErrorString(ret));
-       Serial.println("Retrying MQTT connection in 5 seconds...");
-       mqtt.disconnect();
-       delay(5000);  // wait 5 seconds
-       retries--;
-       if (retries == 0) {
-         // basically die and wait for WDT to reset me
-         while (1);
-       }
-  }
-
-  Serial.println("MQTT Connected!");
-}
-
 
 //NOTES ABOUT POINTERS:
 //----------------------------------------
