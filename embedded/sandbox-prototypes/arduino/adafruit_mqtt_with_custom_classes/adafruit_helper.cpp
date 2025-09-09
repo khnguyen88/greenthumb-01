@@ -1,11 +1,9 @@
 // For Arduino projects using Arduino IDE only
-#ifndef ADA_HELPER_H
-#define ADA_HELPER_H
-
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
 #include <string>
 #include <cstring>
+#include "adafruit_helper.h"
 
 class AdafruitHelper {
     private:
@@ -17,7 +15,6 @@ class AdafruitHelper {
 
     public:
         // Default Constructor
-        AdafruitHelper() = default;
         AdafruitHelper(Adafruit_MQTT_Client &mqtt) : _mqtt(mqtt) {};
 
         // Methods
