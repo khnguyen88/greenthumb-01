@@ -12,7 +12,7 @@
 
 // io.adafruit.com root CA certificate from example. Check often to see if it has updated. You will need this.
 // https://github.com/adafruit/Adafruit_MQTT_Library/blob/master/examples/adafruitio_secure_esp32/adafruitio_secure_esp32.ino
-const char* adafruitio_root_ca_exp = \
+const char* adafruitio_root_ca = \
       "-----BEGIN CERTIFICATE-----\n"
       "MIIEjTCCA3WgAwIBAgIQDQd4KhM/xvmlcpbhMf/ReTANBgkqhkiG9w0BAQsFADBh\n"
       "MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\n"

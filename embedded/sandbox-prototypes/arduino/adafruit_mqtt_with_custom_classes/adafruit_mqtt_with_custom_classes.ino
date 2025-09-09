@@ -27,7 +27,9 @@ WiFiSSLClient sslClient;
 
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&sslClient, AIO_SERVER, AIO_SERVERPORT_SECURE, AIO_USERNAME, AIO_KEY);
-AdafruitHelper mqttHelper(mqtt);
+AdafruitHelper mqttHelper(mqtt); 
+
+
 
 const int ledPin = 4; //LED pin #
 const int dhtPin = 7; //DHT sensor pin #
@@ -51,9 +53,9 @@ bool isStartofLoop = false;
 /****************************** Feeds ***************************************/
 
 // Setup a feed called 'test' for publishing and subscribing
-
-Adafruit_MQTT_Publish pub_test = mqttHelper.CreateAdaMqttFeedPub(AIO_USERNAME, "test");
-Adafruit_MQTT_Subscribe test_sub = mqttHelper.CreateAdaMqttFeedSub(AIO_USERNAME, "test");
+// Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
+Adafruit_MQTT_Publish pub_test = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/test");
+Adafruit_MQTT_Subscribe test_sub = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/test");
 
 /////END GLOBAL STATE////////////////
 
@@ -101,7 +103,7 @@ void setup() {
   ledOnState = false;
 
   // Set Adafruit IO's root CA
-  sslClient.setCACert(adafruitio_root_ca_exp);
+  sslClient.setCACert(adafruitio_root_ca);
   mqtt.subscribe(&test_sub);
 
   Serial.println("SETUP COMPLETE");
@@ -127,7 +129,6 @@ void loop() {
 
     //MQTT Connect
     mqttHelper.AdaMqttClientConnect();
-    // MQTT_connect();
 
     //MQTT Publish ==> Send data to MQTT broker
     // Now we can publish stuff!
@@ -208,6 +209,10 @@ void printWifiStatus() {
   Serial.print(rssi);
   Serial.println(" dBm");
 }
+
+// Function to connect and reconnect as necessary to the MQTT server.
+// Should be called in the loop function and it will take care if connecting.
+
 
 //NOTES ABOUT POINTERS:
 //----------------------------------------
