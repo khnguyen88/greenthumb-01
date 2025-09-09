@@ -19,6 +19,9 @@ AdafruitHelper::AdafruitHelper(Adafruit_MQTT_Client &mqtt) : _mqtt(mqtt) {};
 
 // Methods
 void AdafruitHelper::AdaMqttClientConnect() {
+    // Function to connect and reconnect as necessary to the MQTT server.
+    // Should be called in the loop function and it will take care if connecting.
+
     int8_t ret;
 
     // Stop if already connected.

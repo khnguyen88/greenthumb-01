@@ -210,8 +210,6 @@ void printWifiStatus() {
   Serial.println(" dBm");
 }
 
-// Function to connect and reconnect as necessary to the MQTT server.
-// Should be called in the loop function and it will take care if connecting.
 
 
 //NOTES ABOUT POINTERS:
