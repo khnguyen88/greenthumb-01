@@ -20,6 +20,8 @@ int keyIndex = 0;               // your network key index number (needed only fo
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 
+byte mac[6];  // the MAC address of your Wifi shield
+
 ///////please enter your sensitive data in the Secret tab/adafruit_secrets.h
 WiFiSSLClient sslClient;
 
@@ -94,6 +96,7 @@ void setup() {
   }
   server.begin();                           // start the web server on port 80
   printWifiStatus();                        // you're connected now, so print out the status
+  printMacAddress();                        // unique device identifier :)
 
 
   // Time Tracking Setup
@@ -243,6 +246,22 @@ void printWifiStatus() {
   Serial.print("signal strength (RSSI):");
   Serial.print(rssi);
   Serial.println(" dBm");
+}
+
+void printMacAddress(){
+  WiFi.macAddress(mac);
+  Serial.print("MAC: ");
+  Serial.print(mac[5], HEX);
+  Serial.print(":");
+  Serial.print(mac[4], HEX);
+  Serial.print(":");
+  Serial.print(mac[3], HEX);
+  Serial.print(":");
+  Serial.print(mac[2], HEX);
+  Serial.print(":");
+  Serial.print(mac[1], HEX);
+  Serial.print(":");
+  Serial.println(mac[0], HEX);
 }
 
 //Code copied from Arduino Form

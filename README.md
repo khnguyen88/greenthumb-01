@@ -20,7 +20,7 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [Simplest way to initialize multiple related const properties in a constructor?](https://stackoverflow.com/questions/15535711/simplest-way-to-initialize-multiple-related-const-properties-in-a-constructor)
 -   [How to print in C++](https://www.udacity.com/blog/2021/05/how-to-print-in-cpp.html)
 -   [C++ Inheritance](https://www.w3schools.com/cpp/cpp_inheritance.asp)
-    [C++ Inheritance](https://www.geeksforgeeks.org/cpp/inheritance-in-c/)
+-   [C++ Inheritance](https://www.geeksforgeeks.org/cpp/inheritance-in-c/)
 -   [C++ Encapsulation](https://www.w3schools.com/cpp/cpp_encapsulation.asp)
 -   [C++ Polymorphism](https://www.w3schools.com/cpp/cpp_polymorphism.asp)
 -   [Chronos Cheat Sheet; Alternative to Millis(), a built-in arduino library function](https://gist.github.com/mortie/bf21c9d2d53b83f3be1b45b76845f090)
@@ -34,6 +34,7 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [ELEGOO 37 in 1 Sensor Modules Kit - Tutorial, Datasheet & Code](https://drive.google.com/file/d/1EMtCczGjfEjxzH-RrLvcUSCd7XEdTBNh/view?usp=sharing)
 -   [ELEGOO UNO R3 Project The Most Complete Starter Kit - Tutorial, Datasheet & Code](https://drive.google.com/file/d/1wiPBkznSR3HUtgtNdWXdeVlMMpOGftPV/view?usp=sharing)
 -   [Using the Arduino UNO R4 WiFi LED Matrix](https://docs.arduino.cc/tutorials/uno-r4-wifi/led-matrix/)
+-   [Using Soil Moisture Meter + Monitor](https://www.esclabs.in/soil-moisture-monitor-using-arduino/)
 
 #### Web Servers + HTTP Protocol (LAN ONLY) and Other Bad IoT Workarounds
 
@@ -57,6 +58,8 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [Adafruit IO API Cookbook](https://io.adafruit.com/api/docs/cookbook.html#adafruit-io-api-cookbook)
 -   [GitHub - Adafruit MQTT Library](https://github.com/adafruit/Adafruit_MQTT_Library/tree/master)
 -   [Adafruit Tutorial - MQTT, Adafruit IO & You!](https://cdn-learn.adafruit.com/downloads/pdf/mqtt-adafruit-io-and-you.pdf)
+
+### Arduino Mac Address (IoT)
 
 ### WiFi SSL
 
@@ -119,8 +122,23 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 ## Frontend
 
+-   [Github - Ashan - Building Chat App with Angular Signal](https://github.com/AhsanAyaz/ng-signals-v17)
+-   [Youtube - Ashan - Building Chat App with Angular Signal](https://www.youtube.com/watch?v=0f0Y7FgT6o8)
+-   [FreeCodeCamp - How to Build a Realtime Chat Application with Angular 20 and Supabase](https://www.freecodecamp.org/news/how-to-build-a-realtime-chat-app-with-angular-20-and-supabase/)
+-   [Mastering Frontend Observability in React with Grafana Faro](https://www.youtube.com/watch?v=IA_-zkpVhIU)
+-   [Youtube - Fireship - Angular Chatbot with Dialogflow (API.ai)](https://www.youtube.com/watch?v=CKhV7-NF2OI)
+-   [Angular Signal](https://angular.dev/guide/signals)
+
 <!-- NETWORKING SECTION -->
 
 ## General Networking
 
 -   [WAN for Dummies](https://www.aaronengineered.com/blog/wan-for-dummies)
+-   [How to Access "localhost" from the Internet](https://www.youtube.com/watch?v=bxEmW1gAyRw)
+-   [Accessing localhost from Anywhere](https://www.sitepoint.com/accessing-localhost-from-anywhere/)
+-   [Using Caddy as a reverse proxy in a home network](https://caddy.community/t/using-caddy-as-a-reverse-proxy-in-a-home-network/9427)
+-   [How To Setup An Caddy Server - The Ultimate Server](https://www.youtube.com/watch?v=G8Tsi9hQJxw)
+-   [Reverse Proxy And Auto SSL Using Caddy And Docker Compose](https://www.youtube.com/watch?v=qj45uHP7Jmo)
+-   [Self Host 101 - Run Multiple Apps with Caddy | DNS, Static Sites, Reverse Proxies and Let's Encrypt](https://www.youtube.com/watch?v=mLznVlBAtcg)
+
+### Random
