@@ -116,6 +116,7 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 ### Databases
 
+-   [Connect GCP MySQL VM Instance with MySQL Workbench](https://www.youtube.com/watch?v=uCPpPhdI6zA)
 -   [How to connect MySQL Database with Flask Tutorial](https://www.youtube.com/watch?v=14HTiBQEQ9M)
 
 <!-- FRONTEND SECTION -->
