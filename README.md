@@ -29,12 +29,22 @@ Helpful resources for others who want to try their hands at creating their Ardui
 
 ### Tutorials and Sample Codes
 
-#### Sensors or Hardware
+#### Sensors or Modules or Hardware
 
 -   [ELEGOO 37 in 1 Sensor Modules Kit - Tutorial, Datasheet & Code](https://drive.google.com/file/d/1EMtCczGjfEjxzH-RrLvcUSCd7XEdTBNh/view?usp=sharing)
 -   [ELEGOO UNO R3 Project The Most Complete Starter Kit - Tutorial, Datasheet & Code](https://drive.google.com/file/d/1wiPBkznSR3HUtgtNdWXdeVlMMpOGftPV/view?usp=sharing)
 -   [Using the Arduino UNO R4 WiFi LED Matrix](https://docs.arduino.cc/tutorials/uno-r4-wifi/led-matrix/)
 -   [Using Soil Moisture Meter + Monitor](https://www.esclabs.in/soil-moisture-monitor-using-arduino/)
+-   [Sun Founder - Lesson 23: Ultrasonic Sensor Module (HC-SR04)](https://docs.sunfounder.com/projects/umsk/en/latest/02_arduino/uno_lesson23_ultrasonic.html)
+-   [Controlling 120-240 VAC With a Relay Using Arduino](https://www.instructables.com/Controlling-120-240-VAC-with-a-relay-using-arduino/)
+    -   Note there are varying relay switches with different voltage trigger sizes: 12V, 5V, and 3V. Look into which your device supplies.
+-   [Elearn - Relay Module](https://elearn.ellak.gr/mod/book/view.php?id=4568&chapterid=2440)
+-   [Shallowsky - PhotoResistor](https://shallowsky.com/arduino/class/photocell.html)
+    -   [Understanding this photoresistor circuit](https://forum.arduino.cc/t/understanding-this-photoresistor-circuit/517857/2)
+    -   [Spark Fun - Voltage Divider](https://learn.sparkfun.com/tutorials/voltage-dividers)
+    -   [Photocells](https://learn.adafruit.com/photocells/using-a-photocell)
+    -   Analog Pin is placed at the voltage split at the center where two resistor is placed
+-   [Photoresistor Module](https://arduinomodules.info/ky-018-photoresistor-module/)
 
 #### Web Servers + HTTP Protocol (LAN ONLY) and Other Bad IoT Workarounds
 
@@ -143,3 +153,5 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Self Host 101 - Run Multiple Apps with Caddy | DNS, Static Sites, Reverse Proxies and Let's Encrypt](https://www.youtube.com/watch?v=mLznVlBAtcg)
 
 ### Random
+
+-   [University of Califorina - Soil Mixes Part 3: How much air and water?](https://ucanr.edu/blog/nursery-and-flower-grower/article/soil-mixes-part-3-how-much-air-and-water)
