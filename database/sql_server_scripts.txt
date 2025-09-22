@@ -1,0 +1,43 @@
+CREATE TABLE [Account] (
+    id BIGINT PRIMARY KEY IDENTITY(1,1),
+    first_name NVARCHAR(50),
+    last_name NVARCHAR(50) NOT NULL DEFAULT N'',
+    zip_code NVARCHAR(5),
+    email NVARCHAR(100),
+    phone_number NVARCHAR(20),
+    phone_service_provider NVARCHAR(50),
+    CONSTRAINT CK_zip_code CHECK (zip_code LIKE '[0-9][0-9][0-9][0-9][0-9]')
+);
+
+CREATE TABLE Microcontroller (
+    id BIGINT PRIMARY KEY IDENTITY(1,1),
+    type NVARCHAR(50) NOT NULL,
+    mac_address NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Sensor_Device (
+    id BIGINT PRIMARY KEY IDENTITY(1,1),
+    product_name NVARCHAR(50) NOT NULL,
+    type NVARCHAR(50) NOT NULL,
+    product_code NVARCHAR(50) NOT NULL DEFAULT N'',
+    short_desc NVARCHAR(50) NOT NULL DEFAULT N'',
+    detail NVARCHAR(255) NOT NULL DEFAULT N''
+);
+
+CREATE TABLE Account_Microcontroller (
+    id BIGINT PRIMARY KEY IDENTITY(1,1),
+    a_id BIGINT NOT NULL,
+    mc_id BIGINT NOT NULL,
+    FOREIGN KEY (a_id) REFERENCES [Account](id) ON DELETE CASCADE,
+    FOREIGN KEY (mc_id) REFERENCES Microcontroller(id) ON DELETE CASCADE,
+    UNIQUE (a_id, mc_id)
+);
+
+CREATE TABLE Microcontroller_Sensor_Device (
+    id BIGINT PRIMARY KEY IDENTITY(1,1),
+    mc_id BIGINT NOT NULL,
+    sd_id BIGINT NOT NULL,
+    FOREIGN KEY (mc_id) REFERENCES Microcontroller(id) ON DELETE CASCADE,
+    FOREIGN KEY (sd_id) REFERENCES Sensor_Device(id) ON DELETE CASCADE,
+    UNIQUE (mc_id, sd_id)
+);

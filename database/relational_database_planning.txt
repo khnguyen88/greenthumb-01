@@ -1,0 +1,39 @@
+User
+-----------------------
+id (Primary Key, Incrementing)
+First Name
+Last Name
+Zip Code
+Email
+Phone_Number
+Phone_Service_Provider
+
+
+Microcontroller
+-----------------------
+Id (Primary Key, Incrementing)
+Type
+Mac_Address
+
+
+
+Sensor_Device
+-----------------------
+Id  (Primary Key, Incrementing)
+Type
+Details
+
+
+Account_Microcontroller
+-------------------------
+id (Primary Key, Incrementing)
+u_id (Unique, Foreign Key, Delete w/ Parent - Casade)
+mc_id (Unique, Foreign Key, Delete w/ Parent - Casade)
+
+
+Microcontroller_Sensor_Device
+------------------------------
+id (Primary Key, Incrementing)
+mc_id (Unique, Foreign Key, Delete w/ Parent - Casade)
+sd_id (Unique, Foreign Key, Delete w/ Parent - Casade)
+

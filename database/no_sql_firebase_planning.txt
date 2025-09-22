@@ -1,0 +1,36 @@
+{
+  "accounts": {
+    "account_id_123": {
+      "first_name": "",
+      "last_name": "",
+      "zip_code": "",
+      "email": "",
+      "phone_number": "",
+      "phone_service_provider": "",
+      "microcontrollers": ["mc_id_001", "mc_id_002"]
+    }
+  },
+  "microcontrollers": {
+    "mc_id_001": {
+      "type": "",
+      "mac_address": "",
+      "sensor_devices": ["sd_id_001", "sd_id_002"]
+    }
+  },
+  "sensor_devices": {
+    "sd_id_001": {
+      "product_name": "",
+      "type": "",
+      "product_code": "",
+      "short_desc": "",
+      "detail": ""
+    },
+    "sd_id_002": {
+      "product_name": "",
+      "type": "",
+      "product_code": "",
+      "short_desc": "",
+      "detail": ""
+    }
+  }
+}

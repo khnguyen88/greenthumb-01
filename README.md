@@ -126,8 +126,10 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 ### Databases
 
--   [Connect GCP MySQL VM Instance with MySQL Workbench](https://www.youtube.com/watch?v=uCPpPhdI6zA)
--   [How to connect MySQL Database with Flask Tutorial](https://www.youtube.com/watch?v=14HTiBQEQ9M)
+-   [Youtube - Connect GCP MySQL VM Instance with MySQL Workbench](https://www.youtube.com/watch?v=uCPpPhdI6zA)
+-   [Youtube - How to connect MySQL Database with Flask Tutorial](https://www.youtube.com/watch?v=14HTiBQEQ9M)
+-   [Dev.IO - Firebase Authentication](https://dev.to/this-is-angular/firebase-authentication-with-angular-19-ief)
+-   [Google - Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
 
 <!-- FRONTEND SECTION -->
 
@@ -155,3 +157,9 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 ### Random
 
 -   [University of Califorina - Soil Mixes Part 3: How much air and water?](https://ucanr.edu/blog/nursery-and-flower-grower/article/soil-mixes-part-3-how-much-air-and-water)
+
+### Security
+
+-   [Youtube - Angular Firebase Authentication - Implement Auth In Minutes](https://www.youtube.com/watch?v=586O934xrhQ)
+-   [Dev.IO - Firebase Authentication](https://dev.to/this-is-angular/firebase-authentication-with-angular-19-ief)
+-   [Google - Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
