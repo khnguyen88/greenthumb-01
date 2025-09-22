@@ -128,8 +128,9 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 -   [Youtube - Connect GCP MySQL VM Instance with MySQL Workbench](https://www.youtube.com/watch?v=uCPpPhdI6zA)
 -   [Youtube - How to connect MySQL Database with Flask Tutorial](https://www.youtube.com/watch?v=14HTiBQEQ9M)
--   [Dev.IO - Firebase Authentication](https://dev.to/this-is-angular/firebase-authentication-with-angular-19-ief)
 -   [Google - Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
+-   [Google - Firestore Sample](https://cloud.google.com/firestore/docs/samples/firestore-data-set-id-specified)
+-   [Create a database](https://learn.microsoft.com/en-us/azure/azure-sql/database/free-offer?view=azuresql)
 
 <!-- FRONTEND SECTION -->
 
@@ -141,6 +142,7 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Mastering Frontend Observability in React with Grafana Faro](https://www.youtube.com/watch?v=IA_-zkpVhIU)
 -   [Youtube - Fireship - Angular Chatbot with Dialogflow (API.ai)](https://www.youtube.com/watch?v=CKhV7-NF2OI)
 -   [Angular Signal](https://angular.dev/guide/signals)
+-   [Google Codelab - Building a web application with Angular and Firebase](https://developers.google.com/codelabs/building-a-web-app-with-angular-and-firebase#0)
 
 <!-- NETWORKING SECTION -->
 
@@ -163,3 +165,4 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Youtube - Angular Firebase Authentication - Implement Auth In Minutes](https://www.youtube.com/watch?v=586O934xrhQ)
 -   [Dev.IO - Firebase Authentication](https://dev.to/this-is-angular/firebase-authentication-with-angular-19-ief)
 -   [Google - Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
+-   [Youtube - Setting Up Google Authentication in Firebase 9: A Step-by-Step Guide](https://www.youtube.com/watch?v=-YA5kORugeI)
