@@ -32,24 +32,32 @@ Adafruit_MQTT_Client mqtt(&sslClient, AIO_SERVER, AIO_SERVERPORT_SECURE, AIO_USE
 
 //Analog Sensors
 const int photoResistorPin = A0;
+const float photoResistoMaxDarkRawValue = 24; //Range 0-1023, Initial Calibration required. In Pitch black environment.
+const float photoResistorMaxBrightRawValue = 936;//Range 0-1023, Initial Calibration required. In Full Light environment. Adjust for indoor/outdoor.
+
 const int soilMoisturePin = A5;
+const float soilMoistureAirRawValue = 588.00;//Range 0-1023, Initial Calibration required. Exposed in air, 0% saturation. 
+const float soilMoistureWaterRawValue = 255.00; //Range 0-1023, Initial Calibration required. Submerged in water, 100% saturation. 
 
 //Pump Device (Digital Signal)
 const int waterPumpPin = 3; // 1.6 Liters Per Minute (relay switch, technically)
+const bool forcePumpOn = false;
 
 //Digital Sensors
 const int sonarWaterEchoPin = 6; //Ultrasonic sensor echo pin
 const int sonarWaterTrigPin = 7; //Ultrasonic sensor trigger pin
-float initNoWaterDepthInch = 0;
+const float minAllowWaterLevelInch = 1.5; // Minimum water level to keep the pump submerged, inches
+const float maxAllowWaterLevelInch = 5.0; // Height of the water container, inches
+float initNoWaterDepthInch = 0; //Currently the sonar is hitting the pump. We need to account and adjust for the depth differences
 float waterLevelInch = 0;
-const float minAllowWaterDepthInch = 1.5; // Minimum water level to keep the pump submerged, inches
-const float maxAllowWaterDepthInch = 5.0; // Height of the water container, inches
+const float calibratedWaterSensorLevel = minAllowWaterLevelInch; //To Adjust for any obstruction or constraints placed on the sensor depth
 
 const int sonarPlantEchoPin = 8; //Ultrasonic sensor echo pin
 const int sonarPlantTrigPin = 9; //Ultrasonic sensor trigger pin
 float initDepthToSoilInch = 0;
 float plantHeightInch = 0;
 const float maxPlantHeight = 6.0; // Minimum water level to keep the pump submerged, inches
+const float calibratedPlantSensorHeight = 0; //To Adjust for any obstruction or constraints placed on the sensor depth
 
 const int maxDistanceCm = 200; //ultrasonic sensor, cm
 
@@ -58,6 +66,7 @@ const int dhtPin = 10; //DHT sensor pin #
 //Light Devices (Digital Signal)
 const int ledPin = 12; //LED pin #
 const int growLightPin = 13; // Growlight pin # (really it's a relay switch)
+bool forceLightOn = false;
 
 unsigned long startMillis;
 unsigned long currentMillis;
@@ -131,10 +140,20 @@ void setup() {
   //Photo Resistor
   pinMode(photoResistorPin, OUTPUT);
   (float)analogRead(photoResistorPin)/1023.0 * 100;
+  delay(200);
+  Serial.print("Setup for PhotoResistor (Raw Analog): ");
+  Serial.println((float)analogRead(photoResistorPin));
+  Serial.print("Setup for Soil Moisture (Mapped Analog): ");
+  Serial.println((float)map(analogRead(photoResistorPin), photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100)); //Brighter light, higher value;
 
   //Soil Moisture
   pinMode(soilMoisturePin, OUTPUT);
   (float)analogRead(soilMoisturePin)/1023.0 * 100;
+  delay(200);
+  Serial.print("Setup for Soil Moisture (Raw Analog): ");
+  Serial.println((float)analogRead(soilMoisturePin));
+  Serial.print("Setup for Soil Moisture (Mapped Analog): ");
+  Serial.println((float)map(analogRead(soilMoisturePin), soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0)); //More saturation lower value. So we flipped the mapping.
 
   //Pump
   pinMode(waterPumpPin, OUTPUT);
@@ -150,11 +169,11 @@ void setup() {
   ledOnState = false;
 
   // Depth Sensor
-  initNoWaterDepthInch = (float)(sonarWater.ping_cm()/2.54);
+  initNoWaterDepthInch = (float)(sonarWater.ping_cm()/2.54) + calibratedWaterSensorLevel;
   Serial.print("Setup for Water Sensor (in): ");
   Serial.println(initNoWaterDepthInch);
 
-  initDepthToSoilInch = (float)(sonarPlant.ping_cm()/2.54);
+  initDepthToSoilInch = (float)(sonarPlant.ping_cm()/2.54) + calibratedPlantSensorHeight;
   Serial.print("Setup for Plant Sensor (in): ");
   Serial.println(initDepthToSoilInch);
 
@@ -181,15 +200,13 @@ void loop() {
 
     //Sensor Reading
     Serial.print("Soil Moisture Ratio: ");
-    float soilMoistureRatio = (float)analogRead(soilMoisturePin)/1023.0 * 100;
-    Serial.print(soilMoistureRatio); //Max threshold of analog value range is 1023.
+    Serial.print((float)map(analogRead(soilMoisturePin), soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0)); 
     Serial.println("%");
 
 
     Serial.print("Light Intensity: ");
-    Serial.print((float)analogRead(photoResistorPin)/1023.0 * 100); //Max threshold of analog value range is 1023.
+    Serial.print((float)map(analogRead(photoResistorPin), photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100)); 
     Serial.println("%");
-    // Serial.println(light_sensor.getPercentValue());
 
     sonarDistance(sonarPlant, "Plant", initDepthToSoilInch, plantHeightInch);
     sonarDistance(sonarWater, "Water", initNoWaterDepthInch, waterLevelInch);
@@ -268,9 +285,10 @@ void sonarDistance(NewPing& sonarSensor, String sensorName, float& initDepth, fl
     Serial.print("Measured Height/Level: ");
     Serial.print(actualHeightLevel); 
     Serial.println(" in");
-    Serial.print(sensorName + " Sensor Depth Reading: ");
-    Serial.print(distanceIn); 
+    Serial.print(sensorName + " Uncalibrated Sensor Depth Reading: ");
+    Serial.print(distanceIn); //Delete if there is no obstruction.
     Serial.println(" in");
+    Serial.println(initDepth);
   }
 
   delay(500);

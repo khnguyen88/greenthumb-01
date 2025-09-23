@@ -26,6 +26,7 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [Chronos Cheat Sheet; Alternative to Millis(), a built-in arduino library function](https://gist.github.com/mortie/bf21c9d2d53b83f3be1b45b76845f090)
 -   [Chronos Library Details](https://en.cppreference.com/w/cpp/header/chrono.html)
 -   [C++ Pure vs Regular Virtual Functions](https://www.geeksforgeeks.org/cpp/difference-between-virtual-function-and-pure-virtual-function-in-c/)
+-   [Arduino Map function - For Adjusting Upper/Lower Limit Values](https://docs.arduino.cc/language-reference/en/functions/math/map/)
 
 ### Tutorials and Sample Codes
 
@@ -46,6 +47,11 @@ Helpful resources for others who want to try their hands at creating their Ardui
     -   Analog Pin is placed at the voltage split at the center where two resistor is placed
 -   [Photoresistor Module](https://arduinomodules.info/ky-018-photoresistor-module/)
 -   [Capacitive Soil Moisture Sensor issue](https://forum.arduino.cc/t/capacitive-soil-moisture-sensor-v1-2-inconsistent/882137)
+-   [How to fix faulty Capacitive soil moisture humidity sensor v1.2](https://www.youtube.com/watch?v=QGCrtXf8YSs)
+-   [Capacitive Soil Moisture Sensor Quick Fix](https://www.youtube.com/watch?v=HB2Eky6czWM)
+-   [Bypass LED Growlight Controllers](https://www.reddit.com/r/PlantedTank/comments/15j7jpp/how_to_bypass_hygger_planted_controller/)
+-   [Bypass LED Growlight Controllers/Timer](https://www.reddit.com/r/AskElectronics/comments/nl426i/im_trying_to_bypass_my_little_growlight_timer/)
+    -   [Bypass LED Growlight Controllers/Timer, Image](https://vgy.me/u/vJoD0X)
 
 #### Web Servers + HTTP Protocol (LAN ONLY) and Other Bad IoT Workarounds
 
@@ -144,6 +150,7 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Youtube - Fireship - Angular Chatbot with Dialogflow (API.ai)](https://www.youtube.com/watch?v=CKhV7-NF2OI)
 -   [Angular Signal](https://angular.dev/guide/signals)
 -   [Google Codelab - Building a web application with Angular and Firebase](https://developers.google.com/codelabs/building-a-web-app-with-angular-and-firebase#0)
+-   [TailwindCSS - Install Tailwind CSS with Angular](https://tailwindcss.com/docs/installation/framework-guides/angular)
 
 <!-- NETWORKING SECTION -->
 
