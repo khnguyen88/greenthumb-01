@@ -45,6 +45,7 @@ Helpful resources for others who want to try their hands at creating their Ardui
     -   [Photocells](https://learn.adafruit.com/photocells/using-a-photocell)
     -   Analog Pin is placed at the voltage split at the center where two resistor is placed
 -   [Photoresistor Module](https://arduinomodules.info/ky-018-photoresistor-module/)
+-   [Capacitive Soil Moisture Sensor issue](https://forum.arduino.cc/t/capacitive-soil-moisture-sensor-v1-2-inconsistent/882137)
 
 #### Web Servers + HTTP Protocol (LAN ONLY) and Other Bad IoT Workarounds
 
@@ -159,6 +160,7 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 ### Random
 
 -   [University of Califorina - Soil Mixes Part 3: How much air and water?](https://ucanr.edu/blog/nursery-and-flower-grower/article/soil-mixes-part-3-how-much-air-and-water)
+-   [Soil Moisture and Irrigation](https://soilsensor.com/soil/soil-moisture-and-irrigation/)
 
 ### Security
 

@@ -30,19 +30,34 @@ WiFiSSLClient sslClient;
 // Setup the MQTT client class by passing in the WiFi client and MQTT server and login details.
 Adafruit_MQTT_Client mqtt(&sslClient, AIO_SERVER, AIO_SERVERPORT_SECURE, AIO_USERNAME, AIO_KEY);
 
+//Analog Sensors
 const int photoResistorPin = A0;
-const int waterPumpPin = 2; // 1.6 Liters Per Minute
-const int ledPin = 4; //LED pin #
+const int soilMoisturePin = A5;
 
-const int dhtPin = 7; //DHT sensor pin #
+//Pump Device (Digital Signal)
+const int waterPumpPin = 3; // 1.6 Liters Per Minute (relay switch, technically)
 
-const int sonarWaterTrigPin = 8; //Ultrasonic sensor trigger pin
-const int sonarWaterEchoPin = 9; //Ultrasonic sensor echo pin
+//Digital Sensors
+const int sonarWaterEchoPin = 6; //Ultrasonic sensor echo pin
+const int sonarWaterTrigPin = 7; //Ultrasonic sensor trigger pin
+float initNoWaterDepthInch = 0;
+float waterLevelInch = 0;
+const float minAllowWaterDepthInch = 1.5; // Minimum water level to keep the pump submerged, inches
+const float maxAllowWaterDepthInch = 5.0; // Height of the water container, inches
 
-const int sonarPlantTrigPin = 10; //Ultrasonic sensor trigger pin
-const int sonarPlantEchoPin = 11; //Ultrasonic sensor echo pin
+const int sonarPlantEchoPin = 8; //Ultrasonic sensor echo pin
+const int sonarPlantTrigPin = 9; //Ultrasonic sensor trigger pin
+float initDepthToSoilInch = 0;
+float plantHeightInch = 0;
+const float maxPlantHeight = 6.0; // Minimum water level to keep the pump submerged, inches
 
 const int maxDistanceCm = 200; //ultrasonic sensor, cm
+
+const int dhtPin = 10; //DHT sensor pin #
+
+//Light Devices (Digital Signal)
+const int ledPin = 12; //LED pin #
+const int growLightPin = 13; // Growlight pin # (really it's a relay switch)
 
 unsigned long startMillis;
 unsigned long currentMillis;
@@ -61,8 +76,7 @@ RBD::LightSensor light_sensor(photoResistorPin);
 //MOCK WEB API SERVER SETUP
 char *api_server = "api.weather.com";
 
-const char* weather_ca = 
-"";
+const char* weather_ca = "";
 
 bool isStartofLoop = false;
 
@@ -116,15 +130,33 @@ void setup() {
 
   //Photo Resistor
   pinMode(photoResistorPin, OUTPUT);
+  (float)analogRead(photoResistorPin)/1023.0 * 100;
+
+  //Soil Moisture
+  pinMode(soilMoisturePin, OUTPUT);
+  (float)analogRead(soilMoisturePin)/1023.0 * 100;
 
   //Pump
   pinMode(waterPumpPin, OUTPUT);
   digitalWrite(waterPumpPin, LOW);
 
-  // LED/Sensor Setup
+  // Growlight Setup
+  pinMode(growLightPin, OUTPUT);
+  digitalWrite(growLightPin, LOW);
+
+  // LED Setup
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
   ledOnState = false;
+
+  // Depth Sensor
+  initNoWaterDepthInch = (float)(sonarWater.ping_cm()/2.54);
+  Serial.print("Setup for Water Sensor (in): ");
+  Serial.println(initNoWaterDepthInch);
+
+  initDepthToSoilInch = (float)(sonarPlant.ping_cm()/2.54);
+  Serial.print("Setup for Plant Sensor (in): ");
+  Serial.println(initDepthToSoilInch);
 
   // Set Adafruit IO's root CA
   sslClient.setCACert(adafruitio_root_ca_exp);
@@ -148,13 +180,19 @@ void loop() {
 
 
     //Sensor Reading
-    Serial.print("Light Intensity: ");
-    Serial.println(analogRead(photoResistorPin));
-    Serial.println((float)analogRead(photoResistorPin)/1023.0 * 100);
-    Serial.println(light_sensor.getPercentValue());
+    Serial.print("Soil Moisture Ratio: ");
+    float soilMoistureRatio = (float)analogRead(soilMoisturePin)/1023.0 * 100;
+    Serial.print(soilMoistureRatio); //Max threshold of analog value range is 1023.
+    Serial.println("%");
 
-    sonarDistance(sonarPlant, "Plant");
-    sonarDistance(sonarWater, "Water");
+
+    Serial.print("Light Intensity: ");
+    Serial.print((float)analogRead(photoResistorPin)/1023.0 * 100); //Max threshold of analog value range is 1023.
+    Serial.println("%");
+    // Serial.println(light_sensor.getPercentValue());
+
+    sonarDistance(sonarPlant, "Plant", initDepthToSoilInch, plantHeightInch);
+    sonarDistance(sonarWater, "Water", initNoWaterDepthInch, waterLevelInch);
     sensorDHT(temperature, humidity, dht11);
 
     Serial.print("LED State: ");
@@ -206,6 +244,7 @@ void loop() {
 
         //Device Triggered
         digitalWrite(ledPin, ledOnState ? HIGH : LOW);
+        digitalWrite(growLightPin, ledOnState ? HIGH : LOW);
         digitalWrite(waterPumpPin, ledOnState ? HIGH : LOW);
 
         Serial.print(F("NEW LED State: "));
@@ -218,13 +257,18 @@ void loop() {
   }
 }
 
-void sonarDistance(NewPing& sonarSensor, String sensorName){
+void sonarDistance(NewPing& sonarSensor, String sensorName, float& initDepth, float& actualHeightLevel){
   delay(50);
   distanceCm = sonarSensor.ping_cm();
-  distanceIn = distanceCm/2.54; //converts cm to in, 1 in = 2.5 cm
-  if(distanceCm >= 0){
+  distanceIn = (float)(distanceCm/2.54); //converts cm to in, 1 in = 2.5 cm
+  actualHeightLevel = (float)(distanceIn - initDepth) >= 0.0 ? (float)(distanceIn - initDepth) : 0.0;
+
+  if(distanceCm >= 0.0){
     Serial.print(sensorName + " Sonar ");
-    Serial.print("Distance: ");
+    Serial.print("Measured Height/Level: ");
+    Serial.print(actualHeightLevel); 
+    Serial.println(" in");
+    Serial.print(sensorName + " Sensor Depth Reading: ");
     Serial.print(distanceIn); 
     Serial.println(" in");
   }
