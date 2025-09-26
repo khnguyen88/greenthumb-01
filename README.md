@@ -320,3 +320,4 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 -   [Github Default GitIgnore Collection](https://github.com/github/gitignore/tree/main)
     -   [Github Default GitIgnore - Visual Studio](https://github.com/github/gitignore/blob/main/VisualStudio.gitignore)
+    -   [Github Default GitIgnore - Angular](https://github.com/github/gitignore/blob/main/Angular.gitignore)
