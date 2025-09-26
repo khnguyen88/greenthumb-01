@@ -131,6 +131,15 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 ## Backend
 
+### .NET
+
+-   [Microsoft - Tutorial - First Web API + Entity Framework](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-9.0&tabs=visual-studio)
+-   [Microsoft - Entity Framework Core - Document](https://learn.microsoft.com/en-us/ef/core/)
+-   [Microsoft - Entity Framework Core - Key](https://learn.microsoft.com/en-us/ef/core/modeling/keys?tabs=data-annotations)
+-   [Microsoft - Entity Framework Core - Generated Value](https://learn.microsoft.com/en-us/ef/core/modeling/generated-properties?tabs=data-annotations)
+-   [Stackoverflow - Auto Increment on Partial Primary Key](https://stackoverflow.com/questions/36155429/auto-increment-on-partial-primary-key-with-entity-framework-core)
+-   [Reddit - Entity Framework Core - Using Sequence to Genereate ID and Return on Add](https://www.reddit.com/r/dotnet/comments/wx90a6/ef_core_using_sequences_to_generate_ids_and/)
+
 ### Databases
 
 -   [Youtube - Connect GCP MySQL VM Instance with MySQL Workbench](https://www.youtube.com/watch?v=uCPpPhdI6zA)
@@ -168,6 +177,7 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 
 -   [University of Califorina - Soil Mixes Part 3: How much air and water?](https://ucanr.edu/blog/nursery-and-flower-grower/article/soil-mixes-part-3-how-much-air-and-water)
 -   [Soil Moisture and Irrigation](https://soilsensor.com/soil/soil-moisture-and-irrigation/)
+-   [University of Florida - Light for Houseplants](https://gardeningsolutions.ifas.ufl.edu/plants/houseplants/light-for-houseplants/)
 
 ### Security
 
@@ -175,3 +185,138 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Dev.IO - Firebase Authentication](https://dev.to/this-is-angular/firebase-authentication-with-angular-19-ief)
 -   [Google - Cloud Firestore Documentation](https://firebase.google.com/docs/firestore)
 -   [Youtube - Setting Up Google Authentication in Firebase 9: A Step-by-Step Guide](https://www.youtube.com/watch?v=-YA5kORugeI)
+
+# TODO: Other Resources that need to be sorted out
+
+-   [Microsoft - Tutorial: Create a controller-based web API with ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-9.0&tabs=visual-studio)
+-   [Youtube - Swagger and .NET 9 - What is going on and How to get it back?](https://www.youtube.com/watch?v=3DHK8qWIFc8)
+-   [Generate OpenAPI documents](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/openapi/aspnetcore-openapi?view=aspnetcore-9.0&tabs=visual-studio%2Cvisual-studio-code)
+-   [Enable Cross-Origin Requests (CORS) in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-9.0)
+-   [Microsoft - Enable Cross-Origin Requests (CORS) in ASP.NET Core - 1](https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-9.0#set-the-allowed-origins)
+-   [Microsoft - Enable cross-origin requests in ASP.NET Web API 2](https://learn.microsoft.com/en-us/aspnet/web-api/overview/security/enabling-cross-origin-requests-in-web-api)
+-   [Stackoverflow - How to Enable CORS in ASP.NET Core Web API](https://stackoverflow.com/questions/44379560/how-to-enable-cors-in-asp-net-core-webapi)
+-   [C-Sharp Corner - Using CQRS Pattern in C-Sharp](https://www.c-sharpcorner.com/article/using-the-cqrs-pattern-in-c-sharp/)
+-   [Milan Jovanovic - CQRS Pattern With MediatR](https://www.milanjovanovic.tech/blog/cqrs-pattern-with-mediatr)
+-   [Code Maze - CQRS and MediatR in ASP.NET Core](https://code-maze.com/cqrs-mediatr-in-aspnet-core/)
+-   [CQRS Validation Pipeline with MediatR and FluentValidation](https://code-maze.com/cqrs-mediatr-fluentvalidation/)
+-   [Code Maze - Dependency Injection in ASP.NET Core](https://code-maze.com/dependency-injection-aspnet/)
+-   [Code Maze - ASP.NET Core Series](https://code-maze.com/net-core-series/)
+-   [Code Maze - ASP.NET Core Web API – Part 1 of 16 - Creating MySQL Database](https://code-maze.com/net-core-web-development-part1/)
+-   [Code Maze - ASP.NET Core Web API – Part 2 of 16 - .NET Service Configuration](https://code-maze.com/net-core-web-development-part2/)
+-   [Code Maze - ASP.NET Core Web API – Part 3 of 16 - Logging With NLog](https://code-maze.com/net-core-web-development-part3/)
+-   [Code Maze - ASP.NET Core Web API – Part 4 of 16 - Repository Pattern](https://code-maze.com/net-core-web-development-part4/)
+-   [Code Maze - ASP.NET Core Web API – Part 5 of 16 - How to Handle Get Request](https://code-maze.com/net-core-web-development-part5/)
+-   [Code Maze - ASP.NET Core Web API – Part 5 of 16 - Post, Put, Delete](https://code-maze.com/net-core-web-development-part6/)
+-   [Code Maze - ASP.NET Core Web API – Part 16 of 16 - IIS Deployment](https://code-maze.com/net-core-web-development-part16/)
+-   [Deploy the ASP.NET Core Web App to Linux](https://code-maze.com/deploy-aspnetcore-linux-nginx/)
+-   [Github Forums - CORS does not function on swagger.json endpoint](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2641)
+-   [Medium - Advanced Design Patterns in C#: Command Query Responsibility Segregation (CQRS)](https://krishan-samarawickrama.medium.com/advanced-design-patterns-in-c-command-query-responsibility-segregation-cqrs-d9ff598ccdf6)
+-   [Microsoft - CQRS Pattern](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
+-   [Dev.to - Mastering CQRS Design Pattern with MediaTr in C .NET](https://dev.to/dianaiminza/mastering-cqrs-design-pattern-with-mediatr-in-c-net-khk)
+-   [OAuth Google Sign-In Setup - Youtube](https://www.youtube.com/watch?v=TjMhPr59qn4)
+-   [OAuth Google Sign-In Setup - GitHub](https://github.com/divanov11/apple-signin/tree/google-signin)
+-   [Microsoft - Tutorial: Host a RESTful API with CORS in Azure App Service](https://learn.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-rest-api)
+-   [Google - Quickstart: Build and deploy a .NET web app to Cloud Run](https://cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-dotnet-service)
+-   [Google Authentication in ASP.NET Core with React (.NET 9) ](https://www.youtube.com/watch?v=SH-ABnaKSIM)
+-   [AspNetCore WebAPI - Google Authenticatio](https://dvoituron.com/2019/08/09/webapi-google-auth/)
+-   [External OAuth authentication providers](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/social/google-logins?view=aspnetcore-9.0)
+-   [Entity Framework Tutorial](https://www.entityframeworktutorial.net/)
+-   [Microsoft Tutorial - Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app?tabs=netcore-cli)
+-   [Tutorials Point - Entity Framework](https://www.tutorialspoint.com/entity_framework/index.htm)
+-   [Medium - Step-by-Step Guide to Entity Framework in .NET](https://medium.com/@lucas.and227/step-by-step-guide-to-entity-framework-in-net-c629faf9f322)
+-   [StackOverFlow - EntityFramework Core auto generate key id property](https://stackoverflow.com/questions/43899190/entityframework-core-auto-generate-key-id-property)
+-   [Running A Worker Service As A Windows Service](https://medium.com/@adebanjoemmanuel01/running-a-worker-service-as-a-windows-service-c1d12a28a73c)
+-   [Create a .NET Web API with Entity Framework](https://www.youtube.com/watch?v=A7nV0xF5vYg)
+
+-   [Can someone explain when to use Singleton, Scoped and Transient with some real life examples?](https://www.reddit.com/r/csharp/comments/1acwtar/can_someone_explain_when_to_use_singleton_scoped/)
+
+## Others:
+
+-   [Flask OpenAPI Generation? ](https://www.reddit.com/r/flask/comments/1gkcdnu/flask_openapi_generation/)
+-   [Fasi API Doc](https://pypi.org/project/fastapi/)
+-   [Fast API Doc](https://fastapi.tiangolo.com/)
+-   [Fast API - Generate OpenAPI Spec](https://www.speakeasy.com/openapi/frameworks/fastapi)
+
+## Cloud Applications - Google Cloud Platform
+
+-   [Youtube - GCP - How to SSH to Virtual Machine (VM) Linux on Google Cloud Platform](https://www.youtube.com/watch?v=dZ1LhEgoC_8)
+-   [Youtube - How to connect to Google Cloud Virtual Machine using SSH from Terminal](https://www.youtube.com/watch?v=hP9B3xXP1Ts)
+-   [Google Cloud - Google Cloud Run - Quickstart: Build and deploy a .NET web app to Cloud Run](https://cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-dotnet-service)
+
+## Database
+
+## Database + Entity Framework
+
+-   [Entity Framework and SQLite, the ultimate how-to](https://stackoverflow.com/questions/63494481/entity-framework-and-sqlite-the-ultimate-how-to)
+
+# APIs
+
+-   [Open Weather API - Weather](https://openweathermap.org/api/one-call-3#concept)
+-   [Open Weather API - GeoCoding](https://openweathermap.org/api/geocoding-api#direct_zip)
+
+# TODO: OTHER RESOURCES THAT I NEED TO SORT OUT TOO
+
+<!-- BACKEND SECTION: MICROSOFT SEMANTIC KERNEL -->
+
+-   [Microsoft Website - Semantic Kernel - Documentation - Introduction to Semantic Kernel](https://learn.microsoft.com/en-us/semantic-kernel/overview/)
+
+    -   [Microsoft Website - Semantic Kernel - Documentation - Understanding the kernel](https://learn.microsoft.com/en-us/semantic-kernel/overview/)
+    -   [Microsoft Website - Semantic Kernel - Documentation - What is a Plugin?](https://learn.microsoft.com/en-us/semantic-kernel/concepts/plugins/?pivots=programming-language-csharp)
+    -   [Microsoft Website - Semantic Kernel - Documentation - Using plugins for Retrieval Augmented Generation (RAG)](https://learn.microsoft.com/en-us/semantic-kernel/concepts/plugins/using-data-retrieval-functions-for-rag?source=recommendations)
+
+-   [Let's Learn .NET Semantic Kernel - From MS DOTNET - Video](https://www.youtube.com/watch?v=lCQOCoH3Osk)
+
+    -   [Let's Learn .NET Semantic Kernel - Training Module](https://learn.microsoft.com/en-us/collections/4wrote7dxq3mxx?WT.mc_id=dotnet-147962-juyoo)
+    -   [Let's Learn .NET Semantic Kernel - Github.IO Instruction (HIGHLY RECOMMEND!)](https://microsoftlearning.github.io/mslearn-ai-semantic-kernel/)
+    -   [Let's Learn .NET Semantic Kernel - Github Template](https://github.com/MicrosoftLearning/mslearn-ai-semantic-kernel)
+
+-   [Develop AI Agents with Azure OpenAI and Semantic Kernel SDK - Github Template](https://github.com/MicrosoftLearning/MSLearn-Develop-AI-Agents-with-Azure-OpenAI-and-Semantic-Kernel-SDK)
+
+-   [Semantic Kernel - Microsoft - Github](https://github.com/microsoft/semantic-kernel)
+
+    -   [Semantic Kernel - Samples - Microsoft - Github](https://github.com/microsoft/semantic-kernel/tree/main/dotnet/samples)
+    -   [Semantic Kernel - Samples - Agents - Microsoft - Github](https://github.com/microsoft/semantic-kernel/tree/main/dotnet/samples/GettingStartedWithAgents)
+
+-   [Develop an AI Agent using Semantic Kernel AI-3026 - Youtube (Python)](https://www.youtube.com/watch?v=NFs4zXIhHKU)
+-   [Orchestrate a multi-agent solution using Semantic Kernel - Microsoft (Python) - Great Read though](https://learn.microsoft.com/en-us/training/modules/orchestrate-semantic-kernel-multi-agent-solution/)
+
+-   [Microsoft Website - Semantic Kernel - Documentation - Agents Framework](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/?pivots=programming-language-csharp)
+
+    -   [Microsoft Website - Semantic Kernel - Documentation - Agent Orchestration Types + Sample Code](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-orchestration/?pivots=programming-language-csharp)
+
+    -   [Microsoft Website - Semantic Kernel - Documentation - Agents Examples Sample Code](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/examples/example-chat-agent?pivots=programming-language-csharp)
+
+    -   [Microsoft Website - Semantic Kernel - Documentation - Agents Memory](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-memory?pivots=programming-language-csharp)
+
+    -   [Microsoft Website - Semantic Kernel - Documentation - Agents RAG Search + Sample Code](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/agent/agent-rag?pivots=programming-language-csharp)
+
+-   [Microsoft Website - Semantic Kernel - Documentation - Proccess Framework](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/process/process-framework)
+
+    -   [Microsoft Website - Semantic Kernel - Documentation - Process Sample Code](https://learn.microsoft.com/en-us/semantic-kernel/frameworks/process/examples/example-first-process?pivots=programming-language-csharp)
+
+-   [Building AI Agent Workflows with Semantic Kernel - Microsoft Developer - Youtube (C# and .NET)](https://www.youtube.com/watch?v=3JFKwerYj04)
+
+    -   [Sample of Complete Semantic Kernel Project (Semantic Clip) - Microsoft Developer - Github (C# and .NET)](https://github.com/vicperdana/SemantiClip)
+
+-   [User MS Semantic Kernel Samples - Vinoth Rajendran - GitHub (C# and .NET)](https://github.com/rvinothrajendran/MicrosoftSemanticKernelSamples)
+
+    -   [Sequential multi-agent orcestration - Process + Process Steps and States with Semantic Kernel - Vinoth Rajendran - Github](https://github.com/rvinothrajendran/MicrosoftSemanticKernelSamples/tree/main/SKSampleCSharp/ProcessSample)
+    -   [](https://www.youtube.com/watch?v=xha6M8wK_AY)
+
+<!-- BACKEND SECTION: MICROSOFT KERNEL MEMORY -->
+
+# RESOURCES - NEED TO BE SORTED OUT
+
+-   [Github - Microsoft - Kernel Memory](https://github.com/microsoft/kernel-memory)
+-   [Youtube - Matt Eland's Document Search in .NET with Kernel Memory](https://www.youtube.com/watch?v=h8bKn1nzjrQ)
+-   [Github - Matt Eland's Document Search with Kernel Memory Code](https://github.com/IntegerMan/DocumentSearchWithKernelMemory/blob/main/MattEland.Demos.KernelMemory.DocumentSearch/MattEland.Demos.KernelMemory.DocumentSearch/Program.cs)
+-   [LeadingEDJE's Kernel Memory Search Blog Post](https://blog.leadingedje.com/post/ai/documents/kernelmemory.html)
+-   [Johnny Reilly's Blog on Chunking Documents into Azure AI Search](https://johnnyreilly.com/using-kernel-memory-to-chunk-documents-into-azure-ai-search)
+-   [StormHub's dev.to Post on Kernel Memory with Azure Services](https://dev.to/stormhub/kernel-memory-with-azure-openai-blob-storage-and-ai-search-services-1245)
+-   [StormHub's GitHub Code for Azure Kernel Memory Integration](https://github.com/StormHub/stormhub/blob/main/resources/2024-11-18/ConsoleApp/ConsoleApp/Program.cs)
+-   [Semantic Kernel with Azure Search - RAG + Kernel Memory](https://devblogs.microsoft.com/semantic-kernel/azure-openai-on-your-data-with-semantic-kernel/)
+
+# GITIGNORE COLLECTION
+
+-   [Github Default GitIgnore Collection](https://github.com/github/gitignore/tree/main)
+    -   [Github Default GitIgnore - Visual Studio](https://github.com/github/gitignore/blob/main/VisualStudio.gitignore)

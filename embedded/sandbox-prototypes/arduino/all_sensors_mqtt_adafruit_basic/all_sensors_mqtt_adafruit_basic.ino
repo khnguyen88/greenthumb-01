@@ -32,8 +32,8 @@ Adafruit_MQTT_Client mqtt(&sslClient, AIO_SERVER, AIO_SERVERPORT_SECURE, AIO_USE
 
 //Analog Sensors
 const int photoResistorPin = A0;
-const float photoResistoMaxDarkRawValue = 24; //Range 0-1023, Initial Calibration required. In Pitch black environment.
-const float photoResistorMaxBrightRawValue = 936;//Range 0-1023, Initial Calibration required. In Full Light environment. Adjust for indoor/outdoor.
+const float photoResistoMaxDarkRawValue = 20; //Range 0-1023, Initial Calibration required. In Pitch black environment.
+const float photoResistorMaxBrightRawValue = 1023;//Range 0-1023, Initial Calibration required. In Full Light environment. Adjust for indoor/outdoor.
 
 const int soilMoisturePin = A5;
 const float soilMoistureAirRawValue = 588.00;//Range 0-1023, Initial Calibration required. Exposed in air, 0% saturation. 
