@@ -231,7 +231,7 @@ void loop() {
     Serial.print("Soil Moisture Ratio: ");
     currentSoilMoistureReadingPct = (float)map(analogRead(soilMoisturePin), soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0);
     constrainMinMaxRange(currentSoilMoistureReadingPct);
-    Serial.print((float)map(analogRead(soilMoisturePin), soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0)); 
+    Serial.print(currentSoilMoistureReadingPct); 
     Serial.println("%");
 
 
