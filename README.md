@@ -27,6 +27,8 @@ Helpful resources for others who want to try their hands at creating their Ardui
 -   [Chronos Library Details](https://en.cppreference.com/w/cpp/header/chrono.html)
 -   [C++ Pure vs Regular Virtual Functions](https://www.geeksforgeeks.org/cpp/difference-between-virtual-function-and-pure-virtual-function-in-c/)
 -   [Arduino Map function - For Adjusting Upper/Lower Limit Values](https://docs.arduino.cc/language-reference/en/functions/math/map/)
+-   [Arduino - Pin Mode](https://docs.arduino.cc/language-reference/en/functions/digital-io/pinMode/)
+-   [Arduino - Pin Mode Types](https://docs.arduino.cc/learn/microcontrollers/digital-pins/)
 
 ### Tutorials and Sample Codes
 
