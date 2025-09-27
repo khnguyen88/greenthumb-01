@@ -106,6 +106,10 @@ void setup() {
   digitalWrite(ledPin, LOW);
   ledOnState = false;
 
+  //Ultrasonic Sensor Setup
+  pinMode(sonarTrigPin, OUTPUT);
+  pinMode(sonarEchoPin, INPUT);
+
   // Set Adafruit IO's root CA
   sslClient.setCACert(adafruitio_root_ca_exp);
   mqtt.subscribe(&test_sub);

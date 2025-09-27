@@ -100,6 +100,10 @@ void setup() {
   startMillis = millis();
   maxPeriodMillis = secondsToMillis(30); //300sec => 5min
 
+  //Ultrasonic Sensor Setup
+  pinMode(sonarTrigPin, OUTPUT);
+  pinMode(sonarEchoPin, INPUT);
+
   // LED/Sensor Setup
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);

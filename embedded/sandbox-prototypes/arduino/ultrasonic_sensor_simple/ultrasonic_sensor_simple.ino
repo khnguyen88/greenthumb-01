@@ -11,6 +11,9 @@ NewPing sonar(trigPin, echoPin, maxDistance);
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  //Ultrasonic Sensor Setup
+  pinMode(trigPin, OUTPUT); //needed if not using newping library
+  pinMode(echoPin, INPUT);  //needed if not using newping library
 }
 
 void loop() {
