@@ -81,6 +81,19 @@ void ChronoTaskTimer::refreshTimer(bool isPassedDuration){
     setCurrentDuration();
 }
 
+//For force reset, should not be needed
+void ChronoTaskTimer::resetTaskConditions(){
+    isItTaskTime = false;
+
+    startChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(startChronoTime);
+    startChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(startChronoDurationSinceEpoch);
+    startTimeMillis = startChronoDurationSinceEpochInMillis;
+
+    currentChronoDurationSinceEpoch = castChronoTimeToDurationAtEpoch(currentChronoTime);
+    currentChronoDurationSinceEpochInMillis = castChronoDurationToMillisLongLong(currentChronoDurationSinceEpoch);
+    currentTimeMillis = currentChronoDurationSinceEpochInMillis;
+}
+
 unsigned long ChronoTaskTimer::getStartTimeMillis(){
     return startTimeMillis;
 };
