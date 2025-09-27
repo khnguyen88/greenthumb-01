@@ -11,5 +11,15 @@ namespace AgenticGreenthumbApi.Models
         }
 
         public DbSet<PlantInfoModel> PlantInfos { get; set; } = null;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PlantInfoModel>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<PlantInfoModel>()
+                .Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+        }
     }
 }

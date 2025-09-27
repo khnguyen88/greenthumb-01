@@ -29,8 +29,6 @@
     <Folder Include="Steps\" />
     <Folder Include="Processes\" />
     <Folder Include="Orchestrations\" />
-    <Folder Include="Plugins\" />
-    <Folder Include="Repos\" />
   </ItemGroup>
 
 </Project>
