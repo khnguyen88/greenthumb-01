@@ -161,7 +161,7 @@ void setup() {
   maxPeriodMillis = secondsToMillis(30); //300sec => 5min
 
   //Photo Resistor
-  pinMode(photoResistorPin, OUTPUT);
+  pinMode(photoResistorPin, INPUT);
   (float)analogRead(photoResistorPin)/1023.0 * 100;
   delay(200);
   Serial.print("Setup for PhotoResistor (Raw Analog): ");
@@ -172,7 +172,7 @@ void setup() {
   Serial.println(currentPhotoResistorReadingPct); 
 
   //Soil Moisture
-  pinMode(soilMoisturePin, OUTPUT);
+  pinMode(soilMoisturePin, INPUT);
   (float)analogRead(soilMoisturePin)/1023.0 * 100;
   delay(200);
   Serial.print("Setup for Soil Moisture (Raw Analog): ");
