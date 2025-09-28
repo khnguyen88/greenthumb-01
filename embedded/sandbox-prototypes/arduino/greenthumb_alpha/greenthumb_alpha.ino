@@ -15,6 +15,7 @@
 #include "adafruit_helper.h"
 #include "unit_converter.h"
 
+#include "arduino_task_timer.h"
 /////START GLOBAL STATES//////////////////
 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
@@ -39,12 +40,19 @@ AdafruitHelper mqttHelper(mqtt);
 const int photoResistorPin = A0;
 const float photoResistoMaxDarkRawValue = 20; //Range 0-1023, Initial Calibration required. In Pitch black environment.
 const float photoResistorMaxBrightRawValue = 1023;//Range 0-1023, Initial Calibration required. In Full Light environment. Adjust for indoor/outdoor.
+long currentPhotoResistorReadingRaw = 0; // 0 to 1023;
 float currentPhotoResistorReadingPct = 0; // 0 to 100;
+long photoResistorCheckFrequencyHr = 6;
+long photoResistorCheckFrequencyMillis = hoursToMillis(photoResistorCheckFrequencyHr);
 
 const int soilMoisturePin = A5;
 const float soilMoistureAirRawValue = 588.00;//Range 0-1023, Initial Calibration required. Exposed in air, 0% saturation. 
-const float soilMoistureWaterRawValue = 255.00; //Range 0-1023, Initial Calibration required. Submerged in water, 100% saturation. 
+const float soilMoistureWaterRawValue = 255.00; //Range 0-1023, Initial Calibration required. Submerged in water, 100% saturation.
+long currentSoilMoistureReadingRaw = 0; // 0 to 1023;
 float currentSoilMoistureReadingPct = 0; // 0 to 100;
+long soilMoistureCheckFrequencyHr = 4;
+long soilMoistureCheckFrequencyMillis = hoursToMillis(soilMoistureCheckFrequencyHr);
+
 
 //Pump Device (Digital Signal)
 const float soilVoidRatio = 0.4;
@@ -61,49 +69,52 @@ const float pumpFlowRateCInPM = pumpFlowRateLPM * (float)cubicInPerLiter;
 const float pumpFlowRateCInPS = pumpFlowRateCInPM * (1 / 60);
 const int waterPumpPin = 3;
 
-const bool forcePumpOn = false;
-const float pumpDurationSec = soilWaterVolByIncremCubicIn / pumpFlowRateCInPS;
-const long pumpDurationMillis = pumpDurationSec * 1000;
-const int pumpFrequencyHr = hrsInDay / waterFreqTilFull; //Arbitary
+const float tubeTravelTimeSec = 1.0; //Estimated, but it can be calculated too. Area of tube * length / flow-rate;
+const float pumpActiveDurationSec = soilWaterVolByIncremCubicIn / pumpFlowRateCInPS + tubeTravelTimeSec;
+const long pumpActiveDurationMillis = secondsToMillis(pumpActiveDurationSec);
+
+float soilMoisturePumpTriggerValue = (float)minPlantSoilMoistPct;
+bool isPumpActive = false;
+bool isUserForcePumpActive = false; // Update from Adafruit Subscription
 
 
 //Digital Sensors
 const int sonarWaterEchoPin = 6; //Ultrasonic sensor echo pin
 const int sonarWaterTrigPin = 7; //Ultrasonic sensor trigger pin
-const float minAllowWaterLevelInch = 1.5; // Minimum water level to keep the pump submerged, inches
+const float minAllowWaterLevelInch = 2.0; // Minimum water level to keep the pump submerged, inches + a lil safety factor. Pump height is 1.57 inches.
 const float maxAllowWaterLevelInch = 5.0; // Height of the water container, inches
 float initNoWaterDepthInch = 0; //Currently the sonar is hitting the pump. We need to account and adjust for the depth differences
 float currentWaterLevelInch = 0;
-const float calibratedWaterSensorLevel = minAllowWaterLevelInch; //To Adjust for any obstruction or constraints placed on the sensor depth
+const float calibratedWaterSensorLevelInch = 0; //To Adjust for any obstruction or constraints placed on the sensor depth
 
 const int sonarPlantEchoPin = 8; //Ultrasonic sensor echo pin
 const int sonarPlantTrigPin = 9; //Ultrasonic sensor trigger pin
 float initDepthToSoilInch = 0;
 float currentPlantHeightInch = 0;
 const float maxPlantHeight = 6.0; // Minimum water level to keep the pump submerged, inches
-const float calibratedPlantSensorHeight = 0; //To Adjust for any obstruction or constraints placed on the sensor depth
+const float calibratedPlantSensorHeightInch = 0; //To Adjust for any obstruction or constraints placed on the sensor depth
 
 const int maxDistanceCm = 200; //ultrasonic sensor, cm
 
 const int dhtPin = 10; //DHT sensor pin #
+int currentHumidityPct;
+int currentTempCel;
 
 //Light Devices (Digital Signal)
 const int ledPin = 12; //LED pin #
 
 const int growLightPin = 13; // Growlight pin # (really it's a relay switch)
 int lightIntGrowLightTrigPct = 10; // If the photo resistor sensor reading reaches below this percentage 
-int lightIntensityDurationHr = 2;
-long lightIntensityDurationMillis = lightIntensityDurationHr * 60 * 60 * 1000;
-bool forceLightOn = false; // Turns on when
+int growlightActiveDurationHrs = 1;
+long growlightActiveDurationMillis = hoursToMillis(growlightActiveDurationHrs) ;
+bool isUserForceGrowLightActive = false; // Update from Adafruit Subscription based on User Input
+bool isGrowlightActive = false;
 
 unsigned long startMillis;
 unsigned long currentMillis;
 unsigned long maxPeriodMillis; //5mins; 1 sec = 1000 mils
 
-
-float duration, distanceCm, distanceIn;
-int humidity, temperature;
-bool ledOnState;
+bool isLedActive;
 
 DHT11 dht11(dhtPin);
 NewPing sonarWater(sonarWaterTrigPin, sonarWaterEchoPin, maxDistanceCm);
@@ -112,12 +123,45 @@ RBD::LightSensor light_sensor(photoResistorPin);
 
 bool isStartofLoop = false;
 
+//ACTUAL
+// ArduinoTaskTimer photoResistorCheckTimer(photoResistorCheckFrequencyMillis);
+// ArduinoTaskTimer growlightActiveTimer(soilMoistureCheckFrequencyMillis);
+
+// ArduinoTaskTimer soilMoistureCheckTimer(4 * 60 * 60 * 1000); 
+// ArduinoTaskTimer pumpActiveTimer(pumpActiveDurationMillis);
+
+//FOR TESTING ONLY
+ArduinoTaskTimer photoResistorCheckTimer(photoResistorCheckFrequencyMillis);
+ArduinoTaskTimer growlightActiveTimer(growlightActiveDurationMillis); 
+
+ArduinoTaskTimer soilMoistureCheckTimer(soilMoistureCheckFrequencyMillis);
+ArduinoTaskTimer pumpActiveTimer(pumpActiveDurationMillis);
+
+long publishFrequencyHrs = 1;
+long subscribeFrequencyHrs = 1;
+long sensorReadingFrequencyMinutes = 1;
+
+ArduinoTaskTimer publishFrequencyTimer(hoursToMillis(publishFrequencyHrs));
+ArduinoTaskTimer subscribeFrequencyTimer(hoursToMillis(subscribeFrequencyHrs));
+ArduinoTaskTimer sensorReadingFrequencyTimer(minutesToMillis(sensorReadingFrequencyMinutes));
 /****************************** Feeds ***************************************/
 
 // Setup a feed called 'test' for publishing and subscribing
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
 Adafruit_MQTT_Publish pub_test = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/test");
-Adafruit_MQTT_Subscribe test_sub = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/test");
+Adafruit_MQTT_Subscribe sub_test = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/test");
+
+Adafruit_MQTT_Publish pub_photoResistor = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/photo-resistor-pct");
+Adafruit_MQTT_Publish pub_soilMoisture = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/soil-moisture-pct");
+Adafruit_MQTT_Publish pub_waterLevel = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/water-level-in");
+Adafruit_MQTT_Publish pub_plantHeight = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/plant-height-in");
+Adafruit_MQTT_Publish pub_temperature = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temperature-cel");
+Adafruit_MQTT_Publish pub_humidity = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/humidity-pct");
+
+Adafruit_MQTT_Publish pub_growLight = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/grow-light-bool");
+Adafruit_MQTT_Publish pub_pump = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/pump-bool");
+
+
 
 /////END GLOBAL STATE////////////////
 
@@ -161,13 +205,15 @@ void setup() {
   maxPeriodMillis = secondsToMillis(30); //300sec => 5min
 
   //Photo Resistor
-  pinMode(photoResistorPin, INPUT);
+  pinMode(photoResistorPin, INPUT); //INPUT listens to voltage changes on the pin
   (float)analogRead(photoResistorPin)/1023.0 * 100;
   delay(200);
   Serial.print("Setup for PhotoResistor (Raw Analog): ");
   Serial.println((float)analogRead(photoResistorPin));
-  Serial.print("Setup for PhotoResistor (Mapped Analog): ");
-  currentPhotoResistorReadingPct = (float)map(analogRead(photoResistorPin), photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100); // Brighter light, higher value;
+  Serial.print("Setup for PhotoResistor (Mapped Analog) & ");
+  Serial.print("Initial PhotoResistor Sensor Reading (pct): ");
+  currentPhotoResistorReadingRaw = analogRead(photoResistorPin);
+  currentPhotoResistorReadingPct = (float)map(currentPhotoResistorReadingRaw, photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100); // Brighter light, higher value;
   constrainMinMaxRange(currentPhotoResistorReadingPct);
   Serial.println(currentPhotoResistorReadingPct); 
 
@@ -177,41 +223,44 @@ void setup() {
   delay(200);
   Serial.print("Setup for Soil Moisture (Raw Analog): ");
   Serial.println((float)analogRead(soilMoisturePin));
-  Serial.print("Setup for Soil Moisture (Mapped Analog): ");
-  currentSoilMoistureReadingPct = (float)map(analogRead(soilMoisturePin), soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0); //More saturation lower value. So we flipped the mapping.
+  Serial.print("Setup for Soil Moisture (Mapped Analog) & ");
+  Serial.print("Initial Soil Moisture Sensor Reading (pct): ");
+  currentSoilMoistureReadingRaw = analogRead(soilMoisturePin);
+  currentSoilMoistureReadingPct = (float)map(currentSoilMoistureReadingRaw, soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0); //More saturation lower value. So we flipped the mapping.
   constrainMinMaxRange(currentSoilMoistureReadingPct);
   Serial.println(currentSoilMoistureReadingPct);
 
   //Pump
   pinMode(waterPumpPin, OUTPUT);
-  digitalWrite(waterPumpPin, LOW);
-  Serial.print("Pump Frequency, HR: ");
-  Serial.println(pumpFrequencyHr);
-
   Serial.print("Pump Duration, SEC: ");
-  Serial.println(pumpDurationSec);
+  Serial.println(pumpActiveDurationSec);
 
   // Growlight Setup
-  pinMode(growLightPin, OUTPUT);
+  pinMode(growLightPin, OUTPUT); //OUTPUT transmit signal to the component
   digitalWrite(growLightPin, LOW);
 
   // LED Setup
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
-  ledOnState = false;
+  isLedActive = false;
 
   // Depth Sensor
-  initNoWaterDepthInch = (float)(sonarWater.ping_cm()/2.54) + calibratedWaterSensorLevel;
-  Serial.print("Setup for Water Sensor (in): ");
+  initNoWaterDepthInch = (float)(sonarWater.ping_cm()/2.54) + calibratedWaterSensorLevelInch;
+  Serial.print("Setup for Initial (No) Water Sensor Depth Reading(in): ");
   Serial.println(initNoWaterDepthInch);
 
-  initDepthToSoilInch = (float)(sonarPlant.ping_cm()/2.54) + calibratedPlantSensorHeight;
-  Serial.print("Setup for Plant Sensor (in): ");
+  initDepthToSoilInch = (float)(sonarPlant.ping_cm()/2.54) + calibratedPlantSensorHeightInch;
+  Serial.print("Setup for Initial Plant (Just Soil) Sensor Depth Reading (in): ");
   Serial.println(initDepthToSoilInch);
 
+  sonarDistance(sonarPlant, "Plant", initDepthToSoilInch, currentPlantHeightInch);
+  sonarDistance(sonarWater, "Water", initNoWaterDepthInch, currentWaterLevelInch);
+
+  sensorDHT(currentTempCel, currentHumidityPct, dht11);
+  
   // Set Adafruit IO's root CA
   sslClient.setCACert(adafruitio_root_ca);
-  mqtt.subscribe(&test_sub);
+  mqtt.subscribe(&sub_test);
 
   Serial.println("SETUP COMPLETE");
 }
@@ -222,62 +271,178 @@ void loop() {
   if(!isStartofLoop){
   Serial.println("START OF LOOPING");
   isStartofLoop = true;
-  }
   Serial.println("==============================");
-  currentMillis = millis();
-
-  if(currentMillis - startMillis >= maxPeriodMillis){
-    //Sensor Reading
-    Serial.print("Soil Moisture Ratio: ");
-    currentSoilMoistureReadingPct = (float)map(analogRead(soilMoisturePin), soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0);
-    constrainMinMaxRange(currentSoilMoistureReadingPct);
-    Serial.print(currentSoilMoistureReadingPct); 
-    Serial.println("%");
+  }
 
 
-    Serial.print("Light Intensity: ");
-    currentPhotoResistorReadingPct = (float)map(analogRead(photoResistorPin), photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100);
+  // Check and act on sensorReadingFrequencyTimer
+  // One general timer can be used to update sensor reading
+  if (sensorReadingFrequencyTimer.checkIsItTaskTime()) {
+    Serial.println("-----------------------------------------------");
+    Serial.println("Reading Sensor Data Now...");
+    isLedActive = true;
+    digitalWrite(ledPin, isLedActive ? HIGH : LOW);
+
+    currentPhotoResistorReadingRaw = analogRead(photoResistorPin);
+    currentPhotoResistorReadingPct = (float)map(currentPhotoResistorReadingRaw, photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100); // Brighter light, higher value;
     constrainMinMaxRange(currentPhotoResistorReadingPct);
+
+    Serial.print("Light Intensity Pct: ");
     Serial.print(currentPhotoResistorReadingPct); 
-    Serial.println("%");
+    Serial.println("%");  
+
+    currentSoilMoistureReadingRaw = analogRead(soilMoisturePin);
+    currentSoilMoistureReadingPct = (float)map(currentSoilMoistureReadingRaw, soilMoistureWaterRawValue, soilMoistureAirRawValue, 100, 0); //More saturation lower value. So we flipped the mapping.
+    constrainMinMaxRange(currentSoilMoistureReadingPct);
+  
+    Serial.print("Soil Moisture Pct: ");
+    Serial.print(currentSoilMoistureReadingPct); 
+    Serial.println("%");  
 
     sonarDistance(sonarPlant, "Plant", initDepthToSoilInch, currentPlantHeightInch);
     sonarDistance(sonarWater, "Water", initNoWaterDepthInch, currentWaterLevelInch);
-    sensorDHT(temperature, humidity, dht11);
 
-    Serial.print("LED State: ");
-    Serial.println(digitalRead(ledPin));
+    sensorDHT(currentTempCel, currentHumidityPct, dht11);
+    Serial.println("Sensor Reading Complete...");
+
+    delay(500);
+    isLedActive = false;
+    digitalWrite(ledPin, isLedActive ? HIGH : LOW);
+  }
+
+  // ----------------------------------------------
+  // Photoresistor Sensor Check and Grow Light Activity
+  // ----------------------------------------------
+
+  // Determine if it's time to check photo resistor sensor
+  if (photoResistorCheckTimer.checkIsItTaskTime()) {
+    if (currentPhotoResistorReadingPct <= lightIntGrowLightTrigPct){
+      Serial.println("-----------------------------------------------");
+      Serial.println("Low Light Level Detected - Activiating grow lights for 2 hours");
+      isGrowlightActive = true;
+      digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
+
+      growlightActiveTimer.resetTaskConditions();
+    }
+    else{
+      Serial.println("Light level sufficient — No need to turn on LED grow lights");
+    }
+  }
+
+  // If user manually force Grow Light activation outside sensor reading
+  if (isUserForceGrowLightActive){
+      // If Force activation, turn on growlight and reset grow light active timer, and turn off user trigger
+      Serial.println("-----------------------------------------------");
+      Serial.println("User has force activated growlight.");
+      isGrowlightActive = true;
+      digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
+
+      growlightActiveTimer.resetTaskConditions();
+      isUserForceGrowLightActive = false;
+  }
+
+  if (isGrowlightActive){
+    if (growlightActiveTimer.checkIsItTaskTime()){
+      Serial.println("-----------------------------------------------");
+      Serial.println("Growlight has been active for X hours, turning off growlight now.");
+      isGrowlightActive = false;
+      digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
+
+    }
+  }
+
+  // -------------------------------------------------------------
+  // Soil Moisture Sensor and Water Depth, and Pump Activity
+  // --------------------------------------------------------------
+
+  // Determine if it's time to check soil moisture sensor
+  if (soilMoistureCheckTimer.checkIsItTaskTime()) {
+    if (currentSoilMoistureReadingPct <= soilMoisturePumpTriggerValue){
+      Serial.println("Low Soil Moisture Level Detected");
+
+      if(currentWaterLevelInch >= minAllowWaterLevelInch){
+        Serial.println("Water is at an acceptable level");
+        Serial.println("Activating water pump");
+        isPumpActive = true;
+        digitalWrite(waterPumpPin, isPumpActive ? HIGH : LOW);
+        pumpActiveTimer.resetTaskConditions();
+      }
+      else{
+        Serial.println("Water is below the acceptable level");
+        Serial.println("water pump will remain inactive");
+      }
+    }
+    else{
+      Serial.println("Soil Moisture Level sufficient — No need to activate pump");
+    }
+  }
+
+  // If user manually force pump activation outside sensor reading
+  if (isUserForcePumpActive){
+      // If Force activation, turn on pump and reset pump active timer, and turn off user trigger
+      Serial.println("User has force activated pump.");
+      if(currentWaterLevelInch >= minAllowWaterLevelInch){
+        Serial.println("Water is at an acceptable level");
+        Serial.println("Activating water pump");
+        isPumpActive = true;
+        digitalWrite(waterPumpPin, isPumpActive ? HIGH : LOW);
+        pumpActiveTimer.resetTaskConditions();
+      }
+      else{
+        Serial.println("Water is below the acceptable level");
+        Serial.println("water pump will remain inactive");
+      }
+      isUserForcePumpActive = false;
+  }
+
+  if (isPumpActive){
+    if (pumpActiveTimer.checkIsItTaskTime()){
+      Serial.println("Pump has been active for X seconds, turning off pump now.");
+      isPumpActive = false;
+      digitalWrite(waterPumpPin, isPumpActive ? HIGH : LOW);
+
+    }
+  }
+
+    // Check and act on publishFrequencyTimer
+  // One general timer can be used to publish data (send data)
+  if (publishFrequencyTimer.checkIsItTaskTime()) {
+    Serial.println("-----------------------------------------------");
+    Serial.println("Publishing Data Now...");
+    
+    //MQTT Connect
+    mqttHelper.AdaMqttClientConnect();
+    mqttHelper.PublishToFeed<float>(pub_photoResistor, "photo-resistor-pct", currentPhotoResistorReadingPct);
+    mqttHelper.PublishToFeed<float>(pub_soilMoisture, "soil-moisture-pct", currentSoilMoistureReadingPct);
+    mqttHelper.PublishToFeed<float>(pub_waterLevel, "water-level-in", currentWaterLevelInch);
+    mqttHelper.PublishToFeed<float>(pub_plantHeight, "plant-height-in", currentPlantHeightInch);
+    mqttHelper.PublishToFeed<int32_t>(pub_temperature, "temperature-cel", currentTempCel);
+    mqttHelper.PublishToFeed<int32_t>(pub_humidity, "humidity-pct", currentHumidityPct);
+
+    mqttHelper.PublishToFeed<int32_t>(pub_growLight, "grow-light-bool", isGrowlightActive);
+    mqttHelper.PublishToFeed<int32_t>(pub_pump, "pump-bool", isPumpActive);
+
+    Serial.println("Publishing Data Complete...");
+  }
+
+  // Check and act on subscribeFrequencyTimer
+  // One general timer can be used to subscribe data (recieve data)
+  if (subscribeFrequencyTimer.checkIsItTaskTime()) {
+    Serial.println("-----------------------------------------------");
+    Serial.println("Subsribing To Data Now...");
 
     //MQTT Connect
     mqttHelper.AdaMqttClientConnect();
+    // mqttHelper.UpdateWithSubscribeFeed(sub_test, "test", isLedActive, true);
 
-    //MQTT Publish ==> Send data to MQTT broker
-    // Now we can publish stuff!
-    int32_t dummyVal = ledOnState; //int failed because its 16-bit in uno, so we need to specify int32_t, 32bit. bool can easily be converted to int, but not the other way around
-    mqttHelper.PublishToFeed<int32_t>(pub_test, "test", dummyVal);
-
-    // wait a couple seconds to avoid rate limit
-    delay(2000);
-
-    //MQTT Subscribe ==> Retrieve data from MQTT broker
-    mqttHelper.UpdateWithSubscribeFeed(test_sub, "test", ledOnState, true);
-
-    Serial.print("Flipped LED State: ");
-    Serial.println(ledOnState);
-
-    digitalWrite(ledPin, ledOnState ? HIGH : LOW);
-    digitalWrite(growLightPin, ledOnState ? HIGH : LOW);
-    digitalWrite(waterPumpPin, ledOnState ? HIGH : LOW);
-
-    //FIXED TIMER
-    startMillis = currentMillis;
+    Serial.println("Subsribing Data Complete...");
   }
 }
 
 void sonarDistance(NewPing& sonarSensor, String sensorName, float& initDepth, float& actualHeightLevel){
   delay(50);
-  distanceCm = sonarSensor.ping_cm();
-  distanceIn = (float)(distanceCm/2.54); //converts cm to in, 1 in = 2.5 cm
+  float distanceCm = sonarSensor.ping_cm();
+  float distanceIn = (float)(distanceCm/2.54); //converts cm to in, 1 in = 2.5 cm
   actualHeightLevel = (float)(distanceIn - initDepth);
   if(sensorName == "Water"){
     actualHeightLevel = actualHeightLevel <= 0 ? -actualHeightLevel : 0;

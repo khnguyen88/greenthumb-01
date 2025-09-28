@@ -6,11 +6,19 @@ ArduinoTaskTimer timer1(60000);  // 1 minute
 ArduinoTaskTimer timer2(30000);  // 30 seconds
 ArduinoTaskTimer timer3(10000);  // 10 seconds
 
-ArduinoTaskTimer photoResistorCheckTimer(6 * 60 * 60 * 1000); //6 * 60 * 60 * 1000 - Check Photoresistor every 6 hours
-ArduinoTaskTimer growlightActiveTimer(2 * 60 * 60 * 1000); // 2 * 60 * 60 * 1000 - Activate LED Lights for duration of 2 hours if conditions are met
+//ACTUAL
+// ArduinoTaskTimer photoResistorCheckTimer(6 * 60 * 60 * 1000); //6 * 60 * 60 * 1000 - Check Photoresistor every 6 hours
+// ArduinoTaskTimer growlightActiveTimer(2 * 60 * 60 * 1000); // 2 * 60 * 60 * 1000 - Activate LED Lights for duration of 2 hours if conditions are met
 
-ArduinoTaskTimer soilMoistureCheckTimer(4 * 60 * 60 * 1000); //4 * 60 * 60 * 1000 - Check Soil Moisture every 4 hours
-ArduinoTaskTimer pumpActiveTimer(2 * 1000); // 2 * 1000 - Activate LED Lights for duration of 2 seconds if conditions are met
+// ArduinoTaskTimer soilMoistureCheckTimer(4 * 60 * 60 * 1000); //4 * 60 * 60 * 1000 - Check Soil Moisture every 4 hours
+// ArduinoTaskTimer pumpActiveTimer(2 * 1000); // 2 * 1000 - Activate Pump for duration of 2 seconds if conditions are met
+
+//FOR TESTING ONLY
+ArduinoTaskTimer photoResistorCheckTimer(30 * 1000); //30 * 1000 - Check Photoresistor every 30 seconds
+ArduinoTaskTimer growlightActiveTimer(10 * 1000); // 10 * 1000 - Activate LED Lights for duration of 10 seconds
+
+ArduinoTaskTimer soilMoistureCheckTimer(30 * 1000); //30 * 1000 - Check Soil Moisture every 30 seconds
+ArduinoTaskTimer pumpActiveTimer(3 * 1000); // 3 * 1000 - Activate Pump for duration of 3 seconds if conditions are met
 
 //Photoresistor Sensor and Grow Light Device
 int photoResistorPin = A0;
@@ -39,7 +47,7 @@ const float minAllowWaterLevelInch = 2.0; // Minimum water level to keep the pum
 const float maxAllowWaterLevelInch = 5.0; // Height of the water container, inches
 float initNoWaterDepthInch = 0; //Currently the sonar is hitting the pump. We need to account and adjust for the depth differences
 float currentWaterLevelInch = 0;
-const float calibratedWaterSensorLevel = minAllowWaterLevelInch; //To Adjust for any obstruction or constraints placed on the sensor depth
+const float calibratedWaterSensorLevel = 0; //To Adjust for any obstruction or constraints placed on the sensor depth
 
 const int sonarPlantEchoPin = 8; //Ultrasonic sensor echo pin
 const int sonarPlantTrigPin = 9; //Ultrasonic sensor trigger pin
@@ -55,6 +63,9 @@ NewPing sonarPlant(sonarPlantTrigPin, sonarPlantEchoPin, maxDistanceCm);
 
 void setup() {
   Serial.begin(9600);
+  delay(1000); // Add a short delay (e.g., 500 milliseconds)
+  Serial.println("-----------------------------------------------");
+  Serial.println("SETUP START");
   pinMode(photoResistorPin, INPUT); //INPUT listens to voltage changes on the pin
   pinMode(growLightPin, OUTPUT); //OUTPUT transmit signal to the component
 
@@ -79,6 +90,7 @@ void setup() {
   initDepthToSoilInch = (float)(sonarPlant.ping_cm()/2.54) + calibratedPlantSensorHeight;
   Serial.print("Setup for Initial Plant (Just Soil) Sensor Depth Reading (in): ");
   Serial.println(initDepthToSoilInch);
+  Serial.println("-----------------------------------------------");
 }
 
 void loop() {
@@ -97,6 +109,7 @@ void loop() {
   // Check and act on timer3
   // One general timer can be used to update sensor reading
   if (timer3.checkIsItTaskTime()) {
+    Serial.println("-----------------------------------------------");
     Serial.println("Timer 3: 10 seconds passed");
     rawPhotoResistorValue = analogRead(photoResistorPin);
     currentPhotoResistorReadingPct = map(rawPhotoResistorValue, 0, 1023, 0, 100);
@@ -123,6 +136,7 @@ void loop() {
   // Determine if it's time to check photo resistor sensor
   if (photoResistorCheckTimer.checkIsItTaskTime()) {
     if (currentPhotoResistorReadingPct <= photoResistorGrowLightTriggerValue){
+      Serial.println("-----------------------------------------------");
       Serial.println("Low Light Level Detected - Activiating grow lights for 2 hours");
       isGrowlightActive = true;
       digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
@@ -137,6 +151,7 @@ void loop() {
   // If user manually force Grow Light activation outside sensor reading
   if (isUserForceGrowLightActive){
       // If Force activation, turn on growlight and reset grow light active timer, and turn off user trigger
+      Serial.println("-----------------------------------------------");
       Serial.println("User has force activated growlight.");
       isGrowlightActive = true;
       digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
@@ -147,6 +162,7 @@ void loop() {
 
   if (isGrowlightActive){
     if (growlightActiveTimer.checkIsItTaskTime()){
+      Serial.println("-----------------------------------------------");
       Serial.println("Growlight has been active for X hours, turning off growlight now.");
       isGrowlightActive = false;
       digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
@@ -210,8 +226,8 @@ void loop() {
 
 void sonarDistance(NewPing& sonarSensor, String sensorName, float& initDepth, float& actualHeightLevel){
   delay(50);
-  distanceCm = sonarSensor.ping_cm();
-  distanceIn = (float)(distanceCm/2.54); //converts cm to in, 1 in = 2.5 cm
+  float distanceCm = sonarSensor.ping_cm();
+  float distanceIn = (float)(distanceCm/2.54); //converts cm to in, 1 in = 2.5 cm
   actualHeightLevel = (float)(distanceIn - initDepth);
   if(sensorName == "Water"){
     actualHeightLevel = actualHeightLevel <= 0 ? -actualHeightLevel : 0;
@@ -221,6 +237,7 @@ void sonarDistance(NewPing& sonarSensor, String sensorName, float& initDepth, fl
   }
 
   if(distanceCm >= 0.0){
+    Serial.println("-----------------------------------------------");
     Serial.print(sensorName + " Sonar ");
     Serial.print("Measured Height/Level: ");
     Serial.print(actualHeightLevel); 
