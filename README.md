@@ -150,6 +150,8 @@ Note: This is needed because ESP32 and Arduino microcontrollers uses different l
 -   [Google - Firestore Sample](https://cloud.google.com/firestore/docs/samples/firestore-data-set-id-specified)
 -   [Create a database](https://learn.microsoft.com/en-us/azure/azure-sql/database/free-offer?view=azuresql)
 
+-   [Creating a Connection String and Working with SQL Server LocalDB](https://learn.microsoft.com/en-us/aspnet/mvc/overview/getting-started/introduction/creating-a-connection-string)
+
 <!-- FRONTEND SECTION -->
 
 ## Frontend

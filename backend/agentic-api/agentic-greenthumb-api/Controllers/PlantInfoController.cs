@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AgenticGreenthumbApi.Models;
+using AgenticGreenthumbApi.Services;
+using System.Net;
 
 namespace AgenticGreenthumbApi.Controllers
 {
@@ -13,25 +15,26 @@ namespace AgenticGreenthumbApi.Controllers
     [ApiController]
     public class PlantInfoController : ControllerBase
     {
-        private readonly PlantInfoContext _context;
+        private static PlantInfoService _plantInfoService;
 
-        public PlantInfoController(PlantInfoContext context)
+        public PlantInfoController(PlantInfoService plantInfoService)
         {
-            _context = context;
+            _plantInfoService = plantInfoService;
         }
 
         // GET: api/PlantInfo
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PlantInfoModel>>> GetPlantInfos()
         {
-            return await _context.PlantInfos.ToListAsync();
+            return await _plantInfoService.GetPlantInfos();
+
         }
 
         // GET: api/PlantInfo/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PlantInfoModel>> GetPlantInfoModel(long id)
         {
-            var plantInfoModel = await _context.PlantInfos.FindAsync(id);
+            var plantInfoModel = await _plantInfoService.GetPlantInfoModel(id);
 
             if (plantInfoModel == null)
             {
@@ -51,25 +54,17 @@ namespace AgenticGreenthumbApi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(plantInfoModel).State = EntityState.Modified;
+            HttpStatusCode httpStatusCode = await _plantInfoService.PutPlantInfoModel(id, plantInfoModel);
 
-            try
+            switch (httpStatusCode)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlantInfoModelExists(id))
-                {
+                case HttpStatusCode.NotFound:
                     return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                case HttpStatusCode.BadRequest:
+                    return BadRequest();
+                default:
+                    return NoContent();
             }
-
-            return NoContent();
         }
 
         // POST: api/PlantInfo
@@ -77,31 +72,24 @@ namespace AgenticGreenthumbApi.Controllers
         [HttpPost]
         public async Task<ActionResult<PlantInfoModel>> PostPlantInfoModel(PlantInfoModel plantInfoModel)
         {
-            _context.PlantInfos.Add(plantInfoModel);
-            await _context.SaveChangesAsync();
+            PlantInfoModel postResult = await _plantInfoService.PostPlantInfoModel(plantInfoModel);
 
-            return CreatedAtAction("GetPlantInfoModel", new { id = plantInfoModel.Id }, plantInfoModel);
+            return CreatedAtAction("GetPlantInfoModel", new { id = postResult.Id }, postResult);
         }
 
         // DELETE: api/PlantInfo/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlantInfoModel(long id)
         {
-            var plantInfoModel = await _context.PlantInfos.FindAsync(id);
-            if (plantInfoModel == null)
+            HttpStatusCode httpStatusCode = await _plantInfoService.DeletePlantInfoModel(id);
+
+            switch (httpStatusCode)
             {
-                return NotFound();
+                case HttpStatusCode.NotFound:
+                    return NotFound();
+                default:
+                    return NoContent();
             }
-
-            _context.PlantInfos.Remove(plantInfoModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PlantInfoModelExists(long id)
-        {
-            return _context.PlantInfos.Any(e => e.Id == id);
         }
     }
 }

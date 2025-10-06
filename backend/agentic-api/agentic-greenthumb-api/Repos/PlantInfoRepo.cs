@@ -31,8 +31,7 @@ namespace AgenticGreenthumbApi.Repos
             return plantInfoModel;
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<HttpStatusCode>> PutPlantInfoModel(long id, PlantInfoModel plantInfoModel)
+        public async Task<HttpStatusCode> PutPlantInfoModel(long id, PlantInfoModel plantInfoModel)
         {
             if (id != plantInfoModel.Id)
             {
@@ -60,7 +59,7 @@ namespace AgenticGreenthumbApi.Repos
             return HttpStatusCode.NoContent;
         }
 
-        public async Task<ActionResult<PlantInfoModel>> PostPlantInfoModel(PlantInfoModel plantInfoModel)
+        public async Task<PlantInfoModel> PostPlantInfoModel(PlantInfoModel plantInfoModel)
         {
             _context.PlantInfos.Add(plantInfoModel);
             await _context.SaveChangesAsync();
@@ -68,7 +67,7 @@ namespace AgenticGreenthumbApi.Repos
             return await Task.FromResult(plantInfoModel);
         }
 
-        public async Task<ActionResult<HttpStatusCode>> DeletePlantInfoModel(long id)
+        public async Task<HttpStatusCode> DeletePlantInfoModel(long id)
         {
             var plantInfoModel = await _context.PlantInfos.FindAsync(id);
             if (plantInfoModel == null)
@@ -77,6 +76,7 @@ namespace AgenticGreenthumbApi.Repos
             }
 
             _context.PlantInfos.Remove(plantInfoModel);
+            
             await _context.SaveChangesAsync();
 
             return HttpStatusCode.NoContent;

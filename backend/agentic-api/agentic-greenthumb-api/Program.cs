@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using AgenticGreenthumbApi.Models;
 using AgenticGreenthumbApi.Services;
+using AgenticGreenthumbApi.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<ChatCompletionService>();
-builder.Services.AddSingleton<AgenticMemoryService>();
-builder.Services.AddSingleton<RagService>();
-builder.Services.AddSingleton<PlantInfoService>();
+builder.Services.AddScoped<ChatCompletionService>();
+builder.Services.AddScoped<AgenticMemoryService>();
+builder.Services.AddScoped<RagService>();
+builder.Services.AddScoped<PlantInfoService>();
+builder.Services.AddScoped<PlantInfoRepo>();
 
 builder.Services.AddDbContext<PlantInfoContext>(opt =>
     opt.UseInMemoryDatabase("PlantInfo"));
