@@ -9,7 +9,7 @@ namespace AgenticGreenthumbApi.Services
 {
     public class PlantInfoService
     {
-        private static PlantInfoRepo _plantInfoRepo;
+        private readonly PlantInfoRepo _plantInfoRepo;
 
         public PlantInfoService(PlantInfoRepo plantInfoRepo) 
         {
@@ -24,6 +24,11 @@ namespace AgenticGreenthumbApi.Services
         public async Task<ActionResult<PlantInfoModel>?> GetPlantInfoModel(long id)
         {
             return await _plantInfoRepo.GetPlantInfoModel(id);
+        }
+
+        public async Task<IEnumerable<PlantInfoModel>> GetPlantInfoModelsByLike(string likeName)
+        {
+            return await _plantInfoRepo.GetPlantInfoModelsByLike(likeName);
         }
 
         public async Task<HttpStatusCode> PutPlantInfoModel(long id, PlantInfoModel plantInfoModel)

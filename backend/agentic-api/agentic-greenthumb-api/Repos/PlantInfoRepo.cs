@@ -1,7 +1,11 @@
 ﻿using AgenticGreenthumbApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Net;
+
+
+
 
 namespace AgenticGreenthumbApi.Repos
 {
@@ -29,6 +33,13 @@ namespace AgenticGreenthumbApi.Repos
             }
 
             return plantInfoModel;
+        }
+
+        public async Task<IEnumerable<PlantInfoModel>> GetPlantInfoModelsByLike(string likeName)
+        {
+            var plantInfoModels = await _context.PlantInfos.Where(p => EF.Functions.Like(p.Name, $"%{likeName}%")).ToListAsync();
+
+            return plantInfoModels;
         }
 
         public async Task<HttpStatusCode> PutPlantInfoModel(long id, PlantInfoModel plantInfoModel)
