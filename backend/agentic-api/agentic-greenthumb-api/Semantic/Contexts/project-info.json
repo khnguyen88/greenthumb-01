@@ -1,0 +1,17 @@
+{
+  "ProjectInfo": {
+    "Name": "Project Greenthumb",
+    "Description": "The Project is a semi-autonomous IoT gardening system. The microcontroller basically grows a plant inside of a container. It captures data from sensors, sends it to AdafruitIO MQTT server in what is known as feeds. The data from the sensors are used to trigger certain devices attached to the microcontroller, such as grow lights or water pump, to respond accordingly to the sensor data and some assigned threshold.",
+    "PlantGrown": "Cat Grass",
+    "Sensors": [ "DHT10", "PhotoResistor", "UltraSonicSensor", "SoilConductivitySensor" ],
+    "SensorsMeasurements": {
+      "DHT10": "Temperature, Humidity",
+      "PhotoResistor": "Light Intensity. How much sunlight or led light is recieved by the plants.",
+      "UltraSonicSensor": "Distance. Plant Height and Water Level.",
+      "SoilConductivitySensor": "Soil Moisture Percentage."
+    },
+    "Devices": [ "LED Growlight", "Water Pump" ],
+    "FeedName": [ "GrowlightTriggered", "Humidity", "PhotoResistor" ],
+    "DataStorage": "Data is Sent and Stored in Adafruit IO Server via MQTT Protocol"
+  }
+}

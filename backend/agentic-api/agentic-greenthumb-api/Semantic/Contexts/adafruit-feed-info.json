@@ -1,0 +1,34 @@
+{
+  "AdafruitIO": {
+    "FeedNamePrefix": {
+      "GrowlightTriggered": "grow-light-bool",
+      "Humidity": "humidity-pct",
+      "PhotoResistor": "photo-resistor-pct",
+      "PlantHeight": "plant-height-in",
+      "PumpTriggered": "pump-bool",
+      "SoilMoisture": "soil-moisture-pct",
+      "Temperature": "temperature-cel",
+      "WaterLevel": "water-level-in"
+    },
+    "FeedNameUnits": {
+      "GrowlightTrigger": "unitless, boolean",
+      "Humidity": "%, percentage",
+      "PhotoResistor": "%, percentage",
+      "PlantHeight": "in, inches",
+      "PumpTriggered": "unitless, boolean",
+      "SoilMoisture": "%, percentage",
+      "Temperature": "C, Celcius",
+      "WaterLevel": "in, inches"
+    },
+    "FeedDataDescription": {
+      "GrowlightTrigger": "An LED growlight device that triggers on when the photo-resistor measured light intensity reading is below a certain threshold. The LED grow light can be turn on or off based on the boolean value. O is off and 1 is on.",
+      "Humidity": "Humidity Data from the DHT10 sensor",
+      "PhotoResistor": "Light Intensity Data from the photo resistor sensor",
+      "PlantHeight": "Sensor is placed at the top of the enclosure pointing towards the potted plant. Plant height is measured by taking the initial distance to the soil and the differences of the subsequent distance as the plant grows. Periodic plant height reading may not be accurate since one reading was taken and median would be required.",
+      "PumpTriggered": "The pump is a device used to feed water from a container to the plant when the plant soil moisture is low. If the water level in the container is below a certain level the microcontroller will not turn the pump on. The pump can be turn on or off based on the boolean value. O is off and 1 is on.",
+      "SoilMoisture": "Soil Measurements in Percentage from the Soil Conductivity Sensor",
+      "Temperature": "Temperature Data in Celcius from the DHT10 sensor",
+      "WaterLevel": "Sensor is placed at the top of the enclosure pointing towards the water container. Measures the water level depth within a container. Water depth is measured by taking the initial distance to the bottom of the container when its empty and the differences of the subsequent distance when the water is filled up and as the water is being used by the pump. The water is used to feed the plant via pump device when the plant's soil moisture is low.'"
+    }
+  }
+}
