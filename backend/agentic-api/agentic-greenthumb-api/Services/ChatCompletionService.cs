@@ -19,10 +19,18 @@ namespace AgenticGreenthumbApi.Services
     public class ChatCompletionService
     {
         private readonly ILogger<ChatCompletionService> _logger;
+        private readonly KernelFactoryService _kernelFactoryService;
+        private readonly UserChatHistoryService _userChatHistoryService;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, KernelFactoryService kernelFactoryService, UserChatHistoryService userChatHistoryService)
         {
             _logger = logger;
+            _kernelFactoryService = kernelFactoryService;
+            _userChatHistoryService = userChatHistoryService;
         }
+
+        
+
+
     }
 }
