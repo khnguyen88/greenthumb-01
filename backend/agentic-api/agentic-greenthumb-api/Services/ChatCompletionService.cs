@@ -1,5 +1,6 @@
 ﻿using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Agents;
+using AgenticGreenthumbApi.Semantic.Plugins;
 using Elastic.Clients.Elasticsearch;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
@@ -23,17 +24,19 @@ namespace AgenticGreenthumbApi.Services
     {
         private readonly ILogger<ChatCompletionService> _logger;
         private readonly UserChatHistoryService _userChatHistoryService;
+        private readonly ChatCompletionPlugin _chatCompletionPlugin;
         private const string userName = "nguyekhi"; //Eventually pass this in
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, UserChatHistoryService userChatHistoryService)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, UserChatHistoryService userChatHistoryService, ChatCompletionPlugin chatCompletionPlugin)
         {
             _logger = logger;
             _userChatHistoryService = userChatHistoryService;
+            _chatCompletionPlugin = chatCompletionPlugin;
         }
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
-            ChatAgentRegistry chatAgentRegistry = new ChatAgentRegistry();
+            ChatAgentRegistry chatAgentRegistry = new ChatAgentRegistry(_chatCompletionPlugin);
 
             ChatHistoryAgentThread agentThread = new();
 

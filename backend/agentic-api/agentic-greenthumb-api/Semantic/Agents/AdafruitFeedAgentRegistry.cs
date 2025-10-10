@@ -5,6 +5,7 @@ using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using System.ComponentModel;
 using System.Text.Json;
+using static Elastic.Clients.Elasticsearch.JoinField;
 
 namespace AgenticGreenthumbApi.Semantic.Agents
 {
@@ -30,32 +31,31 @@ namespace AgenticGreenthumbApi.Semantic.Agents
             The agent will retrieve any sensor and device data requested by the user. The agent my summarize the data too
             """;
 
-        private static string context;
+        public ChatCompletionAgent AdafruitFeedAgent { get; private set; }
 
-        private static string instructionWithContext;
-
-        private static Kernel kernel;
-
-        static AdafruitFeedAgentRegistry()
+        public AdafruitFeedAgentRegistry(AdafruitPlugin adafruitPlugin)
         {
-            context = FileReaderHelper.GetContextFile("adafruit-feed-info.json");
-            instructionWithContext = string.IsNullOrWhiteSpace(context) ? instructions : instructions + "\n \n" + $"Here are some additional context: {context}";
-            kernel = KernelFactoryHelper.GetNewKernel();
-            kernel.Plugins.AddFromType<AdafruitPlugin>("AdafruitPlugin");
+            var context = FileReaderHelper.GetContextFile("adafruit-feed-info.json");
+            var instructionWithContext = string.IsNullOrWhiteSpace(context)
+                ? instructions
+                : instructions + "\n\n" + $"Here are some additional context: {context}";
+
+            var kernel = KernelFactoryHelper.GetNewKernel();
+            kernel.Plugins.AddFromObject(adafruitPlugin, "AdafruitPlugin");
+
+            var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
+            {
+                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+            };
+
+            AdafruitFeedAgent = new ChatCompletionAgent
+            {
+                Name = name,
+                Instructions = instructionWithContext,
+                Description = description,
+                Kernel = kernel,
+                Arguments = new KernelArguments(openAIPromptExecutionSettings),
+            };
         }
-
-        private static readonly OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
-        {
-            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
-        };
-
-        public ChatCompletionAgent AdafruitFeedAgent { get; } = new()
-        {
-            Name = name,
-            Instructions = instructionWithContext,
-            Description = description,
-            Kernel = kernel,
-            Arguments = new KernelArguments(openAIPromptExecutionSettings),
-        };
     }
 }

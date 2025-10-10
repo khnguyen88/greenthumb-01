@@ -22,33 +22,32 @@ namespace AgenticGreenthumbApi.Semantic.Agents
 
         private const string description = "A chat completion agent for an IoT Automated Gardening System";
 
-        private static string context;
+        public ChatCompletionAgent ChatCompletionAgent { get; private set; }
 
-        private static string instructionWithContext;
-
-        private static Kernel kernel;
-
-        static ChatAgentRegistry()
+        public ChatAgentRegistry(ChatCompletionPlugin chatCompletionPlugin)
         {
-            context = FileReaderHelper.GetContextFile("project-info.json");
-            instructionWithContext = string.IsNullOrWhiteSpace(context) ? instructions : instructions + "\n \n" + $"Here are some additional context: {context}";
-            kernel = KernelFactoryHelper.GetNewKernel();
-            kernel.Plugins.AddFromType<ChatCompletionPlugin>("ChatCompletionPlugin");
+            var context = FileReaderHelper.GetContextFile("project-info.json");
+            var instructionWithContext = string.IsNullOrWhiteSpace(context)
+                ? instructions
+                : instructions + "\n\n" + $"Here are some additional context: {context}";
+
+            var kernel = KernelFactoryHelper.GetNewKernel();
+            kernel.Plugins.AddFromObject(chatCompletionPlugin, "AdafruitPlugin");
+
+            var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
+            {
+                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+            };
+
+            ChatCompletionAgent = new ChatCompletionAgent
+            {
+                Name = name,
+                Instructions = instructionWithContext,
+                Description = description,
+                Kernel = kernel,
+                Arguments = new KernelArguments(openAIPromptExecutionSettings),
+            };
         }
-
-        private static readonly OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
-        {
-            FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
-        };
-
-        public ChatCompletionAgent ChatCompletionAgent {  get ; } = new()
-        {
-            Name = name,
-            Instructions = instructionWithContext,
-            Description = description,
-            Kernel = kernel,
-            Arguments = new KernelArguments(openAIPromptExecutionSettings),
-        };
 
     }
 }

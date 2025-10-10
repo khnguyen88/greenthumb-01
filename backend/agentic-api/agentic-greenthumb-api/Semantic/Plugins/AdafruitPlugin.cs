@@ -13,10 +13,11 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
 
         private readonly AdafruitService _adafruitService;
 
-        AdafruitPlugin(AdafruitService adafruitService)
+        public AdafruitPlugin(AdafruitService adafruitService)
         {
             _adafruitService = adafruitService;
         }
+
         public static class KernelFunction
         {
             public const string GetAdafruitSensorFeedDataAsync = nameof(GetAdafruitSensorFeedDataAsync);
@@ -36,9 +37,9 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         [KernelFunction(KernelFunction.FormatAdafruitSensorFeedDataAsync)]
         [Description("Filter the feed data as requested upon recieving it. Only if requested. For example if user what to filter sensor data that was read every other ours. Filters should fit the properties of the feed data model.")]
         [return: Description("Filtered the model data as requested upon recieving it. For example if user what to filter sensor data that was read every other ours. If the requested filter is not achievable return the content and apologize.")]
-        public async Task<IEnumerable<AdafruitFeedModel<float>>> FormatAdafruitSensorFeedDataAsync(IEnumerable<AdafruitFeedModel<float>> unfilteredData)
+        public string FormatAdafruitSensorFeedDataAsync(IEnumerable<AdafruitFeedModel<float>> unfilteredData)
         {
-            return await _adafruitService.GetHumidityFeedData();
+            return JsonSerializer.Serialize(Task.FromResult(_adafruitService.GetHumidityFeedData()));
         }
 
         [KernelFunction(KernelFunction.SummarizeAdafruitSensorFeedDataAsync)]
