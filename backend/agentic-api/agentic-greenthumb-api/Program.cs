@@ -3,6 +3,7 @@ using AgenticGreenthumbApi.Models;
 using AgenticGreenthumbApi.Services;
 using AgenticGreenthumbApi.Repos;
 using AgenticGreenthumbApi.Client;
+using AgenticGreenthumbApi.Helper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 //Should Persists for the entirety for the lifespan of an object
 builder.Services.AddSingleton<AgenticMemoryService>();
-builder.Services.AddSingleton<KernelFactoryService>();
+builder.Services.AddSingleton<KernelFactoryHelper>();
 builder.Services.AddSingleton<AdafruitAPIClient>();
 builder.Services.AddSingleton<AdafruitService>();
 
