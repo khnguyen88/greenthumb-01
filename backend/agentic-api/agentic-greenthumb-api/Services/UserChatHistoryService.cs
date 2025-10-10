@@ -1,5 +1,8 @@
 ﻿using AgenticGreenthumbApi.Domain;
 using Azure.Messaging;
+using Elastic.Clients.Elasticsearch;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.ChatCompletion;
 using StackExchange.Redis;
 using System.Collections.Concurrent;
@@ -15,16 +18,23 @@ namespace AgenticGreenthumbApi.Services
             InMemUserChatHistory = new();
         }
 
-        public bool IsUserChatHistoryRecordExpired(string userId)
+        public bool IsUserChatHistoryRecordExpired(string username)
         {
-            UserChatHistory userChatHistoryRecord = GetUserChatHistory(userId);
-            int recordExpirationDay = 1;
-            DateTime currentDateTime = DateTime.UtcNow;
-            DateTime expirationDateTime = userChatHistoryRecord.SessionDateTime.AddDays(recordExpirationDay);
+            InMemUserChatHistory.TryGetValue(username, out UserChatHistory? userChatHistoryRecord);
 
-            int compareResult = DateTime.Compare(expirationDateTime, currentDateTime);
+            if (userChatHistoryRecord == null)
+            {
+                return true;
+            }
+            else {
+                int recordExpirationDay = 1;
+                DateTime currentDateTime = DateTime.UtcNow;
+                DateTime expirationDateTime = GetUserChatHistory(username).SessionDateTime.AddDays(recordExpirationDay);
 
-            return compareResult >= 0;
+                int compareResult = DateTime.Compare(expirationDateTime, currentDateTime);
+
+                return compareResult >= 0;
+            }
         }
 
         public UserChatHistory GetUserChatHistory(string username)
@@ -46,25 +56,27 @@ namespace AgenticGreenthumbApi.Services
             }
         }
 
-
-        public void AddUpdateUserChatHistory(string username, ChatHistory currentChatHistory)
+        public void AddUpdateUserChatHistory(string username, ChatHistory latestChatHistory)
         {
-
             UserChatHistory userChatHistory = GetUserChatHistory(username);
 
-            if (IsUserChatHistoryRecordExpired(username))
-            {
-                userChatHistory.ChatHistory = new ChatHistory();
-            }
-            else
-            {
-                userChatHistory.ChatHistory = currentChatHistory;
-            }
+            userChatHistory.ChatHistory = latestChatHistory;
+
+            InMemUserChatHistory.AddOrUpdate(username, userChatHistory, (username, userChatHistory) => userChatHistory);
         }
+
 
         public void DeleteUserChatHistory(string username)
         {
             InMemUserChatHistory.TryRemove(username, out _);
+        }
+
+        public void PopulateAgentThread(ChatHistoryAgentThread agentThread, ChatHistory userChatHistory)
+        {
+            foreach (ChatMessageContent chatMessage in userChatHistory)
+            {
+                agentThread.ChatHistory.Add(chatMessage);
+            }
         }
     }
 }

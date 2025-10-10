@@ -10,10 +10,10 @@ namespace AgenticGreenthumbApi.Helper
 {
     public class KernelFactoryHelper
     {
-        public static Kernel MasterKernel { get; set; }
-        public static IKernelMemory MasterKernelMemory { get; set; }
+        public static Kernel masterKernel;
+        public static IKernelMemory masterKernelMemory;
 
-        public KernelFactoryHelper() {
+        static KernelFactoryHelper() {
 
             var config = new ConfigurationBuilder().AddUserSecrets("4f91f0a7-edfa-4d74-b7d8-6f7a324e86fb").Build();
 
@@ -73,7 +73,7 @@ namespace AgenticGreenthumbApi.Helper
 
             // Create a kernel with Azure OpenAI chat completion
             IKernelBuilder kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion(textDeploymentName, endpoint, apiKey);
-            MasterKernel = kernelBuilder.Build();
+            masterKernel = kernelBuilder.Build();
 
             IKernelMemoryBuilder memoryBuilder = new KernelMemoryBuilder()
                 .WithAzureOpenAITextGeneration(textAzureOpenAIConfig)
@@ -81,29 +81,29 @@ namespace AgenticGreenthumbApi.Helper
                 .WithAzureAISearchMemoryDb(azureAISearchConfig)
                 .WithAzureBlobsDocumentStorage(azureBlobsConfig);
 
-            MasterKernelMemory = memoryBuilder.Build();
+            masterKernelMemory = memoryBuilder.Build();
 
 
         }
 
         public static Kernel GetNewKernel()
         {
-            return MasterKernel.Clone();
+            return masterKernel.Clone();
         }
 
         public static IKernelMemory GetNewKernelMemory()
         {
-            return FastDeepCloner.DeepCloner.Clone(MasterKernelMemory);
+            return FastDeepCloner.DeepCloner.Clone(masterKernelMemory);
         }
 
         public static Kernel GetMasterKernel()
         {
-            return MasterKernel;
+            return masterKernel;
         }
 
         public static IKernelMemory GetMasterKernelMemory()
         {
-            return MasterKernelMemory;
+            return masterKernelMemory;
         }
     }
 }

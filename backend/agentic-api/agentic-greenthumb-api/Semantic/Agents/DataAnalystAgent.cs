@@ -1,7 +1,6 @@
-﻿namespace AgenticGreenthumbApi.Semantic.Agents
+﻿namespace AgenticGreenthumbApi.Agents
 {
     public class DataAnalystAgent
     {
-
     }
 }

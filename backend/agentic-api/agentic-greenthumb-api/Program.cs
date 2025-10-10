@@ -4,6 +4,8 @@ using AgenticGreenthumbApi.Services;
 using AgenticGreenthumbApi.Repos;
 using AgenticGreenthumbApi.Client;
 using AgenticGreenthumbApi.Helper;
+using AgenticGreenthumbApi.Semantic.Agents;
+using AgenticGreenthumbApi.Semantic.Plugins;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +21,10 @@ builder.Services.AddSingleton<AgenticMemoryService>();
 builder.Services.AddSingleton<KernelFactoryHelper>();
 builder.Services.AddSingleton<AdafruitAPIClient>();
 builder.Services.AddSingleton<AdafruitService>();
+builder.Services.AddSingleton<UserChatHistoryService>();
 
 //Should Only Persist for the lifespan of a single request
 builder.Services.AddScoped<ChatCompletionService>();
-builder.Services.AddScoped<UserChatHistoryService>();
 builder.Services.AddScoped<RagService>();
 builder.Services.AddScoped<PlantInfoService>();
 builder.Services.AddScoped<PlantInfoRepo>();

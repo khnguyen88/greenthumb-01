@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AgenticGreenthumbApi.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AgenticGreenthumbApi.Controllers
 {
@@ -8,10 +9,12 @@ namespace AgenticGreenthumbApi.Controllers
     {
 
         private readonly ILogger<ChatCompletionController> _logger;
+        private readonly ChatCompletionService _chatCompletionService;
 
-        public ChatCompletionController(ILogger<ChatCompletionController> logger)
+        public ChatCompletionController(ILogger<ChatCompletionController> logger, ChatCompletionService chatCompletionService)
         {
             _logger = logger;
+            _chatCompletionService = chatCompletionService;
         }
 
         [HttpGet("GetChatHistory", Name = "GetChatHistory")]
@@ -22,9 +25,9 @@ namespace AgenticGreenthumbApi.Controllers
         }
 
         [HttpGet("GetChatResponse", Name = "GetChatResponse")]
-        public string GetChatResponse()
+        public async Task<string> GetChatResponse(string prompt)
         {
-            return "Hello World";
+            return await _chatCompletionService.GetChatResponse(prompt);
         }
     }
 }

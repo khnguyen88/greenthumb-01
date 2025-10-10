@@ -1,18 +1,20 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors;
-using Microsoft.SemanticKernel.PromptTemplates;
-using Microsoft.SemanticKernel.Agents;
+﻿using AgenticGreenthumbApi.Helper;
+using AgenticGreenthumbApi.Semantic.Agents;
+using Elastic.Clients.Elasticsearch;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.KernelMemory;
 using Microsoft.KernelMemory.DocumentStorage.DevTools;
 using Microsoft.KernelMemory.FileSystem.DevTools;
 using Microsoft.KernelMemory.MemoryStorage.DevTools;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Agents;
+using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors;
+using Microsoft.SemanticKernel.PromptTemplates;
 using Spectre.Console;
 using System.Text.Json;
-using AgenticGreenthumbApi.Helper;
 
 
 namespace AgenticGreenthumbApi.Services
@@ -20,14 +22,38 @@ namespace AgenticGreenthumbApi.Services
     public class ChatCompletionService
     {
         private readonly ILogger<ChatCompletionService> _logger;
-        private readonly KernelFactoryHelper _kernelFactoryService;
         private readonly UserChatHistoryService _userChatHistoryService;
+        private const string userName = "nguyekhi"; //Eventually pass this in
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, KernelFactoryHelper kernelFactoryService, UserChatHistoryService userChatHistoryService)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, UserChatHistoryService userChatHistoryService)
         {
             _logger = logger;
-            _kernelFactoryService = kernelFactoryService;
             _userChatHistoryService = userChatHistoryService;
+        }
+
+        public async Task<string> GetChatResponse(string userPrompt)
+        {
+            ChatAgentRegistry chatAgentRegistry = new ChatAgentRegistry();
+
+            ChatHistoryAgentThread agentThread = new();
+
+            bool isUserHistoryExpired = _userChatHistoryService.IsUserChatHistoryRecordExpired(userName);
+
+            if (!isUserHistoryExpired)
+            {
+                ChatHistory userChatHistory = _userChatHistoryService.GetUserChatHistory(userName).ChatHistory ?? new ChatHistory();
+                _userChatHistoryService.PopulateAgentThread(agentThread, userChatHistory);
+            }
+
+            ChatMessageContent message = await chatAgentRegistry.ChatCompletionAgent.InvokeAsync(userPrompt, agentThread).FirstAsync();
+
+            Console.WriteLine(message.ToString());
+
+            _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
+
+            await agentThread.DeleteAsync();
+
+            return message.Content ?? "The chat agent was unable to respond to your prompt";
         }
 
         
