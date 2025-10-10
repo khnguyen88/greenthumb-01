@@ -2,7 +2,7 @@
 {
     public static class FileReaderHelper
     {
-        public static string? GetContextFile(string filename)
+        public static string GetContextFile(string filename)
         {
             string path = Path.Combine(Environment.CurrentDirectory, "Semantic", "Contexts", filename);
             if (File.Exists(path))
@@ -12,7 +12,7 @@
             }
 
             Console.WriteLine($"Context document '{filename}' missing.");
-            return null;
+            return "";
         }
     }
 }
