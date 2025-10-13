@@ -19,6 +19,8 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
             public const string GetHumidityData = nameof(GetHumidityData);
         }
 
+        //NOTE: PROCESS AND ORCESTRATION ALLOWS AGENTS TO COMMUNICATE AND RELAY TO EACH OTHER. WE CANNOT CALL AN AGENT INSIDE A PLUGIN ASSIGNED TO ANOTHER AGENT.
+
         public ChatCompletionPlugin(AdafruitPlugin adafruitPlugin, AdafruitService adafruitService)
         {
             _adafruitPlugin = adafruitPlugin;
