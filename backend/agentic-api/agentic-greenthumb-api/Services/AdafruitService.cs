@@ -10,7 +10,7 @@ namespace AgenticGreenthumbApi.Services
             _adafruitAPIClient = adafruitAPIClient;
         }
 
-        public async Task<IEnumerable<AdafruitFeedModel<bool>>> GetGrowLightFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedModel<float>>> GetGrowLightFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             return await _adafruitAPIClient.GetGrowLightFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
         }
@@ -30,7 +30,7 @@ namespace AgenticGreenthumbApi.Services
             return await _adafruitAPIClient.GetPlantHeightData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
         }
 
-        public async Task<IEnumerable<AdafruitFeedModel<bool>>> GetPumpTriggeredFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedModel<float>>> GetPumpTriggeredFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             return await _adafruitAPIClient.GetPumpTriggeredFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
         }

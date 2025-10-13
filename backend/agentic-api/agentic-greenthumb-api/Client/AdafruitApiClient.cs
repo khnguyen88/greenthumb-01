@@ -69,11 +69,11 @@ namespace AgenticGreenthumbApi.Client
             }
         }
 
-        public async Task<IEnumerable<AdafruitFeedModel<bool>>> GetGrowLightFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
+        public async Task<IEnumerable<AdafruitFeedModel<float>>> GetGrowLightFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
         {
             string growLightFeedName = _config["AdafruitIO:FeedNames:GrowlightTriggered"]!;
 
-            return await GetFeedData<bool>(growLightFeedName);
+            return await GetFeedData<float>(growLightFeedName);
         }
 
         public async Task<IEnumerable<AdafruitFeedModel<float>>> GetHumidityFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
@@ -97,11 +97,11 @@ namespace AgenticGreenthumbApi.Client
             return await GetFeedData<float>(plantHeightFeedName);
         }
 
-        public async Task<IEnumerable<AdafruitFeedModel<bool>>> GetPumpTriggeredFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
+        public async Task<IEnumerable<AdafruitFeedModel<float>>> GetPumpTriggeredFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
         {
             string pumpTriggeredFeedName = _config["AdafruitIO:FeedNames:PumpTriggered"]!;
 
-            return await GetFeedData<bool>(pumpTriggeredFeedName);
+            return await GetFeedData<float>(pumpTriggeredFeedName);
         }
 
         public async Task<IEnumerable<AdafruitFeedModel<float>>> GetSoilMoistureFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
