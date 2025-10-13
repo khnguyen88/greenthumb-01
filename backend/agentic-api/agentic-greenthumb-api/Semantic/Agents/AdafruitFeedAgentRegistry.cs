@@ -3,9 +3,6 @@ using AgenticGreenthumbApi.Semantic.Plugins;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using System.ComponentModel;
-using System.Text.Json;
-using static Elastic.Clients.Elasticsearch.JoinField;
 
 namespace AgenticGreenthumbApi.Semantic.Agents
 {

@@ -1,10 +1,8 @@
 ﻿using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Plugins;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
-using Microsoft.SemanticKernel.PromptTemplates.Handlebars;
 
 namespace AgenticGreenthumbApi.Semantic.Agents
 {
@@ -32,7 +30,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
                 : instructions + "\n\n" + $"Here are some additional context: {context}";
 
             var kernel = KernelFactoryHelper.GetNewKernel();
-            kernel.Plugins.AddFromObject(chatCompletionPlugin, "AdafruitPlugin");
+            kernel.Plugins.AddFromObject(chatCompletionPlugin, "ChatCompletionPlugin");
 
             var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
             {
