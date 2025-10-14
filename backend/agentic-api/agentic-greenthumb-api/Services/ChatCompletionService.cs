@@ -40,7 +40,7 @@ namespace AgenticGreenthumbApi.Services
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
-            ChatAgentRegistry chatAgentRegistry = new ChatAgentRegistry(new ChatCompletionPlugin(), new AdafruitPlugin(_adafruitService));
+            ChatAgentRegistry chatAgentRegistry = new ChatAgentRegistry(new ProjectInfoPlugin(), new AdafruitPlugin(_adafruitService));
             AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
 
             ChatHistoryAgent chatHistoryAgent = chatAgentRegistry.ChatCompletionAgent;
@@ -69,6 +69,8 @@ namespace AgenticGreenthumbApi.Services
 
             //await runtime.RunUntilIdleAsync();
 
+
+            // AGENT BASIC
             ChatMessageContent message = await chatAgentRegistry.ChatCompletionAgent.InvokeAsync(userPrompt, agentThread).FirstAsync();
 
             _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);

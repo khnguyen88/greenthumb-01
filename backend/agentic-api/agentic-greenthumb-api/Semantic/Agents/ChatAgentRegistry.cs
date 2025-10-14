@@ -22,7 +22,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
 
         public ChatCompletionAgent ChatCompletionAgent { get; private set; }
 
-        public ChatAgentRegistry(ChatCompletionPlugin chatCompletionPlugin, AdafruitPlugin adafruitPlugin)
+        public ChatAgentRegistry(ProjectInfoPlugin chatCompletionPlugin, AdafruitPlugin adafruitPlugin)
         {
             var context = FileReaderHelper.GetContextFile("project-info.json");
             var context2 = FileReaderHelper.GetContextFile("adafruit-feed-info.json");

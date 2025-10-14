@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace AgenticGreenthumbApi.Semantic.Plugins
 {
-    public class ChatCompletionPlugin
+    public class ProjectInfoPlugin
     {
 
         public static class KernelFunction
@@ -20,7 +20,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
 
         //NOTE: PROCESS AND ORCESTRATION ALLOWS AGENTS TO COMMUNICATE AND RELAY TO EACH OTHER. WE CANNOT CALL AN AGENT INSIDE A PLUGIN ASSIGNED TO ANOTHER AGENT.
 
-        public ChatCompletionPlugin()
+        public ProjectInfoPlugin()
         {
         }
 

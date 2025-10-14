@@ -29,7 +29,7 @@ builder.Services.AddScoped<ChatCompletionService>();
 builder.Services.AddScoped<RagService>();
 builder.Services.AddScoped<PlantInfoService>();
 builder.Services.AddScoped<PlantInfoRepo>();
-builder.Services.AddScoped<ChatCompletionPlugin>();
+builder.Services.AddScoped<ProjectInfoPlugin>();
 builder.Services.AddScoped<ChatAgentRegistry>();
 builder.Services.AddScoped<AdafruitPlugin>();
 builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
