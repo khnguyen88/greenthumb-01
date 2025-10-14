@@ -7,8 +7,6 @@ using Microsoft.SemanticKernel.Agents.Magentic;
 using Microsoft.SemanticKernel.Agents.Orchestration;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 #pragma warning disable
@@ -16,7 +14,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 {
     public class ChatMagenticOrchestration
     {
-        public Microsoft.SemanticKernel.Agents.Magentic.MagenticOrchestration MagenticOrchestration { get; set; }
+        public MagenticOrchestration MagenticOrchestration { get; set; }
         public ChatHistory ChatHistory {get; set;} = [];
 
         public ChatMagenticOrchestration(ProjectInfoAgentRegistry projectInfoAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry)
