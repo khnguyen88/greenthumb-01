@@ -12,10 +12,12 @@ using Microsoft.KernelMemory.FileSystem.DevTools;
 using Microsoft.KernelMemory.MemoryStorage.DevTools;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
+using Microsoft.SemanticKernel.Agents.Magentic;
 using Microsoft.SemanticKernel.Agents.Orchestration;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.PromptTemplates;
 using Spectre.Console;
 using System.Text.Json;
@@ -40,7 +42,7 @@ namespace AgenticGreenthumbApi.Services
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
-            ChatAgentRegistry chatAgentRegistry = new ChatAgentRegistry(new ProjectInfoPlugin(), new AdafruitPlugin(_adafruitService));
+            ProjectInfoAgentRegistry chatAgentRegistry = new ProjectInfoAgentRegistry(new ProjectInfoPlugin(), new AdafruitPlugin(_adafruitService));
             AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
 
             ChatHistoryAgent chatHistoryAgent = chatAgentRegistry.ChatCompletionAgent;
@@ -56,28 +58,68 @@ namespace AgenticGreenthumbApi.Services
                 _userChatHistoryService.PopulateAgentThread(agentThread, userChatHistory);
             }
 
-            //agentThread.ChatHistory.AddUserMessage(userPrompt);
+            //MAGENTIC (COMMMENT ONE OR THE OTHER OUT)
+            MagenticOrchestration orchestration;
+            Kernel managerKernel = KernelFactoryHelper.GetNewKernel();
 
-            //InProcessRuntime runtime = new InProcessRuntime();
+            //Chat History
+            ChatHistory history = [];
 
-            //await runtime.StartAsync();
+            ValueTask ResponseCallback(ChatMessageContent response)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"# {response.Role} - {response.AuthorName}: {response.Content}");
+                Console.WriteLine();
+                history.Add(response);
 
-            //OrchestrationResult<string> result = await chatOrchestration.MagenticOrchestration.InvokeAsync(userPrompt, runtime);
-            //string output = await result.GetValueAsync();
-            //Console.WriteLine(output.ToString());
-            //agentThread.ChatHistory.AddAssistantMessage(output);
 
-            //await runtime.RunUntilIdleAsync();
+                return ValueTask.CompletedTask;
+            }
+
+            //Manager
+            StandardMagenticManager manager = new StandardMagenticManager(
+                managerKernel.GetRequiredService<IChatCompletionService>(),
+                new OpenAIPromptExecutionSettings())
+            {
+                MaximumInvocationCount = 5
+            };
+
+            //Agents
+            var chatAgent = chatAgentRegistry.ChatCompletionAgent;
+            var adafruitFeedAgent = adafruitFeedAgentRegistry.AdafruitFeedAgent;
+
+            //Orchestration
+            orchestration = new MagenticOrchestration(
+                manager,
+                chatAgent,
+                adafruitFeedAgent
+            )
+            {
+                ResponseCallback = ResponseCallback,
+            };
+
+            agentThread.ChatHistory.AddUserMessage(userPrompt);
+
+            InProcessRuntime runtime = new InProcessRuntime();
+
+            await runtime.StartAsync();
+
+            OrchestrationResult<string> result = await orchestration.InvokeAsync(userPrompt, runtime);
+            string output = await result.GetValueAsync();
+            Console.WriteLine(output.ToString());
+            agentThread.ChatHistory.AddAssistantMessage(output);
+
+            await runtime.RunUntilIdleAsync();
 
 
             // AGENT BASIC
-            ChatMessageContent message = await chatAgentRegistry.ChatCompletionAgent.InvokeAsync(userPrompt, agentThread).FirstAsync();
+            //ChatMessageContent message = await chatAgentRegistry.ChatCompletionAgent.InvokeAsync(userPrompt, agentThread).FirstAsync();
 
             _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
 
 
 
-            return message.Content ?? "The chat agent was unable to respond to your prompt";
+            return output ?? "The chat agent was unable to respond to your prompt";
         }
     }
 }

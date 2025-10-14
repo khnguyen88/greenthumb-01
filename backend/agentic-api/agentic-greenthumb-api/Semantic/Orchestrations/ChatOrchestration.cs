@@ -14,7 +14,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
     public class ChatOrchestration
     {
         public MagenticOrchestration MagenticOrchestration { get; set; }
-        public ChatOrchestration(ChatAgentRegistry chatAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry)
+        public ChatOrchestration(ProjectInfoAgentRegistry chatAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry)
         {
             //Kernel
             Kernel managerKernel = KernelFactoryHelper.GetNewKernel();
