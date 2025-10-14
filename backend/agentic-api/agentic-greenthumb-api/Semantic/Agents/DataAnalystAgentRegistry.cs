@@ -6,7 +6,7 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace AgenticGreenthumbApi.Agents
 {
-    public class DataAnalystAgent
+    public class DataAnalystAgentRegistry
     {
         private const string name = nameof(AdafruitFeedAgent);
 
@@ -30,7 +30,7 @@ namespace AgenticGreenthumbApi.Agents
 
         public ChatCompletionAgent AdafruitFeedAgent { get; private set; }
 
-        public AdafruitFeedAgentRegistry(AdafruitPlugin adafruitPlugin)
+        public DataAnalystAgentRegistry(AdafruitPlugin adafruitPlugin)
         {
             var context = FileReaderHelper.GetContextFile("adafruit-feed-info.json");
             var instructionWithContext = string.IsNullOrWhiteSpace(context)

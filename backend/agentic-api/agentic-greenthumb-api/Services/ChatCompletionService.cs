@@ -1,19 +1,11 @@
 ﻿using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Agents;
-using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
-using Elastic.Clients.Elasticsearch;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.KernelMemory;
-using Microsoft.KernelMemory.DocumentStorage.DevTools;
-using Microsoft.KernelMemory.FileSystem.DevTools;
-using Microsoft.KernelMemory.MemoryStorage.DevTools;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Magentic;
 using Microsoft.SemanticKernel.Agents.Orchestration;
+using Microsoft.SemanticKernel.Agents.Orchestration.Handoff;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors;
@@ -45,7 +37,7 @@ namespace AgenticGreenthumbApi.Services
             ProjectInfoAgentRegistry chatAgentRegistry = new ProjectInfoAgentRegistry(new ProjectInfoPlugin(), new AdafruitPlugin(_adafruitService));
             AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
 
-            ChatHistoryAgent chatHistoryAgent = chatAgentRegistry.ChatCompletionAgent;
+            ChatHistoryAgent chatHistoryAgent = chatAgentRegistry.ProjectInfoAgent;
             //ChatOrchestration chatOrchestration = new ChatOrchestration(chatAgentRegistry, adafruitFeedAgentRegistry);
 
             ChatHistoryAgentThread agentThread = new();
@@ -85,13 +77,13 @@ namespace AgenticGreenthumbApi.Services
             };
 
             //Agents
-            var chatAgent = chatAgentRegistry.ChatCompletionAgent;
+            var projectInfoAgent = chatAgentRegistry.ProjectInfoAgent;
             var adafruitFeedAgent = adafruitFeedAgentRegistry.AdafruitFeedAgent;
 
             //Orchestration
             orchestration = new MagenticOrchestration(
                 manager,
-                chatAgent,
+                projectInfoAgent,
                 adafruitFeedAgent
             )
             {
@@ -100,26 +92,35 @@ namespace AgenticGreenthumbApi.Services
 
             agentThread.ChatHistory.AddUserMessage(userPrompt);
 
-            InProcessRuntime runtime = new InProcessRuntime();
+            try
+            {
+                InProcessRuntime runtime = new InProcessRuntime();
 
-            await runtime.StartAsync();
+                await runtime.StartAsync();
 
-            OrchestrationResult<string> result = await orchestration.InvokeAsync(userPrompt, runtime);
-            string output = await result.GetValueAsync();
-            Console.WriteLine(output.ToString());
-            agentThread.ChatHistory.AddAssistantMessage(output);
+                OrchestrationResult<string> result = await orchestration.InvokeAsync(userPrompt + " and then exit out of stream", runtime);
+                string output = await result.GetValueAsync(TimeSpan.FromSeconds(120));
+                Console.WriteLine("//----------------//");
+                Console.WriteLine(output);
+                agentThread.ChatHistory.AddAssistantMessage(output);
 
-            await runtime.RunUntilIdleAsync();
-
-
-            // AGENT BASIC
-            //ChatMessageContent message = await chatAgentRegistry.ChatCompletionAgent.InvokeAsync(userPrompt, agentThread).FirstAsync();
-
-            _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
+                await runtime.StopAsync();
 
 
+                // AGENT BASIC
+                //ChatMessageContent message = await chatAgentRegistry.ChatCompletionAgent.InvokeAsync(userPrompt, agentThread).FirstAsync();
 
-            return output ?? "The chat agent was unable to respond to your prompt";
+                _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
+
+                return output;
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
+
+
         }
     }
 }

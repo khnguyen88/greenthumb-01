@@ -42,14 +42,14 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             };
 
             //Agents
-            var chatAgent = chatAgentRegistry.ChatCompletionAgent;
+            var projectInfo = chatAgentRegistry.ProjectInfoAgent;
             var adafruitFeedAgent = adafruitFeedAgentRegistry.AdafruitFeedAgent;
 
             //Orchestration
             // =====================================================================================
             MagenticOrchestration = new MagenticOrchestration(
                 manager,
-                chatAgent,
+                projectInfo,
                 adafruitFeedAgent
             )
             {
