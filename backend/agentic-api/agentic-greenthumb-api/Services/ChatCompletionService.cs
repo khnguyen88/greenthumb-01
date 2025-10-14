@@ -41,7 +41,8 @@ namespace AgenticGreenthumbApi.Services
             AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
             PlantInfoAgentRegistry plantInfoAgentRegistry = new PlantInfoAgentRegistry();
 
-            ChatMagenticOrchestration chatMagenticOrchestration = new ChatMagenticOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
+            //ChatMagenticOrchestration chatOrchestration = new ChatMagenticOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
+            ChatHandoffOrchestration chatOrchestration = new ChatHandoffOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
 
             ChatHistoryAgentThread agentThread = new();
 
@@ -55,20 +56,23 @@ namespace AgenticGreenthumbApi.Services
 
             agentThread.ChatHistory.AddUserMessage(userPrompt);
 
-            chatMagenticOrchestration.SetChatHistory(agentThread.ChatHistory);
+            chatOrchestration.SetChatHistory(agentThread.ChatHistory);
 
             try
             {
-                string output = await chatMagenticOrchestration.GetResponse(userPrompt);
+                //string output = await chatMagenticOrchestration.GetResponse(userPrompt);
+                string output = await chatOrchestration.GetResponse(userPrompt);
 
                 Console.WriteLine("# of Content Before Updating User Chat History: " + agentThread.ChatHistory.Count);
-                _userChatHistoryService.AppendUserChatHistory(agentThread.ChatHistory, chatMagenticOrchestration.ChatHistory);
+                Console.WriteLine();
+                _userChatHistoryService.AppendUserChatHistory(agentThread.ChatHistory, chatOrchestration.ChatHistory);
                 _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
                 Console.WriteLine("# of Content After Updating User Chat History: " + agentThread.ChatHistory.Count);
+                Console.WriteLine();
 
-                string trueOutput =  chatMagenticOrchestration.OutputAssistentResponseContent();
+                string trueOutput =  chatOrchestration.OutputAssistentResponseContent();
                 Console.WriteLine(trueOutput);
-                chatMagenticOrchestration.ClearChatHistory();
+                chatOrchestration.ClearChatHistory();
                 return trueOutput;
             }
             catch(Exception ex)

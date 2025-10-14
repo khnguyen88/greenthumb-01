@@ -46,9 +46,12 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             OrchestrationHandoffs handoffs = OrchestrationHandoffs
                 .StartWith(chatModeratorAgent)
                 .Add(chatModeratorAgent, projectInfoAgent, adafruitFeedAgent, plantInfoAgent)
-                .Add(projectInfoAgent, chatModeratorAgent, "Transfer to this agent if the issue is this specific IoT gardening system or project information questions or prompts.")
-                .Add(adafruitFeedAgent, chatModeratorAgent, "Transfer to this agent if the issue is not sensor feed data or adafruit IO related questions or prompts.")
-                .Add(plantInfoAgent, chatModeratorAgent, "Transfer to this agent if the issue is not plant information or plant related questions or prompts.");
+                .Add(chatModeratorAgent, projectInfoAgent, "Transfer to this agent for this specific IoT gardening system or project information questions or prompts.")
+                .Add(chatModeratorAgent, adafruitFeedAgent, "Transfer to this agent for sensor feed data or adafruit IO related questions or prompts.")
+                .Add(chatModeratorAgent, plantInfoAgent, "Transfer to this agent for plant information or plant related questions or prompts.")
+                .Add(projectInfoAgent, chatModeratorAgent, "Transfer to this agent if the prompts is not related to IoT gardening system or project information.")
+                .Add(adafruitFeedAgent, chatModeratorAgent, "Transfer to this agent if the prompts is is not related to sensor feed data or adafruit IO related questions or prompts.")
+                .Add(plantInfoAgent, chatModeratorAgent, "Transfer to this agent if the prompts is not related plant information or plant related questions or prompts.");
 
 
             //Handoff Orchestration

@@ -36,6 +36,7 @@ builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
 builder.Services.AddScoped<ChatModeratorAgentRegistry>();
 builder.Services.AddScoped<PlantInfoAgentRegistry>();
 builder.Services.AddScoped<ChatMagenticOrchestration>();
+builder.Services.AddScoped<ChatHandoffOrchestration>();
 
 builder.Services.AddDbContext<PlantInfoContext>(opt =>
     opt.UseInMemoryDatabase("PlantInfo"));
