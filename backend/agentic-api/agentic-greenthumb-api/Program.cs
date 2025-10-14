@@ -6,6 +6,7 @@ using AgenticGreenthumbApi.Client;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Plugins;
+using AgenticGreenthumbApi.Semantic.Orchestrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,7 @@ builder.Services.AddScoped<ChatCompletionPlugin>();
 builder.Services.AddScoped<ChatAgentRegistry>();
 builder.Services.AddScoped<AdafruitPlugin>();
 builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
+builder.Services.AddScoped<ChatOrchestration>();
 
 builder.Services.AddDbContext<PlantInfoContext>(opt =>
     opt.UseInMemoryDatabase("PlantInfo"));

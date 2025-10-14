@@ -15,13 +15,8 @@ namespace AgenticGreenthumbApi.Helper
         public static Kernel masterKernel;
         public static IKernelMemory masterKernelMemory;
 
-        static KernelFactoryHelper() {
-
-            // var httpClient = new HttpClient
-            // {
-            //     Timeout = TimeSpan.FromMinutes(10),
-            // };
-
+        static KernelFactoryHelper()
+        {
             var config = new ConfigurationBuilder().AddUserSecrets("4f91f0a7-edfa-4d74-b7d8-6f7a324e86fb").Build();
 
             // Configuration Files Values
@@ -81,11 +76,6 @@ namespace AgenticGreenthumbApi.Helper
             // Create a kernel with Azure OpenAI chat completion
             IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
 
-
-
-            // Note if needed: adjust timeout configuration, code obtained here: https://github.com/microsoft/semantic-kernel/discussions/3412
- 
-
             kernelBuilder.AddAzureOpenAIChatCompletion(textDeploymentName, endpoint, apiKey);
 
             masterKernel = kernelBuilder.Build();
@@ -97,9 +87,8 @@ namespace AgenticGreenthumbApi.Helper
                 .WithAzureBlobsDocumentStorage(azureBlobsConfig);
 
             masterKernelMemory = memoryBuilder.Build();
-
-
         }
+
 
         public static Kernel GetNewKernel()
         {

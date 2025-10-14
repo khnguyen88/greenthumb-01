@@ -22,6 +22,9 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.65.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.66.0" />
     <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.65.0" />
+	<PackageReference Include="Microsoft.SemanticKernel.Agents.Magentic" Version="1.63.0-preview" />
+	<PackageReference Include="Microsoft.SemanticKernel.Agents.Orchestration" Version="1.63.0-preview" />
+	<PackageReference Include="Microsoft.SemanticKernel.Agents.Runtime.InProcess" Version="1.63.0-preview" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.51.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
@@ -33,7 +36,6 @@
     <Folder Include="Dtos\" />
     <Folder Include="Semantic\Processes\Steps\" />
     <Folder Include="Semantic\Processes\" />
-    <Folder Include="Semantic\Orchestrations\" />
   </ItemGroup>
 
 </Project>

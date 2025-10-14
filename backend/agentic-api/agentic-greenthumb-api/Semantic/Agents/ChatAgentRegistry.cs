@@ -22,15 +22,21 @@ namespace AgenticGreenthumbApi.Semantic.Agents
 
         public ChatCompletionAgent ChatCompletionAgent { get; private set; }
 
-        public ChatAgentRegistry(ChatCompletionPlugin chatCompletionPlugin)
+        public ChatAgentRegistry(ChatCompletionPlugin chatCompletionPlugin, AdafruitPlugin adafruitPlugin)
         {
             var context = FileReaderHelper.GetContextFile("project-info.json");
+            var context2 = FileReaderHelper.GetContextFile("adafruit-feed-info.json");
             var instructionWithContext = string.IsNullOrWhiteSpace(context)
                 ? instructions
                 : instructions + "\n\n" + $"Here are some additional context: {context}";
 
+            var instructionWithContext2 = string.IsNullOrWhiteSpace(context2)
+                ? instructions
+                : instructions + "\n\n" + $"Here are some additional context: {context2}";
+
             var kernel = KernelFactoryHelper.GetNewKernel();
             kernel.Plugins.AddFromObject(chatCompletionPlugin, "ChatCompletionPlugin");
+            kernel.Plugins.AddFromObject(adafruitPlugin, "AdafruitPlugin");
 
             var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
             {
