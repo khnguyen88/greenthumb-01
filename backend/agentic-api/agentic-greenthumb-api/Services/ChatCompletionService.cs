@@ -36,10 +36,12 @@ namespace AgenticGreenthumbApi.Services
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
-            ProjectInfoAgentRegistry projectInfoAgentRegistry = new ProjectInfoAgentRegistry(new ProjectInfoPlugin(), new AdafruitPlugin(_adafruitService));
+            ChatModeratorAgentRegistry chatModeratorAgentRegistry = new ChatModeratorAgentRegistry();
+            ProjectInfoAgentRegistry projectInfoAgentRegistry = new ProjectInfoAgentRegistry(new ProjectInfoPlugin());
             AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
+            PlantInfoAgentRegistry plantInfoAgentRegistry = new PlantInfoAgentRegistry();
 
-            ChatMagenticOrchestration chatMagenticOrchestration = new ChatMagenticOrchestration(projectInfoAgentRegistry, adafruitFeedAgentRegistry);
+            ChatMagenticOrchestration chatMagenticOrchestration = new ChatMagenticOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
 
             ChatHistoryAgentThread agentThread = new();
 

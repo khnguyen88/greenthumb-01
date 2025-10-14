@@ -17,7 +17,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
         public MagenticOrchestration MagenticOrchestration { get; set; }
         public ChatHistory ChatHistory {get; set;} = [];
 
-        public ChatMagenticOrchestration(ProjectInfoAgentRegistry projectInfoAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry)
+        public ChatMagenticOrchestration(ChatModeratorAgentRegistry chatModeratorAgentRegistry, ProjectInfoAgentRegistry projectInfoAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, PlantInfoAgentRegistry plantInfoAgentRegistry)
         {
             //Kernel
             Kernel managerKernel = KernelFactoryHelper.GetNewKernel();
@@ -45,15 +45,19 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             };
 
             //Agents
-            var projectInfo = projectInfoAgentRegistry.ProjectInfoAgent;
+            var chatModeratorAgent = chatModeratorAgentRegistry.ChatModeratorAgent;
+            var projectInfoAgent = projectInfoAgentRegistry.ProjectInfoAgent;
             var adafruitFeedAgent = adafruitFeedAgentRegistry.AdafruitFeedAgent;
+            var plantInfoAgent = plantInfoAgentRegistry.PlantInfoAgent;
 
             //Orchestration
             // =====================================================================================
             MagenticOrchestration = new Microsoft.SemanticKernel.Agents.Magentic.MagenticOrchestration(
                 manager,
-                projectInfo,
-                adafruitFeedAgent
+                chatModeratorAgent,
+                projectInfoAgent,
+                adafruitFeedAgent,
+                plantInfoAgent
             )
             {
                 ResponseCallback = ResponseCallback,

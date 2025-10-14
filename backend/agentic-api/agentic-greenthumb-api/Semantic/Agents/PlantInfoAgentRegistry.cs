@@ -12,7 +12,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
         private const string instructions = """
         You are a plant information specialist and will provide plant related information to help the user configure some parameters for their microcontroller.
 
-        You summarize some key crucial properties about the plant and the growing conditions needed.
+        Summmarize and a short description of the plants needs and other facts about it.
 
         But also format it to contain all of the properties specified in the PlantInfo domain file and it's associated properties value based on the description of the plant.
         """;
@@ -29,7 +29,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
 
             var instructionWithContext = string.IsNullOrWhiteSpace(contextDomainFile) && string.IsNullOrWhiteSpace(contextDomainPropertyValue)
                 ? instructions
-                : instructions + "\n\n" + $"Here are some additional context about how the data should be format with the following properties and schema: {contextDomainFile}"
+                : instructions + "\n\n" + $"Here are some additional context about how the data should be format with the following properties and schema. Make sure its as JSON format with actual values: {contextDomainFile}"
                                + "\n\n" + $"And based on the description the plants needs and attributes, they should mapped against these enums to meet the specified values: {contextDomainPropertyValue}";
 
 

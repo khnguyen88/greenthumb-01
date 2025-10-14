@@ -33,6 +33,8 @@ builder.Services.AddScoped<ProjectInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoAgentRegistry>();
 builder.Services.AddScoped<AdafruitPlugin>();
 builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
+builder.Services.AddScoped<ChatModeratorAgentRegistry>();
+builder.Services.AddScoped<PlantInfoAgentRegistry>();
 builder.Services.AddScoped<ChatMagenticOrchestration>();
 
 builder.Services.AddDbContext<PlantInfoContext>(opt =>

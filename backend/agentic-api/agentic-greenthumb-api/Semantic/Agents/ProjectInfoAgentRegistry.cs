@@ -21,7 +21,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
 
         public ChatCompletionAgent ProjectInfoAgent { get; private set; }
 
-        public ProjectInfoAgentRegistry(ProjectInfoPlugin projectInfoPlugin, AdafruitPlugin adafruitPlugin)
+        public ProjectInfoAgentRegistry(ProjectInfoPlugin projectInfoPlugin)
         {
             var context = FileReaderHelper.GetContextFile("project-info.json");
 
