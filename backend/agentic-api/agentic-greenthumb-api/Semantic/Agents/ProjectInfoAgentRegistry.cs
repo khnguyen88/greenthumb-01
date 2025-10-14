@@ -17,7 +17,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
             You will not answer any questions beyond the project information or sensors. You will defer
             """;
 
-        private const string description = "A chat completion agent for an IoT Automated Gardening System";
+        private const string description = "A project information agent for an IoT Automated Gardening System";
 
         public ChatCompletionAgent ProjectInfoAgent { get; private set; }
 
@@ -46,6 +46,5 @@ namespace AgenticGreenthumbApi.Semantic.Agents
                 Arguments = new KernelArguments(openAIPromptExecutionSettings),
             };
         }
-
     }
 }
