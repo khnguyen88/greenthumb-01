@@ -65,6 +65,11 @@ namespace AgenticGreenthumbApi.Services
             InMemUserChatHistory.AddOrUpdate(username, userChatHistory, (username, userChatHistory) => userChatHistory);
         }
 
+        public void AppendUserChatHistory(ChatHistory oldUserChatHistory, ChatHistory recentChatHistory)
+        {
+            oldUserChatHistory.AddRange(recentChatHistory);
+        }
+
 
         public void DeleteUserChatHistory(string username)
         {

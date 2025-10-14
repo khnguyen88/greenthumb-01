@@ -23,9 +23,9 @@ builder.Services.AddSingleton<KernelFactoryHelper>();
 builder.Services.AddSingleton<AdafruitAPIClient>();
 builder.Services.AddSingleton<AdafruitService>();
 builder.Services.AddSingleton<UserChatHistoryService>();
+builder.Services.AddSingleton<ChatCompletionService>();
 
 //Should Only Persist for the lifespan of a single request
-builder.Services.AddScoped<ChatCompletionService>();
 builder.Services.AddScoped<RagService>();
 builder.Services.AddScoped<PlantInfoService>();
 builder.Services.AddScoped<PlantInfoRepo>();
@@ -33,7 +33,7 @@ builder.Services.AddScoped<ProjectInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoAgentRegistry>();
 builder.Services.AddScoped<AdafruitPlugin>();
 builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
-builder.Services.AddScoped<ChatOrchestration>();
+builder.Services.AddScoped<ChatMagenticOrchestration>();
 
 builder.Services.AddDbContext<PlantInfoContext>(opt =>
     opt.UseInMemoryDatabase("PlantInfo"));
