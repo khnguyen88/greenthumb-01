@@ -1,4 +1,5 @@
-﻿using AgenticGreenthumbApi.Models;
+﻿using AgenticGreenthumbApi.Domain;
+using AgenticGreenthumbApi.Models;
 using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Services;
 using Microsoft.SemanticKernel;
@@ -41,7 +42,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitGrowLightFeedData()
         {
             var taskData = _adafruitService.GetGrowLightFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -51,7 +52,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitHumidityFeedData()
         {
             var taskData = _adafruitService.GetHumidityFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -61,7 +62,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitPhotoResistorFeedData()
         {
             var taskData = _adafruitService.GetPhotoResistorFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -71,7 +72,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitPlantHeightFeedData()
         {
             var taskData = _adafruitService.GetPlantHeightData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -81,7 +82,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitPumpTriggeredFeedData()
         {
             var taskData = _adafruitService.GetPumpTriggeredFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -91,7 +92,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitSoilMoistureFeedData()
         {
             var taskData = _adafruitService.GetSoilMoistureFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -101,7 +102,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitTemperatureFeedData()
         {
             var taskData = _adafruitService.GetTemperatureFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 
@@ -111,7 +112,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         public string GetAdafruitWaterLevelFeedData()
         {
             var taskData = _adafruitService.GetWaterLevelFeedData();
-            IEnumerable<AdafruitFeedModel<float>> data = taskData.Result ?? new List<AdafruitFeedModel<float>>();
+            IEnumerable<AdafruitFeed<float>> data = taskData.Result ?? new List<AdafruitFeed<float>>();
             return JsonSerializer.Serialize(data);
         }
 

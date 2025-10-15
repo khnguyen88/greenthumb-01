@@ -120,7 +120,7 @@ namespace AgenticGreenthumbApi.Client
 
         public async Task<IEnumerable<AdafruitFeedModel<float>>> GetWaterLevelFeedData(string feedKeyPrefixMacAddress, string feedKeyPrefixStartDate)
         {
-            string waterLevelFeedName = _config["AdafruitIO:FeedNames:GrowlightTriggered"]!;
+            string waterLevelFeedName = _config["AdafruitIO:FeedNames:WaterLevel"]!;
 
             return await GetFeedData<float>(waterLevelFeedName);
         }

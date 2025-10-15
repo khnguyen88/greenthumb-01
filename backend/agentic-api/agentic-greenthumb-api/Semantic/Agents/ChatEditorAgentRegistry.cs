@@ -6,42 +6,38 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 namespace AgenticGreenthumbApi.Semantic.Agents
 {
-    public class ChatEditorAgentRegistry
+    public class ProjectInfoAgentRegistry
     {
-        private const string name = nameof(ChatEditorAgent);
+        private const string name = nameof(ProjectInfoAgent);
 
         private const string instructions = """
-            You are a chat editor agent, you will take a given response from the handoff orchestration group and clean up the response.
-
-            You will consolidate duplicate information and remove unnecessary markdown or headers.
-
-            You will correct and fix any spelling or grammatical errors that is outside of the JSON output.
-
-            Fix any formatting or weird spacing that occurs on the ASCII data table.
-
-            You will just basically output a cleaner response. 
+            You are a project information agent for an IoT Automated Gardening System. You will provide answers to questions 
+            the project. Information about the sensor and devices used by the microntroller. The sensor data are all stored by in adafruit MQTT server.
+            
+            You will not answer any questions beyond the project information or sensors. You will defer
             """;
 
         private const string description = "A project information agent for an IoT Automated Gardening System";
 
-        public ChatCompletionAgent ChatEditorAgent { get; private set; }
+        public ChatCompletionAgent ProjectInfoAgent { get; private set; }
 
-        public ChatEditorAgentRegistry()
+        public ProjectInfoAgentRegistry(ProjectInfoPlugin projectInfoPlugin)
         {
-            var context = "";
+            var context = FileReaderHelper.GetContextFile("project-info.json");
 
             var instructionWithContext = string.IsNullOrWhiteSpace(context)
                 ? instructions
                 : instructions + "\n\n" + $"Here are some additional context: {context}";
 
             var kernel = KernelFactoryHelper.GetNewKernel();
+            kernel.Plugins.AddFromObject(projectInfoPlugin, "ProjectInfoPlugin");
 
             var openAIPromptExecutionSettings = new OpenAIPromptExecutionSettings
             {
                 FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
             };
 
-            ChatEditorAgent = new ChatCompletionAgent
+            ProjectInfoAgent = new ChatCompletionAgent
             {
                 Name = name,
                 Instructions = instructionWithContext,

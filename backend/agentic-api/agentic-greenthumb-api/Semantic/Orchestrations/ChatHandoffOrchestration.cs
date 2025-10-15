@@ -46,11 +46,8 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             OrchestrationHandoffs handoffs = OrchestrationHandoffs
                 .StartWith(chatModeratorAgent)
                 .Add(chatModeratorAgent, projectInfoAgent, adafruitFeedAgent, plantInfoAgent)
-                .Add(chatModeratorAgent, projectInfoAgent, "Transfer to this agent for this specific IoT gardening system or project information questions or prompts.")
-                .Add(chatModeratorAgent, adafruitFeedAgent, "Transfer to this agent for sensor feed data or adafruit IO related questions or prompts.")
-                .Add(chatModeratorAgent, plantInfoAgent, "Transfer to this agent for plant information or plant related questions or prompts.")
                 .Add(projectInfoAgent, chatModeratorAgent, "Transfer to this agent if the prompts is not related to IoT gardening system or project information.")
-                .Add(adafruitFeedAgent, chatModeratorAgent, "Transfer to this agent if the prompts is is not related to sensor feed data or adafruit IO related questions or prompts.")
+                .Add(adafruitFeedAgent, chatModeratorAgent, "Transfer to this agent if the prompts is is not related to sensor feed data (humidity, temperature, etc.) or adafruit IO related.")
                 .Add(plantInfoAgent, chatModeratorAgent, "Transfer to this agent if the prompts is not related plant information or plant related questions or prompts.");
 
 
@@ -89,12 +86,12 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             await runtime.StartAsync();
 
-            OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt + "and then exit out of stream", runtime);
-            string output = await result.GetValueAsync(TimeSpan.FromSeconds(180)); //Very important settings
+            OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt, runtime);
+            string output = await result.GetValueAsync(TimeSpan.FromSeconds(600)); //Very important settings
             Console.WriteLine("//----------------//");
             Console.WriteLine(output);
 
-            await runtime.StopAsync();
+            await runtime.RunUntilIdleAsync();
 
             return output;
         }

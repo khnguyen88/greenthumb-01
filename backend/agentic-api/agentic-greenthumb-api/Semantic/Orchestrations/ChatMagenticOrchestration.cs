@@ -92,12 +92,12 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             await runtime.StartAsync();
 
-            OrchestrationResult<string> result = await MagenticOrchestration.InvokeAsync(userPrompt + "and then exit out of stream", runtime);
-            string output = await result.GetValueAsync(TimeSpan.FromSeconds(180)); //Very important settings
+            OrchestrationResult<string> result = await MagenticOrchestration.InvokeAsync(userPrompt, runtime);
+            string output = await result.GetValueAsync(TimeSpan.FromSeconds(300)); //Very important settings
             Console.WriteLine("//----------------//");
             Console.WriteLine(output);
 
-            await runtime.StopAsync();
+            await runtime.RunUntilIdleAsync();
 
             return output;
         }
