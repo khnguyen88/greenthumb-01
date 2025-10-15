@@ -17,17 +17,17 @@ namespace AgenticGreenthumbApi.Controllers
             _chatCompletionService = chatCompletionService;
         }
 
-        [HttpGet("GetChatHistory", Name = "GetChatHistory")]
-        public IEnumerable<string> GetChatHistory()
-        {
-            return Enumerable.Range(1, 5).Select(index => "What a good cat")
-            .ToArray();
-        }
+        //[HttpGet("GetChatHistory", Name = "GetChatHistory")]
+        //public IEnumerable<string> GetChatHistory()
+        //{
+        //    return Enumerable.Range(1, 5).Select(index => "What a good cat")
+        //    .ToArray();
+        //}
 
         [HttpGet("GetChatResponse", Name = "GetChatResponse")]
-        public async Task<string> GetChatResponse(string prompt)
+        public Task<string> GetChatResponse(string prompt)
         {
-            return await _chatCompletionService.GetChatResponse(prompt);
+            return _chatCompletionService.GetChatResponse(prompt);
         }
     }
 }

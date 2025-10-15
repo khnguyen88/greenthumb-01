@@ -83,9 +83,6 @@ namespace AgenticGreenthumbApi.Services
             {
                 return ex.Message + "\n\n" + "Please adjust your prompt and try again.";
             }
-
-
-
         }
     }
 }

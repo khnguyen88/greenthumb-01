@@ -52,7 +52,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             //Orchestration
             // =====================================================================================
-            MagenticOrchestration = new Microsoft.SemanticKernel.Agents.Magentic.MagenticOrchestration(
+            MagenticOrchestration = new MagenticOrchestration(
                 manager,
                 chatModeratorAgent,
                 projectInfoAgent,
