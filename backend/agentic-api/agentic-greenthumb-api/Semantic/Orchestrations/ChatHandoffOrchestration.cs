@@ -87,7 +87,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             await runtime.StartAsync();
 
             OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt, runtime);
-            string output = await result.GetValueAsync(TimeSpan.FromSeconds(600)); //Very important settings
+            string output = await result.GetValueAsync(TimeSpan.FromSeconds(180)); //Very important settings
             Console.WriteLine("//----------------//");
             Console.WriteLine(output);
 

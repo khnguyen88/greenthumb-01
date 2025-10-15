@@ -81,7 +81,7 @@ namespace AgenticGreenthumbApi.Services
             }
             catch(Exception ex)
             {
-                return ex.Message;
+                return ex.Message + "\n\n" + "Please adjust your prompt and try again.";
             }
 
 
