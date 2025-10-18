@@ -49,4 +49,26 @@ export const MyPreset = definePreset(Aura, {
       },
     },
   },
+  components: {
+    menubar: {
+      colorScheme: {
+        light: {
+          root: {
+            background: 'blue',
+          },
+          item: {
+            focusBackground: 'red',
+          },
+        },
+        dark: {
+          root: {
+            background: 'purple',
+          },
+          item: {
+            focusBackground: 'green',
+          },
+        },
+      },
+    },
+  },
 });
