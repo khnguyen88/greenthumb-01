@@ -70,5 +70,19 @@ export const MyPreset = definePreset(Aura, {
         },
       },
     },
+    button: {
+      extend: {
+        accent: {
+          color: 'yellow',
+          inverseColor: '#ffffff',
+        },
+      },
+      css: ({ dt }) => `
+    .p-button {
+      background: ${dt('button.accent.color')};
+      color: ${dt('button.accent.inverse.color')};
+      transition-duration: ${dt('my.transition.fast')};
+    }`,
+    },
   },
 });
