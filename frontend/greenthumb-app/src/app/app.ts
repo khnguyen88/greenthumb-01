@@ -12,34 +12,10 @@ import { ChatPage } from './components/chat-page/chat-page';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule, Menubar, TopMenubar, LoginPage, MainPage, ChatPage],
+  imports: [RouterOutlet, ButtonModule, Menubar, TopMenubar],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  items: MenuItem[] | undefined;
-  protected readonly title = signal('greenthumb-app');
-  lightDarkMode = signal('Dark');
-  buttonLabel = signal(`Toogle to Dark mode!`);
-
-  ngOnInit(): void {
-    this.items = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-      },
-      {
-        label: 'Features',
-        icon: 'pi pi-star',
-      },
-    ];
-  }
-
-  toggleDarkMode() {
-    const element = document.querySelector('html');
-    element?.classList.toggle('my-app-dark');
-
-    this.lightDarkMode.set(this.lightDarkMode() === 'Light' ? 'Dark' : 'Light');
-    this.buttonLabel.set(`Toogle to ${this.lightDarkMode()} mode!`);
-  }
+  ngOnInit(): void {}
 }

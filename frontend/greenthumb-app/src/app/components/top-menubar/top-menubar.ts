@@ -29,7 +29,16 @@ export class TopMenubar implements OnInit {
       {
         label: 'Home',
         icon: 'pi pi-chart-line',
-        routerLink: '/home',
+        items: [
+          {
+            label: 'Temperature Dashboard',
+            routerLink: '/dashboard/temperature',
+          },
+          {
+            label: 'Humidity Dashboard',
+            routerLink: '/dashboard/humidity',
+          },
+        ],
         command: () => {
           this.checkRoute();
           this.updateLogStatus();
