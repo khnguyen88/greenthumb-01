@@ -1,1 +1,9 @@
-<p>top-menubar works!</p>
+<div class="flex overflow-hidden">
+  <div class="flex-1">
+    <p-menubar [model]="items">
+      <ng-template #end>
+        <p-button [label]="buttonLabel()" (onClick)="toggleDarkMode()" />
+      </ng-template>
+    </p-menubar>
+  </div>
+</div>
