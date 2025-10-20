@@ -12,3 +12,7 @@
 } */
 
 @import 'primeicons/primeicons.css';
+
+.max-height {
+  height: calc(100vh - 60px);
+}
