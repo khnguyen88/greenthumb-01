@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
@@ -7,7 +8,7 @@ import { Menubar } from 'primeng/menubar';
 
 @Component({
   selector: 'app-top-menubar',
-  imports: [ButtonModule, Menubar],
+  imports: [CommonModule, ButtonModule, Menubar],
   templateUrl: './top-menubar.html',
   styleUrl: './top-menubar.css',
 })
@@ -16,6 +17,7 @@ export class TopMenubar implements OnInit {
   protected readonly title = signal('greenthumb-app');
   lightDarkMode = signal('Dark');
   buttonLabel = signal(`Toogle to Dark mode!`);
+  pIconClass = signal('pi pi-moon');
 
   ngOnInit(): void {
     this.items = [
@@ -35,6 +37,8 @@ export class TopMenubar implements OnInit {
     element?.classList.toggle('my-app-dark');
 
     this.lightDarkMode.set(this.lightDarkMode() === 'Light' ? 'Dark' : 'Light');
+    this.pIconClass.set(this.lightDarkMode() === 'Light' ? 'pi pi-sun' : 'pi pi-moon');
+
     this.buttonLabel.set(`Toogle to ${this.lightDarkMode()} mode!`);
   }
 }
