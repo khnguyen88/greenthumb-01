@@ -41,6 +41,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Environment File
+environments/
+environment.ts*
+
 
 # (BACKEND) VISUAL STUDIO GIT_IGNORE
 ## -------------------------------------------------------------------------------------------------------------
