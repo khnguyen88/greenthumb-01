@@ -11,14 +11,39 @@
       "WaterLevel": "water-level-in"
     },
     "FeedNameUnits": {
-      "GrowlightTrigger": "unitless, boolean",
-      "Humidity": "%, percentage",
-      "PhotoResistor": "%, percentage",
-      "PlantHeight": "in, inches",
-      "PumpTriggered": "unitless, boolean",
-      "SoilMoisture": "%, percentage",
-      "Temperature": "C, Celcius",
-      "WaterLevel": "in, inches"
+      "GrowlightTriggered": {
+        "AbbreviatedUnit": "bool",
+        "FullUnit": "unitless, boolean"
+      },
+      "Humidity": {
+        "AbbreviatedUnit": "%",
+        "FullUnit": "%, percentage"
+      },
+
+      "PhotoResistor": {
+        "AbbreviatedUnit": "%",
+        "FullUnit": "%, percentage"
+      },
+      "PlantHeight": {
+        "AbbreviatedUnit": "in",
+        "FullUnit": "in, inches"
+      },
+      "PumpTriggered": {
+        "AbbreviatedUnit": "bool",
+        "FullUnit": "unitless, boolean"
+      },
+      "SoilMoisture": {
+        "AbbreviatedUnit": "%",
+        "FullUnit": "%, percentage"
+      },
+      "Temperature": {
+        "AbbreviatedUnit": "C",
+        "FullUnit": "C, Celcius"
+      },
+      "WaterLevel": {
+        "AbbreviatedUnit": "in",
+        "FullUnit": "in, inches"
+      }
     },
     "FeedDataDescription": {
       "GrowlightTrigger": "An LED growlight device that triggers on when the photo-resistor measured light intensity reading is below a certain threshold. The LED grow light can be turn on or off based on the boolean value. O is off and 1 is on.",

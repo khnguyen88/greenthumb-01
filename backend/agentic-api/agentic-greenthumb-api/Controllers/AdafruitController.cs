@@ -1,10 +1,12 @@
 ﻿using AgenticGreenthumbApi.Client;
 using AgenticGreenthumbApi.Models;
 using AgenticGreenthumbApi.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgenticGreenthumbApi.Controllers
 {
+    [EnableCors("AdafruitPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class AdafruitController : ControllerBase
@@ -65,6 +67,5 @@ namespace AgenticGreenthumbApi.Controllers
         {
             return Ok(_adafruitService.GetWaterLevelFeedData().Result);
         }
-
     }
 }
