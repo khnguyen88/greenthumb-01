@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, catchError, of, throwError } from 'rxjs';
 import { environment } from '../environments/environment';
+import { AdafruitData } from '../interfaces/adafruit-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +11,32 @@ export class AdafruitService {
   constructor(private http: HttpClient) {}
 
   getTemperatureData() {
-    return this.http.get(environment.baseUrl + environment.adafruitData.temperature).pipe(
-      catchError((err) => {
-        return this.handleError(err);
-      })
-    );
+    return this.http
+      .get<AdafruitData[]>(
+        environment.baseUrl + environment.subPath.adafruit + environment.adafruitData.temperature
+      )
+      .pipe(
+        catchError((err) => {
+          return this.handleError(err);
+        })
+      );
+  }
+
+  getHumidityData() {
+    return this.http
+      .get<AdafruitData[]>(
+        environment.baseUrl + environment.subPath.adafruit + environment.adafruitData.humidity,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .pipe(
+        catchError((err) => {
+          return this.handleError(err);
+        })
+      );
   }
 
   handleError(err: Error) {

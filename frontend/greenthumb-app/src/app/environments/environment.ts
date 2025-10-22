@@ -1,6 +1,9 @@
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:7169/api/',
+  baseUrl: 'https://localhost:7169/api/',
+  subPath: {
+    adafruit: 'Adafruit/',
+  },
   adafruitData: {
     growlightTrigger: 'GetGrowLightFeedData',
     lightIntensity: 'GetPhotoResistorFeedData',
