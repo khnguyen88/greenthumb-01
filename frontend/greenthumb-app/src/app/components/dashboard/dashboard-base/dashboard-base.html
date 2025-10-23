@@ -1,4 +1,7 @@
 @if(data){
+<div class="canvas-container">
+  <p-chart [type]="chartType" [data]="chartData" [options]="options" class="h-[30rem]" />
+</div>
 <p-table [value]="data" stripedRows [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template #caption>
     <div class="flex items-center justify-between">
@@ -21,4 +24,8 @@
     </tr>
   </ng-template>
 </p-table>
+} @else{
+<div>
+  <h2>Sorry! No Data Found.</h2>
+</div>
 }

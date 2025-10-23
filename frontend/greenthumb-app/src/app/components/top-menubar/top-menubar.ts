@@ -67,7 +67,9 @@ export class TopMenubar implements OnInit {
 
   toggleDarkMode() {
     const element = document.querySelector('html');
+    const element2 = document.querySelector('.canvas-container');
     element?.classList.toggle('my-app-dark');
+    element2?.classList.toggle('my-app-dark');
 
     this.lightDarkMode.set(this.lightDarkMode() === 'Light' ? 'Dark' : 'Light');
     this.pIconClass.set(this.lightDarkMode() === 'Light' ? 'pi pi-sun' : 'pi pi-moon');

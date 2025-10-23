@@ -4,10 +4,11 @@ export interface ChartData {
 }
 
 export interface ChartDataset {
-  type: 'line' | 'bar'; // Extend with other chart types if needed
+  type: 'line' | 'bar' | null; // Extend with other chart types if needed
   label: string;
   data: number[];
   borderColor?: string;
+  borderDash?: number[] | null;
   borderWidth?: number;
   backgroundColor?: string;
   fill?: boolean;

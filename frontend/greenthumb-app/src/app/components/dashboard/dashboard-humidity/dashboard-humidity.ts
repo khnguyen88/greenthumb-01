@@ -10,7 +10,7 @@ import { AdafruitData } from '../../../interfaces/adafruit-interface';
   styleUrl: './dashboard-humidity.css',
 })
 export class DashboardHumidity implements OnInit {
-  data: AdafruitData[] = [];
+  data!: AdafruitData[];
   feedName: string = 'Humidity';
 
   constructor(private cd: ChangeDetectorRef, private adafruitService: AdafruitService) {}

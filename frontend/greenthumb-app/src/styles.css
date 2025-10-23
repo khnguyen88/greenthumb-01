@@ -10,9 +10,32 @@
     background-color: green;
   }
 } */
-
+@tailwind utilities;
 @import 'primeicons/primeicons.css';
 
 .max-height {
   height: calc(100vh - 60px);
+}
+/* Only if we want to override */
+/* .my-app-dark {
+  --canvas-bg: #0b0b80;
+}
+
+:root {
+  --canvas-bg: green;
+}
+
+:root .canvas-container {
+  background-color: var(--canvas-bg);
+} */
+
+.my-app-dark {
+  --canvas-bg: var(--p-surface-900);
+}
+
+:root {
+  --canvas-bg: var(--p-surface-100);
+}
+.canvas-container {
+  background-color: var(--canvas-bg);
 }

@@ -5,11 +5,19 @@ import {
   PLATFORM_ID,
   ChangeDetectorRef,
   inject,
+  signal,
   effect,
   Input,
 } from '@angular/core';
+
 import { ChartModule } from 'primeng/chart';
-import { ChartData } from '../../../interfaces/chart-interface';
+
+import {
+  ChartData,
+  ChartDataset,
+  ChartOptions,
+  AxisOptions,
+} from '../../../interfaces/chart-interface';
 import { AdafruitData } from '../../../interfaces/adafruit-interface';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -21,15 +29,24 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './dashboard-base.css',
 })
 export class DashboardBase implements OnInit {
+  @Input() data: AdafruitData[] = [];
   @Input() feedName!: string; //WIP
+  @Input() chartType: 'bar' | 'line' = 'line';
+  @Input() borderColor: string = 'black';
+  @Input() borderWidth: number = 2;
+  @Input() isLineDash: boolean = false;
+  @Input() isFill: boolean = false;
+  @Input() tension: number = 0.4;
 
   title!: string;
+  lightDarkMode = signal('Light');
 
-  @Input() data!: AdafruitData[];
+  chartData: ChartData = {
+    labels: [],
+    datasets: [],
+  };
 
-  chartData!: ChartData;
-
-  options: any;
+  options!: ChartOptions;
 
   platformId = inject(PLATFORM_ID);
 
@@ -37,7 +54,73 @@ export class DashboardBase implements OnInit {
 
   ngOnInit() {
     this.initChart();
-    console.log(JSON.stringify(this.data));
+  }
+
+  chartLabelBuilder(data: AdafruitData[]): string[] {
+    return data.map((d) => d.createdAt);
+  }
+
+  chartDataSetBuilder(
+    chartType: 'bar' | 'line' | null,
+    label: string,
+    borderColor: string,
+    data: AdafruitData[],
+    fill: boolean = false,
+    borderDash: number[] | null = this.isLineDash ? [5, 5] : null,
+    borderWidth: number = 2,
+    tension: number = 0.4,
+    documentStyle: CSSStyleDeclaration | null = null
+  ): ChartDataset {
+    return {
+      type: chartType,
+      label: `${label}, ${data[0].unit}`,
+      borderColor: documentStyle?.getPropertyValue?.(borderColor)
+        ? documentStyle.getPropertyValue(borderColor)
+        : borderColor,
+      borderDash: borderDash,
+      borderWidth: borderWidth,
+      fill: fill,
+      tension: tension,
+      data: data.map((d) => d.value),
+    };
+  }
+
+  chartOptionBuilder(
+    labelTextColor: string,
+    tickSecondaryColor: string,
+    gridBorderColor: string,
+    maintainAspectRatio: boolean = false,
+    aspectRatio: number = 0.6
+  ): ChartOptions {
+    return {
+      maintainAspectRatio: maintainAspectRatio,
+      aspectRatio: aspectRatio,
+      plugins: {
+        legend: {
+          labels: {
+            color: labelTextColor,
+          },
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: tickSecondaryColor,
+          },
+          grid: {
+            color: gridBorderColor,
+          },
+        },
+        y: {
+          ticks: {
+            color: gridBorderColor,
+          },
+          grid: {
+            color: gridBorderColor,
+          },
+        },
+      },
+    };
   }
 
   initChart() {
@@ -47,7 +130,20 @@ export class DashboardBase implements OnInit {
       const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
-      var data = {
+      // this.chartData.labels = this.chartLabelBuilder(this.data);
+
+      // var chartDataSet: ChartDataset = this.chartDataSetBuilder(
+      //   this.chartType,
+      //   this.feedName,
+      //   this.borderColor,
+      //   this.data,
+      // );
+
+      // this.chartData.datasets.push(chartDataSet);
+
+      // this.options = this.chartOptionBuilder(textColor, textColorSecondary, surfaceBorder);
+
+      this.chartData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
           {
