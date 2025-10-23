@@ -2,6 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   PLATFORM_ID,
   ChangeDetectorRef,
   inject,
@@ -28,7 +30,7 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './dashboard-base.html',
   styleUrl: './dashboard-base.css',
 })
-export class DashboardBase implements OnInit {
+export class DashboardBase implements OnInit, OnChanges {
   @Input() data: AdafruitData[] = [];
   @Input() feedName!: string; //WIP
   @Input() chartType: 'bar' | 'line' = 'line';
@@ -53,11 +55,17 @@ export class DashboardBase implements OnInit {
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.initChart();
+    // this.initChart();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data'] && this.data?.length) {
+      this.initChart();
+    }
   }
 
   chartLabelBuilder(data: AdafruitData[]): string[] {
-    return data.map((d) => d.createdAt);
+    return data?.map((d) => d.createdAt);
   }
 
   chartDataSetBuilder(
@@ -130,47 +138,51 @@ export class DashboardBase implements OnInit {
       const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
-      // this.chartData.labels = this.chartLabelBuilder(this.data);
+      this.chartData.labels = this.chartLabelBuilder(this.data);
 
-      // var chartDataSet: ChartDataset = this.chartDataSetBuilder(
-      //   this.chartType,
-      //   this.feedName,
-      //   this.borderColor,
-      //   this.data,
-      // );
+      console.log(this.data.map((d) => d.value));
+      var chartDataSet: ChartDataset = {
+        type: 'line',
+        label: 'Dataset 1',
+        borderColor: documentStyle.getPropertyValue('--p-orange-500'),
+        borderWidth: 2,
+        fill: false,
+        tension: 0.4,
+        data: this.data?.map((d) => d.value),
+      };
 
-      // this.chartData.datasets.push(chartDataSet);
+      this.chartData.datasets.push(chartDataSet);
 
       // this.options = this.chartOptionBuilder(textColor, textColorSecondary, surfaceBorder);
 
-      this.chartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            type: 'line',
-            label: 'Dataset 1',
-            borderColor: documentStyle.getPropertyValue('--p-orange-500'),
-            borderWidth: 2,
-            fill: false,
-            tension: 0.4,
-            data: [50, 25, 12, 48, 56, 76, 42],
-          },
-          {
-            type: 'bar',
-            label: 'Dataset 2',
-            backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
-            data: [21, 84, 24, 75, 37, 65, 34],
-            borderColor: 'white',
-            borderWidth: 2,
-          },
-          {
-            type: 'bar',
-            label: 'Dataset 3',
-            backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
-            data: [41, 52, 24, 74, 23, 21, 32],
-          },
-        ],
-      };
+      // this.chartData = {
+      //   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      //   datasets: [
+      //     {
+      //       type: 'line',
+      //       label: 'Dataset 1',
+      //       borderColor: documentStyle.getPropertyValue('--p-orange-500'),
+      //       borderWidth: 2,
+      //       fill: false,
+      //       tension: 0.4,
+      //       data: [50, 25, 12, 48, 56, 76, 42],
+      //     },
+      //     {
+      //       type: 'bar',
+      //       label: 'Dataset 2',
+      //       backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
+      //       data: [21, 84, 24, 75, 37, 65, 34],
+      //       borderColor: 'white',
+      //       borderWidth: 2,
+      //     },
+      //     {
+      //       type: 'bar',
+      //       label: 'Dataset 3',
+      //       backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
+      //       data: [41, 52, 24, 74, 23, 21, 32],
+      //     },
+      //   ],
+      // };
 
       this.options = {
         maintainAspectRatio: false,
