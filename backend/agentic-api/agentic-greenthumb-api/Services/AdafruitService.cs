@@ -1,5 +1,6 @@
 ﻿using AgenticGreenthumbApi.Client;
 using AgenticGreenthumbApi.Domain;
+using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Mappers;
 using AgenticGreenthumbApi.Models;
 using NRedisStack.Search;
@@ -25,101 +26,116 @@ namespace AgenticGreenthumbApi.Services
 
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetGrowLightFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetGrowLightFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             //NOTE: MAP REQUITED, BECAUSE THIS DATA WILL BE INGESTED BY LLM AND SENT WITH PROMPT. WE NEED TO REDUCE THE AMOUNT OF UNCESSARY INFORMATION PROVIDED IN THE PROMPT AND REDUCE OUR TOKEN, TO ALLOW LLM TO PROCESS THINGS QUICKER.
 
             var data =  await _adafruitAPIClient.GetGrowLightFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("GrowlightTriggered");
-            Console.WriteLine(dataUnitType);
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetHumidityFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetHumidityFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetHumidityFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("Humidity");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetPhotoResistorFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetPhotoResistorFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetPhotoResistorFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("PhotoResistor");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetPlantHeightData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetPlantHeightData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetPlantHeightData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("PlantHeight");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetPumpTriggeredFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetPumpTriggeredFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetPumpTriggeredFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("PumpTriggered");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetSoilMoistureFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetSoilMoistureFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetSoilMoistureFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("SoilMoisture");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetTemperatureFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetTemperatureFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetTemperatureFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
 
             string dataUnitType = GetFeedDataUnit("Temperature");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
 
-        public async Task<IEnumerable<AdafruitFeed<float>>> GetWaterLevelFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
+        public async Task<IEnumerable<AdafruitFeedDto<float>>> GetWaterLevelFeedData(string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {
             var data = await _adafruitAPIClient.GetWaterLevelFeedData(feedKeyPrefixMacAddress, feedKeyPrefixStartDate);
-            var mappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
-
+            var partialMappedData = data.Select(m => AdafruitFeedMapper<float>.ModelToDomainMapper(m)).ToList();
+    
             string dataUnitType = GetFeedDataUnit("WaterLevel");
-            mappedData.ForEach(item => item.Unit = dataUnitType);
-            SortFeedDataByAscending<float>(mappedData);
+            partialMappedData.ForEach(item => item.Unit = dataUnitType);
+            SortFeedDataByAscending<float>(partialMappedData);
+
+            var mappedData = partialMappedData.Select(d => AdafruitFeedMapper<float>.DomainToDtoMapper(d)).ToList();
 
             return mappedData;
         }
