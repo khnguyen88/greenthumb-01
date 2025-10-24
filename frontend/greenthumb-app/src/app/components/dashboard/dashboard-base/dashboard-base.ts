@@ -10,6 +10,7 @@ import {
   signal,
   effect,
   Input,
+  HostListener,
 } from '@angular/core';
 
 import { ChartModule } from 'primeng/chart';
@@ -40,9 +41,9 @@ export class DashboardBase implements OnInit, OnChanges {
   @Input() isFill: boolean = false;
   @Input() tension: number = 0.4;
   @Input() simplifyYAxis: boolean = false;
+  @Input() lightDarkMode!: string;
 
   title!: string;
-  lightDarkMode = signal('Light');
   simplifyYAxisSignal = signal(false);
 
   chartData: ChartData = {
@@ -54,10 +55,19 @@ export class DashboardBase implements OnInit, OnChanges {
 
   platformId = inject(PLATFORM_ID);
 
+  windowWidth = signal(window.innerWidth);
+
   constructor(private cd: ChangeDetectorRef) {}
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.windowWidth.set(event.target.innerWidth);
+    this.initChart();
+    this.cd.detectChanges();
+  }
+
   ngOnInit() {
-    // this.initChart();
+    this.windowWidth.set(window.innerWidth);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -66,12 +76,18 @@ export class DashboardBase implements OnInit, OnChanges {
     if (changes['data'] && this.data?.length) {
       this.initChart();
     }
+
+    if (changes['lightDarkMode']) {
+      this.initChart();
+    }
+
+    this.cd.detectChanges();
   }
 
   chartLabelBuilder(data: AdafruitData[]): string[] {
     const dataLabel = data?.map((d) => d.createdAt);
     if (this.simplifyYAxisSignal()) {
-      return this.replaceDuplicateWithBlanks(dataLabel.map((d) => d.split(' ')[0]));
+      return this.simplifyLabel(dataLabel);
     } else {
       return dataLabel;
     }
@@ -140,6 +156,9 @@ export class DashboardBase implements OnInit, OnChanges {
   }
 
   initChart() {
+    this.chartData.labels = [];
+    this.chartData.datasets = [];
+
     if (isPlatformBrowser(this.platformId)) {
       const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--p-text-color');
@@ -152,7 +171,7 @@ export class DashboardBase implements OnInit, OnChanges {
       var chartDataSet: ChartDataset = this.chartDataSetBuilder(
         'line',
         this.feedName,
-        '--p-orange-500', // CSS variable name
+        '--p-purple-500', // CSS variable name
         this.data,
         false, // fill
         this.isLineDash ? [5, 5] : [5, 0],
@@ -169,14 +188,17 @@ export class DashboardBase implements OnInit, OnChanges {
     }
   }
 
-  replaceDuplicateWithBlanks(data: string[]): string[] {
-    const uniqueData: string[] = [];
-    return data.map((d) => {
-      if (uniqueData?.findIndex((u) => u === d) < 0) {
-        uniqueData.push(d);
-        return d;
+  simplifyLabel(rawLabel: string[]): string[] {
+    const dateOnlyLabel = rawLabel.map((d) => d.split(' ')[0]);
+    const uniqueLabel: string[] = [];
+    return dateOnlyLabel.map((d, i) => {
+      if (uniqueLabel?.findIndex((u) => u === d) < 0) {
+        uniqueLabel.push(d);
+        return rawLabel[i].split(' ')[0];
       } else {
-        return '';
+        return this.windowWidth() > 2000 || rawLabel.length < 30
+          ? rawLabel[i].split(' ')[1].slice(0, -3) + '-hr'
+          : '';
       }
     });
   }

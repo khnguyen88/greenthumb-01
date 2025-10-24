@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
+import { SharedService } from '../../services/shared-service';
 
 @Component({
   selector: 'app-top-menubar',
@@ -15,12 +16,13 @@ import { Menubar } from 'primeng/menubar';
 export class TopMenubar implements OnInit {
   items: MenuItem[] | undefined;
   protected readonly title = signal('greenthumb-app');
-  lightDarkMode = signal('Dark');
+  lightDarkMode = signal('Light');
+  lightDarkModeLabel = signal(this.lightDarkMode() === 'Light' ? 'Dark' : 'Light');
   buttonLabel = signal(`Toogle to Dark mode!`);
   pIconClass = signal('pi pi-moon');
   currentRoute = signal('');
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private sharedService: SharedService) {
     this.currentRoute.set(this.router.url);
   }
 
@@ -63,6 +65,8 @@ export class TopMenubar implements OnInit {
         },
       },
     ];
+
+    this.sharedService.updateThemeMode(this.lightDarkMode());
   }
 
   toggleDarkMode() {
@@ -72,9 +76,12 @@ export class TopMenubar implements OnInit {
     element2?.classList.toggle('my-app-dark');
 
     this.lightDarkMode.set(this.lightDarkMode() === 'Light' ? 'Dark' : 'Light');
-    this.pIconClass.set(this.lightDarkMode() === 'Light' ? 'pi pi-sun' : 'pi pi-moon');
+    this.sharedService.updateThemeMode(this.lightDarkMode());
 
-    this.buttonLabel.set(`Toogle to ${this.lightDarkMode()} mode!`);
+    this.lightDarkModeLabel.set(this.lightDarkModeLabel() === 'Light' ? 'Dark' : 'Light');
+    this.pIconClass.set(this.lightDarkModeLabel() === 'Light' ? 'pi pi-sun' : 'pi pi-moon');
+
+    this.buttonLabel.set(`Toogle to ${this.lightDarkModeLabel()} mode!`);
   }
 
   checkRoute() {

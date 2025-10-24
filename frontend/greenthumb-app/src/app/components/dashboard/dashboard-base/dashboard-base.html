@@ -1,29 +1,32 @@
 @if(data){
-<div class="canvas-container">
-  <p-chart [type]="chartType" [data]="chartData" [options]="options" class="h-[30rem]" />
+<div (window:resize)="onResize($event)">
+  <div class="text-2xl text-center font-bold pb-8 pt-4">{{ feedName }} Feed Data</div>
+  <div class="canvas-container">
+    <p-chart [type]="chartType" [data]="chartData" [options]="options" class="h-[30rem]" />
+  </div>
+  <p-table [value]="data" stripedRows [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #caption>
+      <div class="flex items-center justify-between">
+        <span class="text-xl font-bold">{{ feedName }} Feed Data</span>
+        <p-button icon="pi pi-refresh" rounded raised />
+      </div>
+    </ng-template>
+    <ng-template #header>
+      <tr>
+        <th>Value</th>
+        <th>Unit</th>
+        <th>Sample Date</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-data>
+      <tr>
+        <td>{{ data.value }}</td>
+        <td>{{ data.unit }}</td>
+        <td>{{ data.createdAt }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
-<p-table [value]="data" stripedRows [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template #caption>
-    <div class="flex items-center justify-between">
-      <span class="text-xl font-bold">{{ feedName }} Feed Data</span>
-      <p-button icon="pi pi-refresh" rounded raised />
-    </div>
-  </ng-template>
-  <ng-template #header>
-    <tr>
-      <th>Value</th>
-      <th>Unit</th>
-      <th>Sample Date</th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-data>
-    <tr>
-      <td>{{ data.value }}</td>
-      <td>{{ data.unit }}</td>
-      <td>{{ data.createdAt }}</td>
-    </tr>
-  </ng-template>
-</p-table>
 } @else{
 <div>
   <h2>Sorry! No Data Found.</h2>
