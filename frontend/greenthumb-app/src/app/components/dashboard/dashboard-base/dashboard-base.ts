@@ -39,9 +39,11 @@ export class DashboardBase implements OnInit, OnChanges {
   @Input() isLineDash: boolean = false;
   @Input() isFill: boolean = false;
   @Input() tension: number = 0.4;
+  @Input() simplifyYAxis: boolean = false;
 
   title!: string;
   lightDarkMode = signal('Light');
+  simplifyYAxisSignal = signal(false);
 
   chartData: ChartData = {
     labels: [],
@@ -59,32 +61,38 @@ export class DashboardBase implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.simplifyYAxisSignal.set(this.simplifyYAxis);
+
     if (changes['data'] && this.data?.length) {
       this.initChart();
     }
   }
 
   chartLabelBuilder(data: AdafruitData[]): string[] {
-    return data?.map((d) => d.createdAt);
+    const dataLabel = data?.map((d) => d.createdAt);
+    if (this.simplifyYAxisSignal()) {
+      return this.replaceDuplicateWithBlanks(dataLabel.map((d) => d.split(' ')[0]));
+    } else {
+      return dataLabel;
+    }
   }
 
   chartDataSetBuilder(
     chartType: 'bar' | 'line' | null,
     label: string,
-    borderColor: string,
+    borderColor: string, // expects a CSS variable like '--p-orange-500'
     data: AdafruitData[],
     fill: boolean = false,
-    borderDash: number[] | null = this.isLineDash ? [5, 5] : null,
+    borderDash: number[] | null,
     borderWidth: number = 2,
     tension: number = 0.4,
     documentStyle: CSSStyleDeclaration | null = null
   ): ChartDataset {
+    const unit = data[0].unit;
     return {
-      type: chartType,
-      label: `${label}, ${data[0].unit}`,
-      borderColor: documentStyle?.getPropertyValue?.(borderColor)
-        ? documentStyle.getPropertyValue(borderColor)
-        : borderColor,
+      type: this.chartType,
+      label: `${label}, ${unit}`,
+      borderColor: documentStyle?.getPropertyValue?.(borderColor)?.trim() || borderColor,
       borderDash: borderDash,
       borderWidth: borderWidth,
       fill: fill,
@@ -121,7 +129,7 @@ export class DashboardBase implements OnInit, OnChanges {
         },
         y: {
           ticks: {
-            color: gridBorderColor,
+            color: tickSecondaryColor,
           },
           grid: {
             color: gridBorderColor,
@@ -141,80 +149,35 @@ export class DashboardBase implements OnInit, OnChanges {
       this.chartData.labels = this.chartLabelBuilder(this.data);
 
       console.log(this.data.map((d) => d.value));
-      var chartDataSet: ChartDataset = {
-        type: 'line',
-        label: 'Dataset 1',
-        borderColor: documentStyle.getPropertyValue('--p-orange-500'),
-        borderWidth: 2,
-        fill: false,
-        tension: 0.4,
-        data: this.data?.map((d) => d.value),
-      };
+      var chartDataSet: ChartDataset = this.chartDataSetBuilder(
+        'line',
+        this.feedName,
+        '--p-orange-500', // CSS variable name
+        this.data,
+        false, // fill
+        this.isLineDash ? [5, 5] : [5, 0],
+        2, // borderWidth
+        0.4, // tension
+        documentStyle // CSSStyleDeclaration
+      );
 
       this.chartData.datasets.push(chartDataSet);
 
-      // this.options = this.chartOptionBuilder(textColor, textColorSecondary, surfaceBorder);
-
-      // this.chartData = {
-      //   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      //   datasets: [
-      //     {
-      //       type: 'line',
-      //       label: 'Dataset 1',
-      //       borderColor: documentStyle.getPropertyValue('--p-orange-500'),
-      //       borderWidth: 2,
-      //       fill: false,
-      //       tension: 0.4,
-      //       data: [50, 25, 12, 48, 56, 76, 42],
-      //     },
-      //     {
-      //       type: 'bar',
-      //       label: 'Dataset 2',
-      //       backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
-      //       data: [21, 84, 24, 75, 37, 65, 34],
-      //       borderColor: 'white',
-      //       borderWidth: 2,
-      //     },
-      //     {
-      //       type: 'bar',
-      //       label: 'Dataset 3',
-      //       backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
-      //       data: [41, 52, 24, 74, 23, 21, 32],
-      //     },
-      //   ],
-      // };
-
-      this.options = {
-        maintainAspectRatio: false,
-        aspectRatio: 0.6,
-        plugins: {
-          legend: {
-            labels: {
-              color: textColor,
-            },
-          },
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: textColorSecondary,
-            },
-            grid: {
-              color: surfaceBorder,
-            },
-          },
-          y: {
-            ticks: {
-              color: textColorSecondary,
-            },
-            grid: {
-              color: surfaceBorder,
-            },
-          },
-        },
-      };
+      this.options = this.chartOptionBuilder(textColor, textColorSecondary, surfaceBorder);
 
       this.cd.markForCheck();
     }
+  }
+
+  replaceDuplicateWithBlanks(data: string[]): string[] {
+    const uniqueData: string[] = [];
+    return data.map((d) => {
+      if (uniqueData?.findIndex((u) => u === d) < 0) {
+        uniqueData.push(d);
+        return d;
+      } else {
+        return '';
+      }
+    });
   }
 }
