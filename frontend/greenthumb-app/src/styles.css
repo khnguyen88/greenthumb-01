@@ -36,6 +36,15 @@
 :root {
   --canvas-bg: var(--p-surface-100);
 }
+
 .canvas-container {
   background-color: var(--canvas-bg);
+}
+
+html {
+  background-color: var(--p-surface-0);
+}
+
+html.my-app-dark {
+  background-color: var(--p-surface-900);
 }
