@@ -1,5 +1,7 @@
-﻿using AgenticGreenthumbApi.Services;
+﻿using AgenticGreenthumbApi.Dtos;
+using AgenticGreenthumbApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SemanticKernel;
 
 namespace AgenticGreenthumbApi.Controllers
 {
@@ -28,6 +30,12 @@ namespace AgenticGreenthumbApi.Controllers
         public Task<string> GetChatResponse(string prompt)
         {
             return _chatCompletionService.GetChatResponse(prompt);
+        }
+
+        [HttpGet("GetAllChatResponses", Name = "GetAllChatResponses")]
+        public Task<List<ChatHistoryDto>> GetAllChatResponses(string prompt)
+        {
+            return _chatCompletionService.GetChatHistoryAsync(prompt);
         }
     }
 }

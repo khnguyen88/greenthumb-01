@@ -1,5 +1,7 @@
 ﻿using AgenticGreenthumbApi.Domain;
+using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Helper;
+using AgenticGreenthumbApi.Mappers;
 using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
@@ -70,9 +72,9 @@ namespace AgenticGreenthumbApi.Services
                 Console.WriteLine(trueOrchestrationOutput);
                 chatOrchestration.ClearChatHistory();
 
-                ChatMessageContent santitizedOutput = await chatEditorRegistry.ChatEditorAgent.InvokeAsync(trueOrchestrationOutput, agentThread).FirstAsync();
+                ChatMessageContent santitizedOutput = await chatEditorRegistry.ChatEditorAgent.InvokeAsync(trueOrchestrationOutput).FirstAsync();
 
-                _userChatHistoryService.AppendUserChatHistory(agentThread.ChatHistory, chatOrchestration.ChatHistory);
+                agentThread.ChatHistory.Add(santitizedOutput);
                 _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
                 Console.WriteLine("# of Content After Updating User Chat History: " + agentThread.ChatHistory.Count);
                 Console.WriteLine();
@@ -83,6 +85,16 @@ namespace AgenticGreenthumbApi.Services
             {
                 return ex.Message + "\n\n" + "Please adjust your prompt and try again.";
             }
+        }
+
+        public async Task<List<ChatHistoryDto>> GetChatHistoryAsync(string userPrompt)
+        {
+            _ = await GetChatResponse(userPrompt);
+
+            var chatHistory =  _userChatHistoryService.GetUserChatHistory(userName).ChatHistory.ToList();
+
+            return ChatHistoryMapper.DomainToDtoMapper(chatHistory);
+
         }
     }
 }

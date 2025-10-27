@@ -33,7 +33,8 @@ namespace AgenticGreenthumbApi.Services
 
                 int compareResult = DateTime.Compare(expirationDateTime, currentDateTime);
 
-                return compareResult >= 0;
+                return compareResult < 0;
+
             }
         }
 
@@ -60,9 +61,12 @@ namespace AgenticGreenthumbApi.Services
         {
             UserChatHistory userChatHistory = GetUserChatHistory(username);
 
-            userChatHistory.ChatHistory = latestChatHistory;
+            UserChatHistory latestUserChatHistory = new() { 
+                ChatHistory = latestChatHistory,
+                Username = userChatHistory.Username,
+                SessionDateTime = userChatHistory.SessionDateTime};
 
-            InMemUserChatHistory.AddOrUpdate(username, userChatHistory, (username, userChatHistory) => userChatHistory);
+            InMemUserChatHistory.AddOrUpdate(username, latestUserChatHistory, (username, userChatHistory) => latestUserChatHistory);
         }
 
         public void AppendUserChatHistory(ChatHistory oldUserChatHistory, ChatHistory recentChatHistory)
