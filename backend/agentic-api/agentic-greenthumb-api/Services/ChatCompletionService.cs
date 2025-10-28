@@ -87,13 +87,16 @@ namespace AgenticGreenthumbApi.Services
             }
         }
 
-        public async Task<List<ChatHistoryDto>> GetChatHistoryAsync(string userPrompt)
+        public async Task<ChatHistoryDto> GetChatHistory(string userPrompt)
         {
             _ = await GetChatResponse(userPrompt);
 
-            var chatHistory =  _userChatHistoryService.GetUserChatHistory(userName).ChatHistory.ToList();
+            ChatHistoryDto chatHistoryDto = new()
+            {
+                ChatMessages = ChatHistoryMapper.DomainToDtoMapper(_userChatHistoryService.GetUserChatHistory(userName).ChatHistory.ToList())
+            };
 
-            return ChatHistoryMapper.DomainToDtoMapper(chatHistory);
+            return chatHistoryDto;
 
         }
     }

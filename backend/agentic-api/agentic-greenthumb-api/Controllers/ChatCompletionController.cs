@@ -33,9 +33,9 @@ namespace AgenticGreenthumbApi.Controllers
         }
 
         [HttpGet("GetAllChatResponses", Name = "GetAllChatResponses")]
-        public Task<List<ChatHistoryDto>> GetAllChatResponses(string prompt)
+        public Task<ChatHistoryDto> GetAllChatResponses(string prompt)
         {
-            return _chatCompletionService.GetChatHistoryAsync(prompt);
+            return _chatCompletionService.GetChatHistory(prompt);
         }
     }
 }

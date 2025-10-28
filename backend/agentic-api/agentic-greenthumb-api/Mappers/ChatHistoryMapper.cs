@@ -6,10 +6,10 @@ namespace AgenticGreenthumbApi.Mappers
 {
     public class ChatHistoryMapper
     {
-        public static List<ChatHistoryDto> DomainToDtoMapper(List<ChatMessageContent> chatHistory)
+        public static List<ChatMessageDto> DomainToDtoMapper(List<ChatMessageContent> chatHistory)
         {
             return chatHistory.Select(x =>
-                new ChatHistoryDto()
+                new ChatMessageDto()
                 {
                     Role = x.Role.Label.ToLowerInvariant(),
                     Message = x.Items[0].ToString()
