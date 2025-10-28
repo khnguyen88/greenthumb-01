@@ -31,7 +31,7 @@
   margin-bottom: 5px;
   border-radius: var(--rad) var(--rad) var(--rad) var(--rad-sm);
   margin-right: auto;
-  color: black;
+  /* color: black; */
 }
 
 .chat-user {
@@ -40,5 +40,5 @@
   margin-bottom: 5px;
   border-radius: var(--rad) var(--rad) var(--rad-sm) var(--rad);
   margin-left: auto;
-  color: black;
+  /* color: black; */
 }

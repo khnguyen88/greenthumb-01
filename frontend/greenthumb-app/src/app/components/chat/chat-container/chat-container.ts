@@ -1,4 +1,13 @@
-import { Component, Input, AfterViewChecked, ElementRef, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  AfterViewChecked,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatHistoryDto } from '../../../interfaces/chat-interface';
 
@@ -8,9 +17,9 @@ import { ChatHistoryDto } from '../../../interfaces/chat-interface';
   templateUrl: './chat-container.html',
   styleUrl: './chat-container.css',
 })
-export class ChatContainer implements OnInit, AfterViewChecked {
+export class ChatContainer implements OnInit, AfterViewChecked, OnChanges {
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
-
+  @Input() lightDarkMode!: string;
   @Input() chatHistory: ChatHistoryDto = {
     chatMessages: [
       {
@@ -51,6 +60,8 @@ export class ChatContainer implements OnInit, AfterViewChecked {
   ngOnInit() {
     this.scrollToBottom();
   }
+
+  ngOnChanges(changes: SimpleChanges): void {}
 
   ngAfterViewChecked(): void {
     this.scrollToBottom();

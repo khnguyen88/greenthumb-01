@@ -71,9 +71,9 @@ export class TopMenubar implements OnInit {
 
   toggleDarkMode() {
     const element = document.querySelector('html');
-    const element2 = document.querySelector('.canvas-container');
+    const element2 = document.querySelector('html');
     element?.classList.toggle('my-app-dark');
-    element2?.classList.toggle('my-app-dark');
+    element2?.classList.toggle('dark');
 
     this.lightDarkMode.set(this.lightDarkMode() === 'Light' ? 'Dark' : 'Light');
     this.sharedService.updateThemeMode(this.lightDarkMode());
