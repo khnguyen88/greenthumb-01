@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  max-height: fit-content;
+  overflow: auto;
+}
+
+.chat {
+  @apply flex flex-row justify-end items-end;
+  --rad: 20px;
+  --rad-sm: 3px;
+  padding: 5px 25px 5px 25px;
+  max-width: 50vw;
+  margin-left: 25vw;
+  background-color: var(--color-stone-400);
+}
+
+.chat-assistant {
+  justify-content: flex-start;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: var(--rad) var(--rad) var(--rad) var(--rad-sm);
+  margin-right: auto;
+  color: black;
+}
+
+.chat-user {
+  justify-content: flex-end;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: var(--rad) var(--rad) var(--rad-sm) var(--rad);
+  margin-left: auto;
+  color: black;
+}
+
+/* .my-app-dark .chat-assistant {
+  justify-content: flex-start;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: var(--rad) var(--rad) var(--rad) var(--rad-sm);
+  margin-right: auto;
+  color: white;
+}
+
+.my-app-dark .chat-user {
+  justify-content: flex-end;
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  border-radius: var(--rad) var(--rad) var(--rad-sm) var(--rad);
+  margin-left: auto;
+  color: white;
+} */
