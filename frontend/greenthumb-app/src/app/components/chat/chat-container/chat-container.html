@@ -1,11 +1,14 @@
-<div class="chat" *ngFor="let message of chatHistory.chatMessages; let i = index">
-  <div
-    class="p-2"
-    [ngClass]="{
-      'chat-assistant bg-purple-200 dark:bg-purple-200': message.role === 'assistant',
-      'chat-user bg-green-200 dark:bg-green-200': message.role === 'user'
-    }"
-  >
-    {{ message.message }}
+<div class="chat-container" #scrollMe>
+  <div class="chat" *ngFor="let message of chatHistory.chatMessages; let i = index">
+    <div
+      class="p-2"
+      [ngClass]="{
+        'chat-assistant bg-purple-200 dark:bg-purple-200': message.role === 'assistant',
+        'chat-user bg-green-200 dark:bg-green-200': message.role === 'user'
+      }"
+    >
+      {{ message.message }}
+    </div>
   </div>
+  <div #scrollAnchor></div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewChecked, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatHistoryDto } from '../../../interfaces/chat-interface';
 
@@ -8,25 +8,61 @@ import { ChatHistoryDto } from '../../../interfaces/chat-interface';
   templateUrl: './chat-container.html',
   styleUrl: './chat-container.css',
 })
-export class ChatContainer {
+export class ChatContainer implements OnInit, AfterViewChecked {
+  @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
+
   @Input() chatHistory: ChatHistoryDto = {
     chatMessages: [
       {
-        role: 'assistant',
+        role: 'user',
         message: 'hi',
       },
       {
-        role: 'user',
-        message: 'hello',
-      },
-      {
         role: 'assistant',
-        message: 'how can I help you?',
+        message: 'hello',
       },
       {
         role: 'user',
         message: 'can you tell me the meaning of life?',
       },
+      {
+        role: 'assistant',
+        message: '42',
+      },
+      {
+        role: 'user',
+        message: 'what is love?',
+      },
+      {
+        role: 'assistant',
+        message: 'a construct of the mind',
+      },
+      {
+        role: 'user',
+        message: 'what is my purpose?',
+      },
+      {
+        role: 'assistant',
+        message: 'magician',
+      },
     ],
   };
+
+  ngOnInit() {
+    this.scrollToBottom();
+  }
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+
+  //https://stackoverflow.com/questions/35232731/angular-2-scroll-to-bottom-chat-style
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop =
+        this.myScrollContainer.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Scroll error:', err);
+    }
+  }
 }
