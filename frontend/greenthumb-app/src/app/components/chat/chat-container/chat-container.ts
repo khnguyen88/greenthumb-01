@@ -20,45 +20,10 @@ import { SharedService } from '../../../services/shared-service';
   styleUrl: './chat-container.css',
 })
 export class ChatContainer implements OnInit, AfterViewChecked, AfterViewInit, OnChanges {
-  constructor(private sharedService: SharedService){}
+  constructor(private sharedService: SharedService) {}
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
   @Input() lightDarkMode!: string;
-  @Input() chatHistory: ChatHistoryDto = {
-    chatMessages: [
-      {
-        role: 'user',
-        message: 'hi',
-      },
-      {
-        role: 'assistant',
-        message: 'hello',
-      },
-      {
-        role: 'user',
-        message: 'can you tell me the meaning of life?',
-      },
-      {
-        role: 'assistant',
-        message: '42',
-      },
-      {
-        role: 'user',
-        message: 'what is love?',
-      },
-      {
-        role: 'assistant',
-        message: 'a construct of the mind',
-      },
-      {
-        role: 'user',
-        message: 'what is my purpose?',
-      },
-      {
-        role: 'assistant',
-        message: 'magician',
-      },
-    ],
-  };
+  @Input() chatHistory: ChatHistoryDto = { chatMessages: [] };
 
   ngOnInit() {}
 

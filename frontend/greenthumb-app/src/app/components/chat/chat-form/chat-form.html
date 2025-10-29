@@ -3,6 +3,8 @@
     <textarea class="w-full" rows="5" pTextarea [(ngModel)]="value"></textarea>
   </div>
   <div class="button mt-4">
+    <p-button label="Clear Chat" (onClick)="clearChat()" class="mr-4" />
+    <p-button label="Clear Prompt" (onClick)="clearPronpt()" class="mr-4" [disabled]="!value" />
     <p-button
       label="Submit"
       [loading]="loading"

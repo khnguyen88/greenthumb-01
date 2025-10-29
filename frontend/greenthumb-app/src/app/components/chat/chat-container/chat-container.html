@@ -1,4 +1,5 @@
 <div class="chat-container" #scrollMe>
+  @if(chatHistory.chatMessages){
   <div class="chat" *ngFor="let message of chatHistory.chatMessages; let i = index">
     <div
       class="p-2"
@@ -13,4 +14,5 @@
       {{ message.message }}
     </div>
   </div>
+  }
 </div>

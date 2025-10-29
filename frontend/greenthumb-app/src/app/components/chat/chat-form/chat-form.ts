@@ -11,7 +11,8 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../../services/chat-service';
 import { Subscription } from 'rxjs';
-import { ChatHistoryDto, ChatRequestDto } from '../../../interfaces/chat-interface';
+import { ChatHistoryDto, ChatMessageDto, ChatRequestDto } from '../../../interfaces/chat-interface';
+import { SharedService } from '../../../services/shared-service';
 
 @Component({
   selector: 'app-chat-form',
@@ -20,43 +21,57 @@ import { ChatHistoryDto, ChatRequestDto } from '../../../interfaces/chat-interfa
   styleUrl: './chat-form.css',
 })
 export class ChatForm implements OnDestroy {
-  @Output() newPromptEvent = new EventEmitter<ChatHistoryDto>();
-  subscription!: Subscription;
+  @Output() recieveChatMessage = new EventEmitter<ChatMessageDto>();
+  subscription: Subscription = new Subscription();
   value: string = '';
   loading: boolean = false;
 
-  constructor(private cd: ChangeDetectorRef, private chatService: ChatService) {}
+  constructor(
+    private cd: ChangeDetectorRef,
+    private chatService: ChatService,
+    private sharedService: SharedService
+  ) {}
 
   submitPrompt(value: string) {
-    console.log(value);
+    this.loading = true;
+    this.recieveChatMessage.emit(this.buildChatMessage(value, 'user'));
 
     let payload: ChatRequestDto = { prompt: value };
 
-    this.subscription = this.chatService
-      .postPartialChatResponses(payload)
-      .subscribe((result: any) => {
-        console.log(JSON.stringify(result));
+    this.subscription.add(
+      this.chatService.postSingleChatResponse(payload).subscribe((result: any) => {
         if (this.value !== '' && result) {
-          this.newPromptEvent.emit(result);
+          this.recieveChatMessage.emit(result);
         }
-      });
 
-    this.value = '';
-    this.load();
-  }
+        this.loading = false;
+        this.value = '';
+      })
+    );
 
-  load() {
-    this.loading = true;
     this.cd.detectChanges();
-
-    setTimeout(() => {
-      this.loading = false;
-
-      this.cd.detectChanges();
-    }, 2000);
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  buildChatMessage(message: string, role: 'user' | 'assistant'): ChatMessageDto {
+    let chatMessage: ChatMessageDto = {
+      role: role,
+      message: message,
+    };
+
+    return chatMessage;
+  }
+
+  clearPronpt() {
+    this.value = '';
+    this.cd.detectChanges();
+  }
+
+  clearChat() {
+    this.sharedService.updateChatHistory({ chatMessages: [] });
+    this.cd.detectChanges();
   }
 }
