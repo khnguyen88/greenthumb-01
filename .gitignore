@@ -477,3 +477,4 @@ FodyWeavers.xsd
 *.msm
 *.msp
 frontend/greenthumb-app/src/app/environments/environment.ts
+
