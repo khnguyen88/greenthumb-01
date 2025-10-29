@@ -42,7 +42,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment File
-environments/*
+**/environment.ts
+environments/
 environment.ts*
 
 
