@@ -42,7 +42,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment File
-environments/
+environments/*
 environment.ts*
 
 
@@ -476,3 +476,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+frontend/greenthumb-app/src/app/environments/environment.ts
