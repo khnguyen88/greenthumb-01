@@ -12,4 +12,10 @@ namespace AgenticGreenthumbApi.Dtos
         public string Role { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
     }
+    public class ChatRequest
+    {
+        public string Prompt { get; set; }
+    }
+
+
 }

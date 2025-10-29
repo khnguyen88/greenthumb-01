@@ -50,6 +50,14 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod(); //Update and just use "GET" AND "OPTIONS" in the future.
         });
+
+    options.AddPolicy("ChatPolicy",
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+          .AllowAnyHeader()
+          .AllowAnyMethod(); //Update and just use "GET" AND "OPTIONS" in the future.
+    });
 });
 
 var app = builder.Build();

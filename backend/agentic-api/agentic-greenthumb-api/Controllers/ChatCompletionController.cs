@@ -1,12 +1,14 @@
 ﻿using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SemanticKernel;
 
 namespace AgenticGreenthumbApi.Controllers
 {
+    [EnableCors("ChatPolicy")]
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class ChatCompletionController : ControllerBase
     {
 
@@ -19,23 +21,23 @@ namespace AgenticGreenthumbApi.Controllers
             _chatCompletionService = chatCompletionService;
         }
 
-        //[HttpGet("GetChatHistory", Name = "GetChatHistory")]
-        //public IEnumerable<string> GetChatHistory()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => "What a good cat")
-        //    .ToArray();
-        //}
 
-        [HttpGet("GetChatResponse", Name = "GetChatResponse")]
-        public Task<string> GetChatResponse(string prompt)
+        [HttpPost("PostChatResponse", Name = "PostChatResponse")]
+        public Task<string> GetChatResponse([FromBody] ChatRequest chatRequest)
         {
-            return _chatCompletionService.GetChatResponse(prompt);
+            return _chatCompletionService.GetChatResponse(chatRequest.Prompt);
         }
 
-        [HttpGet("GetAllChatResponses", Name = "GetAllChatResponses")]
-        public Task<ChatHistoryDto> GetAllChatResponses(string prompt)
+        [HttpPost("PostAllChatResponses", Name = "PostAllChatResponses")]
+        public Task<ChatHistoryDto> GetAllChatResponses([FromBody] ChatRequest chatRequest)
         {
-            return _chatCompletionService.GetChatHistory(prompt);
+            return _chatCompletionService.GetChatHistory(chatRequest.Prompt);
+        }
+
+        [HttpPost("PartialChatResponses", Name = "PartialChatResponses")]
+        public Task<ChatHistoryDto> GetPartialChatResponses([FromBody] ChatRequest chatRequest)
+        {
+            return _chatCompletionService.GetPartialChatHistory(chatRequest.Prompt);
         }
     }
 }

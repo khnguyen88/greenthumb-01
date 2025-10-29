@@ -99,6 +99,21 @@ namespace AgenticGreenthumbApi.Services
             return chatHistoryDto;
 
         }
+
+        public async Task<ChatHistoryDto> GetPartialChatHistory(string userPrompt)
+        {
+            //This is to simulate a scenerio where I run this on cloud run. Likely the history will not persist since it's on a per REST API call instance. If no one is using it, the application gets shut down.
+
+            _ = await GetChatResponse(userPrompt);
+
+            ChatHistoryDto chatHistoryDto = new()
+            {
+                ChatMessages = ChatHistoryMapper.DomainToDtoMapper(_userChatHistoryService.GetUserChatHistory(userName).ChatHistory.TakeLast(2).ToList())
+            };
+
+            return chatHistoryDto;
+
+        }
     }
 }
 #pragma warning restore
