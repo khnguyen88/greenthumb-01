@@ -6,12 +6,12 @@ import { ChatHistoryDto } from '../interfaces/chat-interface';
   providedIn: 'root',
 })
 export class SharedService {
-  private subscription!: Subscription;
+  subscription: Subscription = new Subscription();
   private _themeMode = new BehaviorSubject<string>('Light');
   public themeMode$: Observable<string> = this._themeMode.asObservable();
 
   private _chatHistory = new BehaviorSubject<ChatHistoryDto>({ chatMessages: [] });
-  public chatHistory: Observable<ChatHistoryDto> = this._chatHistory.asObservable();
+  public chatHistory$: Observable<ChatHistoryDto> = this._chatHistory.asObservable();
 
   constructor() {}
 
@@ -19,10 +19,7 @@ export class SharedService {
     this._themeMode.next(newMode);
   }
 
-  updateChatHistory(newChatHistoryContent: ChatHistoryDto) {
-    this.subscription = this.chatHistory.subscribe((result) => {
-      result.chatMessages.concat(newChatHistoryContent.chatMessages);
-      this._chatHistory.next(result);
-    });
+  updateChatHistory(newChatHistory: ChatHistoryDto) {
+    this._chatHistory.next(newChatHistory);
   }
 }

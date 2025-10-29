@@ -13,7 +13,7 @@ import { SharedService } from '../../../services/shared-service';
 export class DashboardHumidity implements OnInit {
   data!: AdafruitData[];
   feedName: string = 'Humidity';
-  private subscription!: Subscription;
+  subscription: Subscription = new Subscription();
   lightDarkMode = signal('Light');
 
   constructor(
@@ -23,15 +23,20 @@ export class DashboardHumidity implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.adafruitService.getHumidityData().subscribe((result) => {
-      this.data = result;
-      console.log(result);
-      this.cd.detectChanges();
-    });
+    this.subscription.add(
+      this.adafruitService.getHumidityData().subscribe((result) => {
+        this.data = result;
+        console.log(result);
+        this.cd.detectChanges();
+      })
+    );
 
-    this.subscription = this.sharedService.themeMode$.subscribe((result) => {
-      this.lightDarkMode.set(result);
-    });
+    this.subscription.add(
+      this.sharedService.themeMode$.subscribe((result) => {
+        this.lightDarkMode.set(result);
+        this.cd.detectChanges();
+      })
+    );
   }
 
   ngOnDestroy() {
