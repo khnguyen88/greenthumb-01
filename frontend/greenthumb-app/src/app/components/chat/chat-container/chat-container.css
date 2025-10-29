@@ -12,6 +12,12 @@
   }
 }
 
+@media screen and (max-width: 480px) {
+  :host {
+    height: 45vh;
+  }
+}
+
 .chat-container {
   height: 100%;
   max-height: 100%;

@@ -1,1 +1,14 @@
-<p>chat-form works!</p>
+<div class="form-container" #scrollMe>
+  <div class="w-full">
+    <textarea class="w-full" rows="5" pTextarea [(ngModel)]="value"></textarea>
+  </div>
+  <div class="button mt-4">
+    <p-button
+      label="Submit"
+      [loading]="loading"
+      [disabled]="!value"
+      (onClick)="submitPrompt(value)"
+      (keyup.enter)="submitPrompt(value)"
+    />
+  </div>
+</div>
