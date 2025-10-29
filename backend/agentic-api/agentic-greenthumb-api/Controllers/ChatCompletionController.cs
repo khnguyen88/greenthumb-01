@@ -23,9 +23,9 @@ namespace AgenticGreenthumbApi.Controllers
 
 
         [HttpPost("PostChatResponse", Name = "PostChatResponse")]
-        public Task<string> GetChatResponse([FromBody] ChatRequest chatRequest)
+        public Task<ChatMessageDto> GetChatResponse([FromBody] ChatRequest chatRequest)
         {
-            return _chatCompletionService.GetChatResponse(chatRequest.Prompt);
+            return _chatCompletionService.GetChatResponseMessage(chatRequest.Prompt);
         }
 
         [HttpPost("PostAllChatResponses", Name = "PostAllChatResponses")]

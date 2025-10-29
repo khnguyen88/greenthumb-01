@@ -87,6 +87,13 @@ namespace AgenticGreenthumbApi.Services
             }
         }
 
+        public async Task<ChatMessageDto> GetChatResponseMessage(string userPrompt)
+        {
+            var response = await GetChatResponse(userPrompt);
+
+            return new ChatMessageDto() { Role = "assistant", Message = response };
+        }
+
         public async Task<ChatHistoryDto> GetChatHistory(string userPrompt)
         {
             _ = await GetChatResponse(userPrompt);
