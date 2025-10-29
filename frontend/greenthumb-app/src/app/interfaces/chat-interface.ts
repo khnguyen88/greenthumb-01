@@ -6,3 +6,7 @@ export interface ChatMessageDto {
 export interface ChatHistoryDto {
   chatMessages: ChatMessageDto[];
 }
+
+export interface ChatRequestDto {
+  prompt: string;
+}

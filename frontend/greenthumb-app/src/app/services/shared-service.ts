@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { ChatHistoryDto } from '../interfaces/chat-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  private _themeMode = new BehaviorSubject<string>('Light'); 
+  private subscription!: Subscription;
+  private _themeMode = new BehaviorSubject<string>('Light');
   public themeMode$: Observable<string> = this._themeMode.asObservable();
+
+  private _chatHistory = new BehaviorSubject<ChatHistoryDto>({ chatMessages: [] });
+  public chatHistory: Observable<ChatHistoryDto> = this._chatHistory.asObservable();
 
   constructor() {}
 
   updateThemeMode(newMode: string) {
     this._themeMode.next(newMode);
+  }
+
+  updateChatHistory(newChatHistoryContent: ChatHistoryDto) {
+    this.subscription = this.chatHistory.subscribe((result) => {
+      result.chatMessages.concat(newChatHistoryContent.chatMessages);
+      this._chatHistory.next(result);
+    });
   }
 }
