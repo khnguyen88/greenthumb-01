@@ -90,6 +90,7 @@ namespace AgenticGreenthumbApi.Services
         public async Task<ChatMessageDto> GetChatResponseMessage(string userPrompt)
         {
             var response = await GetChatResponse(userPrompt);
+            Console.WriteLine(response);
 
             return new ChatMessageDto() { Role = "assistant", Message = response };
         }

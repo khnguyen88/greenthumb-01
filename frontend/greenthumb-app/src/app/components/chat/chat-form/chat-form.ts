@@ -2,9 +2,12 @@ import {
   Component,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
+  OnInit,
   OnDestroy,
+  AfterViewChecked,
+  AfterViewInit,
+  signal,
 } from '@angular/core';
 import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
@@ -20,17 +23,34 @@ import { SharedService } from '../../../services/shared-service';
   templateUrl: './chat-form.html',
   styleUrl: './chat-form.css',
 })
-export class ChatForm implements OnDestroy {
+export class ChatForm implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
   @Output() recieveChatMessage = new EventEmitter<ChatMessageDto>();
   subscription: Subscription = new Subscription();
   value: string = '';
   loading: boolean = false;
+  hasChat = signal(false);
 
   constructor(
     private cd: ChangeDetectorRef,
     private chatService: ChatService,
     private sharedService: SharedService
   ) {}
+
+  ngOnInit(): void {
+    this.checkChat();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  ngAfterViewChecked(): void {
+    this.checkChat();
+  }
+
+  ngAfterViewInit(): void {
+    this.checkChat();
+  }
 
   submitPrompt(value: string) {
     this.loading = true;
@@ -52,10 +72,6 @@ export class ChatForm implements OnDestroy {
     this.cd.detectChanges();
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
   buildChatMessage(message: string, role: 'user' | 'assistant'): ChatMessageDto {
     let chatMessage: ChatMessageDto = {
       role: role,
@@ -65,7 +81,16 @@ export class ChatForm implements OnDestroy {
     return chatMessage;
   }
 
-  clearPronpt() {
+  checkChat() {
+    this.subscription.add(
+      this.sharedService.chatHistory$.subscribe((result) => {
+        this.hasChat.set(result?.chatMessages?.length > 0 ? true : false);
+        this.cd.detectChanges();
+      })
+    );
+  }
+
+  clearPrompt() {
     this.value = '';
     this.cd.detectChanges();
   }
