@@ -19,7 +19,9 @@
           <span class="text-surface-700 dark:text-surface-200 leading-normal"
             >Don't have an account?</span
           >
-          <a class="text-primary font-medium ml-1 cursor-pointer hover:text-primary-emphasis"
+          <a
+            class="text-primary font-medium ml-1 cursor-pointer hover:text-primary-emphasis"
+            (click)="onLinkClick()"
             >Create today!</a
           >
         </div>
@@ -52,19 +54,6 @@
           class="w-full px-3 py-2 shadow-sm rounded-lg"
         />
       </div>
-      <!-- <div
-        class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0"
-      >
-        <div class="flex items-center gap-2">
-          <p-checkbox id="rememberme1"></p-checkbox>
-          <label for="rememberme1" class="text-surface-900 dark:text-surface-0 leading-normal"
-            >Remember me</label
-          >
-        </div>
-        <a class="text-primary font-medium cursor-pointer hover:text-primary-emphasis"
-          >Forgot your password?</a
-        >
-      </div> -->
     </div>
     <button pButton class="w-full py-2 rounded-lg flex justify-center items-center gap-2">
       <i pButtonIcon class="pi pi-user text-base! leading-normal!"></i>

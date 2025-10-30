@@ -8,9 +8,9 @@ import { Login } from '../login/login/login';
   styleUrl: './login-page.css',
 })
 export class LoginPage {
-  isRegister = signal(false);
+  isNewMember = signal(false);
 
   toggleRegister(flagState: boolean) {
-    this.isRegister.set(flagState);
+    this.isNewMember.set(flagState);
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -9,4 +9,13 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register {}
+export class Register {
+  @Output() setNewMemberFlagEvent = new EventEmitter<boolean>();
+
+  constructor(private cd: ChangeDetectorRef) {}
+
+  onLinkClick() {
+    this.setNewMemberFlagEvent.emit(false);
+    this.cd.detectChanges();
+  }
+}
