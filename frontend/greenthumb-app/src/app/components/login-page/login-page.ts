@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ButtonModule } from 'primeng/button';
+import { Component, signal } from '@angular/core';
+import { Register } from '../login/register/register';
+import { Login } from '../login/login/login';
 @Component({
   selector: 'app-login-page',
-  imports: [FormsModule, ButtonModule, CheckboxModule, InputTextModule],
+  imports: [Register, Login],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
-export class LoginPage {}
+export class LoginPage {
+  isRegister = signal(false);
+
+  toggleRegister(flagState: boolean) {
+    this.isRegister.set(flagState);
+  }
+}

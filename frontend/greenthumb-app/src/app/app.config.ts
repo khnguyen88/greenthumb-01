@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  importProvidersFrom,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -8,6 +9,10 @@ import { providePrimeNG } from 'primeng/config';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { MyPreset } from './themes/mypresets';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { environment_firebase } from './environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,5 +32,8 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    provideFirebaseApp(() => initializeApp(environment_firebase.firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
 };

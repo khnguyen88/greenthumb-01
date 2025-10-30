@@ -28,6 +28,7 @@ export class ChatPage implements OnInit, OnDestroy {
     this.subscription.add(
       this.sharedService.chatHistory$.subscribe((result) => {
         this.chatHistory.set(result);
+        console.log(JSON.stringify(result));
       })
     );
   }
