@@ -20,5 +20,16 @@
 }
 
 .button {
-  @apply flex flex-row justify-end items-end;
+  @apply flex flex-row justify-end h-full;
+}
+
+@media screen and (min-width: 400px) {
+  .button {
+    @apply items-end;
+  }
+}
+
+.submit {
+  @apply h-full;
+  height: 100%;
 }
