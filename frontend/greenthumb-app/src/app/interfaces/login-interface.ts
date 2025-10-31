@@ -1,4 +1,11 @@
+export interface UserRegisterInterface {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
 export interface UserLoginInterface {
-  username: string,
-  password: string
+  email: string;
+  password: string;
 }
