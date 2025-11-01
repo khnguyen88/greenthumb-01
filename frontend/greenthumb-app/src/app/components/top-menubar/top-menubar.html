@@ -2,7 +2,6 @@
   <div class="flex-1">
     <p-menubar [model]="items" appendTo="body">
       <ng-template #end>
-        <!-- <p-button [label]="buttonLabel()" (onClick)="toggleDarkMode()" /> -->
         <button pButton (click)="toggleDarkMode()">
           <i [ngClass]="pIconClass()" pButtonIcon></i>
           <span pButtonLabel>{{ buttonLabel() }}</span>
