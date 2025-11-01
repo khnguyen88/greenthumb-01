@@ -49,9 +49,10 @@ export class Register {
       )
       .subscribe({
         next: () => {
-          this.router.navigateByUrl('/');
           this.errorMessage.set(null);
           this.registerForm.reset();
+          this.router.navigateByUrl('/');
+          this.cd.detectChanges();
         },
         error: (e) => {
           this.errorMessage.set(e.code);

@@ -7,6 +7,9 @@ import { ChatHistoryDto } from '../interfaces/chat-interface';
 })
 export class SharedService {
   subscription: Subscription = new Subscription();
+
+  // TODO: Consider refactoring with signal.
+
   private _themeMode = new BehaviorSubject<string>('Light');
   public themeMode$: Observable<string> = this._themeMode.asObservable();
 

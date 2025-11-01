@@ -1,3 +1,9 @@
+export interface UserInterface {
+  email: string;
+  displayName: string;
+  uid: string;
+}
+
 export interface UserRegisterInterface {
   firstName: string;
   lastName: string;

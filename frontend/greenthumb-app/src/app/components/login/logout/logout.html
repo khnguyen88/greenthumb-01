@@ -1,0 +1,32 @@
+<!-- https://primeblocks.org/free -->
+<div class="h-full bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-20 lg:px-80">
+  <div
+    class="bg-surface-0 dark:bg-surface-900 p-8 md:p-12 shadow-sm rounded-2xl w-full max-w-sm mx-auto flex flex-col gap-8"
+  >
+    <div class="flex flex-col items-center gap-4">
+      <div class="flex items-center gap-4">
+        <!-- INSERT IMAGE HERE -->
+      </div>
+      <div class="flex flex-col items-center gap-2 w-full">
+        <div
+          class="text-surface-900 dark:text-surface-0 text-2xl font-semibold leading-tight text-center w-full"
+        >
+          Welcome!
+        </div>
+        <div class="text-center w-full">
+          <span class="text-surface-700 dark:text-surface-200 leading-normal"
+            >Leaving, Already? Just Logout!</span
+          >
+        </div>
+      </div>
+    </div>
+    <button
+      pButton
+      class="w-full py-2 rounded-lg flex justify-center items-center gap-2"
+      (click)="logout()"
+    >
+      <i pButtonIcon class="pi pi-sign-out text-base! leading-normal!"></i>
+      <span pButtonLabel>Logout</span>
+    </button>
+  </div>
+</div>

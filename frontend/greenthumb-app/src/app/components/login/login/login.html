@@ -1,5 +1,3 @@
-<!-- <p>login-page works!</p> -->
-<!-- FREE PRIME BLOCK (PLACEHOLDER) -->
 <!-- https://primeblocks.org/free -->
 <div class="h-full bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-20 lg:px-80">
   <div
@@ -27,37 +25,52 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col gap-6 w-full">
-      <div class="flex flex-col gap-2 w-full">
-        <label for="email1" class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
-          >Email Address</label
-        >
-        <input
-          pInputText
-          id="email1"
-          type="text"
-          placeholder="Email address"
-          class="w-full px-3 py-2 shadow-sm rounded-lg"
-        />
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="flex flex-col gap-6 w-full">
+        <div class="flex flex-col gap-2 w-full">
+          <label for="email" class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+            >Email Address</label
+          >
+          <input
+            pInputText
+            id="email"
+            type="text"
+            placeholder="Email address"
+            class="w-full px-3 py-2 shadow-sm rounded-lg"
+            formControlName="email"
+          />
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label
+            for="password"
+            class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+            >Password</label
+          >
+          <input
+            pInputText
+            id="password"
+            type="password"
+            placeholder="Password"
+            class="w-full px-3 py-2 shadow-sm rounded-lg"
+            formControlName="password"
+          />
+        </div>
+        <div class="flex flex-col gap-2 w-full py-4">
+          <button
+            type="submit"
+            pButton
+            class="w-full rounded-lg flex justify-center items-center gap-2"
+          >
+            <i pButtonIcon class="pi pi-user-plus text-base! leading-normal!"></i>
+            <span pButtonLabel>Register</span>
+          </button>
+        </div>
       </div>
-      <div class="flex flex-col gap-2 w-full">
-        <label
-          for="password1"
-          class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
-          >Password</label
-        >
-        <input
-          pInputText
-          id="password1"
-          type="password"
-          placeholder="Password"
-          class="w-full px-3 py-2 shadow-sm rounded-lg"
-        />
-      </div>
+    </form>
+    @if(errorMessage()){
+    <div class="text-surface-700 dark:text-surface-200">
+      Error: {{ errorMessage() }}; Please Try Again!
     </div>
-    <button pButton class="w-full py-2 rounded-lg flex justify-center items-center gap-2">
-      <i pButtonIcon class="pi pi-user text-base! leading-normal!"></i>
-      <span pButtonLabel>Sign In</span>
-    </button>
+    }
   </div>
 </div>

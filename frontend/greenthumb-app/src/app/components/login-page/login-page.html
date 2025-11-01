@@ -1,5 +1,7 @@
-@if(!isNewMember()){
+@if(authService.currentUserSig() === null){ @if(!isNewMember()){
 <app-login (setNewMemberFlagEvent)="toggleRegister($event)"></app-login>
 } @else{
 <app-register (setNewMemberFlagEvent)="toggleRegister($event)"></app-register>
+} } @else{
+<app-logout></app-logout>
 }
