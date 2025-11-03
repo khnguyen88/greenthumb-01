@@ -17,6 +17,7 @@ export class Logout implements OnDestroy {
     this.subscription.add(
       this.authService.logout().subscribe(() => {
         this.authService.currentUserSig.set(undefined);
+        this.authService.isLoginSubmitSuccessful.set(false);
       })
     );
     this.cd.detectChanges();

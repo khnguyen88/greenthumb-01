@@ -44,6 +44,7 @@ export class Login {
         this.errorMessage.set(null);
         this.loginForm.reset();
         this.router.navigateByUrl('/');
+        this.authService.isLoginSubmitSuccessful.set(true);
       },
       error: (e) => {
         this.errorMessage.set(e.code);

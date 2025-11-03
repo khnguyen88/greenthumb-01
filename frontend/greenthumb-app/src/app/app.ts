@@ -10,7 +10,9 @@ import { LoginPage } from './components/login-page/login-page';
 import { MainPage } from './components/main-page/main-page';
 import { ChatPage } from './components/chat-page/chat-page';
 import { AuthService } from './services/auth-service';
+import { AuthCaGuard } from './guards/auth-ca-guard';
 import { UserInterface } from './interfaces/login-interface';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +21,14 @@ import { UserInterface } from './interfaces/login-interface';
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private cd: ChangeDetectorRef,
+    private authGuard: AuthCaGuard
+  ) {
+    this.authGuard.authState.set(sessionStorage.getItem('user') !== null);
+    this.authService.isLoginSubmitSuccessful.set(sessionStorage.getItem('user') !== null);
+  }
 
   ngOnInit(): void {
     this.authService.user$.subscribe((user) => {
@@ -29,10 +38,17 @@ export class App implements OnInit {
           displayName: user.displayName!,
           uid: user.uid,
         };
-
         this.authService.currentUserSig.set(userInfo);
+        sessionStorage.setItem('user', JSON.stringify(userInfo));
+        this.authService.isLoginSubmitSuccessful.set(true);
+        this.authGuard.authState.set(true);
+        this.cd.detectChanges();
       } else {
         this.authService.currentUserSig.set(null);
+        sessionStorage.removeItem('user');
+        this.authService.isLoginSubmitSuccessful.set(false);
+        this.authGuard.authState.set(false);
+        this.cd.detectChanges();
       }
     });
   }

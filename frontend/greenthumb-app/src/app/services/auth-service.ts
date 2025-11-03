@@ -20,9 +20,11 @@ export class AuthService {
   firebaseAuth = inject(Auth);
   user$ = user(this.firebaseAuth);
   currentUserSig = signal<UserInterface | null | undefined>(undefined);
+  isLoginSubmitSuccessful = signal<boolean>(false);
   isUserLogin = computed(() => {
     return this.checkLogStatus();
   });
+  
 
   register(fName: string, lastName: string, email: string, password: string): Observable<void> {
     const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password).then(
@@ -45,6 +47,6 @@ export class AuthService {
 
   checkLogStatus(): boolean {
     const user = this.currentUserSig();
-    return user !== null && user !== undefined;
+    return (user !== null && user !== undefined) || this.isLoginSubmitSuccessful();
   }
 }
