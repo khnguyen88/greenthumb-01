@@ -48,7 +48,7 @@ export class TopMenubar implements OnInit, OnChanges, AfterViewInit {
     this.items = [
       {
         label: 'Home',
-        icon: 'pi pi-comments',
+        icon: 'pi pi-home',
         routerLink: '/landing',
         command: () => {
           this.checkRoute();
