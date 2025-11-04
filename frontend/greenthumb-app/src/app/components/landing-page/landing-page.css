@@ -1,0 +1,23 @@
+.page-container {
+  height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  :host {
+    height: 100vh;
+  }
+
+  .page-container {
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  :host {
+    height: 100vh;
+  }
+
+  .page-container {
+    height: auto;
+  }
+}
