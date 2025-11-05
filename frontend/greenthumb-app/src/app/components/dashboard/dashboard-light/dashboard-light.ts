@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { DashboardBase } from '../dashboard-base/dashboard-base';
 
 @Component({
   selector: 'app-dashboard-light',
-  imports: [],
+  imports: [DashboardBase],
   templateUrl: './dashboard-light.html',
-  styleUrl: './dashboard-light.css'
+  styleUrl: './dashboard-light.css',
 })
-export class DashboardLight {
-
-}
+export class DashboardLight {}

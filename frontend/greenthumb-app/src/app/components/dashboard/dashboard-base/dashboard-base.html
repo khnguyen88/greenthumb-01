@@ -1,4 +1,4 @@
-@if(data){
+@if(data.length > 0){
 <div (window:resize)="onResize($event)">
   <div class="text-2xl text-center font-bold pb-8 pt-4">{{ feedName }} Feed Data</div>
   <div class="canvas-container">
@@ -29,6 +29,9 @@
 </div>
 } @else{
 <div>
-  <h2>Sorry! No Data Found.</h2>
+  <b
+    >Sorry! Either the data is currently unavaliable or have been cleared due to Adafruit IO's
+    30-Days Retention Policy.</b
+  >
 </div>
 }

@@ -66,6 +66,10 @@ export class TopMenubar implements OnInit, OnChanges, AfterViewInit {
             label: 'Humidity Dashboard',
             routerLink: '/dashboard/humidity',
           },
+          {
+            label: 'Light Intensity Dashboard',
+            routerLink: '/dashboard/light',
+          },
         ],
         command: () => {
           this.checkRoute();
