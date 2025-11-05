@@ -240,24 +240,8 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
   }
 
   private loadFeedData(feedName: string = 'empty', afterLoad?: () => void): void {
-    let dataObservable: Observable<AdafruitData[]>;
-
-    let santizedFeedName = feedName.toLowerCase();
-    console.log(santizedFeedName);
-    switch (santizedFeedName) {
-      case 'temperature':
-        dataObservable = this.adafruitService.getTemperatureData();
-        break;
-      case 'humidity':
-        dataObservable = this.adafruitService.getHumidityData();
-        break;
-      case 'humidity':
-        dataObservable = this.adafruitService.getHumidityData();
-        break;
-      default:
-        console.warn(`Unknown feed type: ${feedName}`);
-        return;
-    }
+    let dataObservable: Observable<AdafruitData[]> =
+      this.adafruitService.getFeedDataByName(feedName);
 
     this.subscription.add(
       dataObservable.subscribe((result) => {

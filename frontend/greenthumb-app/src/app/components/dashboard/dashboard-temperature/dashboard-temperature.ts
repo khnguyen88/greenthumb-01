@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { DashboardBase } from '../dashboard-base/dashboard-base';
 
 @Component({
   selector: 'app-dashboard-temperature',
-  imports: [],
+  imports: [DashboardBase],
   templateUrl: './dashboard-temperature.html',
-  styleUrl: './dashboard-temperature.css'
+  styleUrl: './dashboard-temperature.css',
 })
-export class DashboardTemperature {
-
-}
+export class DashboardTemperature {}
