@@ -13,7 +13,10 @@ import {
   HostListener,
   OnDestroy,
   AfterViewInit,
+  EffectRef,
 } from '@angular/core';
+
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ChartModule } from 'primeng/chart';
 
@@ -30,6 +33,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
 import { AdafruitService } from '../../../services/adafruit-service';
+import { SharedService } from '../../../services/shared-service';
 
 @Component({
   selector: 'app-dashboard-base',
@@ -47,7 +51,8 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
   @Input() isFill: boolean = false;
   @Input() tension: number = 0.4;
   @Input() simplifyYAxis: boolean = false;
-  @Input() lightDarkMode!: string;
+  lightDarkMode = signal('Light');
+  lightDarkEffect!: EffectRef;
 
   title!: string;
   simplifyYAxisSignal = signal(false);
@@ -65,7 +70,21 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
 
   subscription = new Subscription();
 
-  constructor(private adafruitService: AdafruitService, private cd: ChangeDetectorRef) {}
+  //Consider replacing constructor with using inject();
+  constructor(
+    private adafruitService: AdafruitService,
+    private sharedService: SharedService,
+    private cd: ChangeDetectorRef
+  ) {
+    let lightDarkObservableSignal = toSignal(this.sharedService.themeMode$, {
+      initialValue: 'Light',
+    });
+
+    this.lightDarkEffect = effect(() => {
+      this.lightDarkMode.set(lightDarkObservableSignal());
+      this.initChart();
+    });
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -77,6 +96,9 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
   }
 
   ngOnInit() {
+    this.loadFeedData(this.feedName, () => {
+      this.initChart();
+    });
     this.windowWidth.set(window.innerWidth);
     this.cd.detectChanges();
   }
@@ -90,19 +112,11 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
       });
     }
 
-    if (changes['lightDarkMode']) {
-      this.loadFeedData(this.feedName, () => {
-        this.initChart();
-      });
-    }
-
     this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {
-    this.loadFeedData(this.feedName, () => {
-      this.initChart();
-    });
+    this.loadFeedData(this.feedName, () => {});
     this.cd.detectChanges();
   }
 
@@ -237,6 +251,9 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
     switch (santizedFeedName) {
       case 'temperature':
         dataObservable = this.adafruitService.getTemperatureData();
+        break;
+      case 'humidity':
+        dataObservable = this.adafruitService.getHumidityData();
         break;
       case 'humidity':
         dataObservable = this.adafruitService.getHumidityData();
