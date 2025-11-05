@@ -68,7 +68,27 @@ export class TopMenubar implements OnInit, OnChanges, AfterViewInit {
           },
           {
             label: 'Light Intensity Dashboard',
-            routerLink: '/dashboard/light',
+            routerLink: '/dashboard/light-intensity',
+          },
+          {
+            label: 'Soil Moisture Dashboard',
+            routerLink: '/dashboard/soil-moisture',
+          },
+          {
+            label: 'Growlight Trigger Dashboard',
+            routerLink: '/dashboard/growlight-trigger',
+          },
+          {
+            label: 'Pump Trigger Dashboard',
+            routerLink: '/dashboard/pump-trigger',
+          },
+          {
+            label: 'Plant Height Dashboard',
+            routerLink: '/dashboard/plant-height',
+          },
+          {
+            label: 'Water Depth Dashboard',
+            routerLink: '/dashboard/water-depth',
           },
         ],
         command: () => {

@@ -165,6 +165,8 @@ export class AdafruitService {
         return this.getSoilMoistureData();
       case 'water level':
         return this.getWaterLevelData();
+      case 'water depth':
+        return this.getWaterLevelData();
       case 'plant height':
         return this.getPlantHeightData();
       case 'pump trigger':

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DashboardWaterDepth } from './dashboard-water-depth';
+import { DashboardWaterLevel } from './dashboard-water-level';
 
-describe('DashboardWaterDepth', () => {
-  let component: DashboardWaterDepth;
-  let fixture: ComponentFixture<DashboardWaterDepth>;
+describe('DashboardWaterLevel', () => {
+  let component: DashboardWaterLevel;
+  let fixture: ComponentFixture<DashboardWaterLevel>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardWaterDepth]
+      imports: [DashboardWaterLevel]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DashboardWaterDepth);
+    fixture = TestBed.createComponent(DashboardWaterLevel);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
