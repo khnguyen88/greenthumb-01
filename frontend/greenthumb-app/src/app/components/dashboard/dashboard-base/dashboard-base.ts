@@ -11,9 +11,13 @@ import {
   effect,
   Input,
   HostListener,
+  OnDestroy,
+  AfterViewInit,
 } from '@angular/core';
 
 import { ChartModule } from 'primeng/chart';
+
+import { Observable, Subscription } from 'rxjs';
 
 import {
   ChartData,
@@ -25,13 +29,15 @@ import { AdafruitData } from '../../../interfaces/adafruit-interface';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
+import { AdafruitService } from '../../../services/adafruit-service';
+
 @Component({
   selector: 'app-dashboard-base',
   imports: [ButtonModule, TableModule, ChartModule],
   templateUrl: './dashboard-base.html',
   styleUrl: './dashboard-base.css',
 })
-export class DashboardBase implements OnInit, OnChanges {
+export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() data: AdafruitData[] = [];
   @Input() feedName!: string; //WIP
   @Input() chartType: 'bar' | 'line' = 'line';
@@ -57,31 +63,51 @@ export class DashboardBase implements OnInit, OnChanges {
 
   windowWidth = signal(window.innerWidth);
 
-  constructor(private cd: ChangeDetectorRef) {}
+  subscription = new Subscription();
+
+  constructor(private adafruitService: AdafruitService, private cd: ChangeDetectorRef) {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth.set(event.target.innerWidth);
-    this.initChart();
+    this.loadFeedData(this.feedName, () => {
+      this.initChart();
+    });
     this.cd.detectChanges();
   }
 
   ngOnInit() {
     this.windowWidth.set(window.innerWidth);
+    this.cd.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.simplifyYAxisSignal.set(this.simplifyYAxis);
 
     if (changes['data'] && this.data?.length) {
-      this.initChart();
+      this.loadFeedData(this.feedName, () => {
+        this.initChart();
+      });
     }
 
     if (changes['lightDarkMode']) {
-      this.initChart();
+      this.loadFeedData(this.feedName, () => {
+        this.initChart();
+      });
     }
 
     this.cd.detectChanges();
+  }
+
+  ngAfterViewInit(): void {
+    this.loadFeedData(this.feedName, () => {
+      this.initChart();
+    });
+    this.cd.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   chartLabelBuilder(data: AdafruitData[]): string[] {
@@ -201,5 +227,35 @@ export class DashboardBase implements OnInit, OnChanges {
           : '';
       }
     });
+  }
+
+  private loadFeedData(feedName: string = 'empty', afterLoad?: () => void): void {
+    let dataObservable: Observable<AdafruitData[]>;
+
+    let santizedFeedName = feedName.toLowerCase();
+    console.log(santizedFeedName);
+    switch (santizedFeedName) {
+      case 'temperature':
+        dataObservable = this.adafruitService.getTemperatureData();
+        break;
+      case 'humidity':
+        dataObservable = this.adafruitService.getHumidityData();
+        break;
+      default:
+        console.warn(`Unknown feed type: ${feedName}`);
+        return;
+    }
+
+    this.subscription.add(
+      dataObservable.subscribe((result) => {
+        this.data = result;
+        console.log(result);
+        this.cd.detectChanges();
+        if (afterLoad) {
+          afterLoad?.();
+          this.cd.detectChanges();
+        }
+      })
+    );
   }
 }
