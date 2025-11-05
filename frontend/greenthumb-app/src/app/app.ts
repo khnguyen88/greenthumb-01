@@ -26,8 +26,8 @@ export class App implements OnInit {
     private cd: ChangeDetectorRef,
     private authGuard: AuthCaGuard
   ) {
-    this.authGuard.authState.set(sessionStorage.getItem('user') !== null);
-    this.authService.isLoginSubmitSuccessful.set(sessionStorage.getItem('user') !== null);
+    this.authGuard.authState.set(localStorage.getItem('user') !== null);
+    this.authService.isLoginSubmitSuccessful.set(localStorage.getItem('user') !== null);
   }
 
   ngOnInit(): void {
@@ -39,13 +39,13 @@ export class App implements OnInit {
           uid: user.uid,
         };
         this.authService.currentUserSig.set(userInfo);
-        sessionStorage.setItem('user', JSON.stringify(userInfo));
+        localStorage.setItem('user', JSON.stringify(userInfo));
         this.authService.isLoginSubmitSuccessful.set(true);
         this.authGuard.authState.set(true);
         this.cd.detectChanges();
       } else {
         this.authService.currentUserSig.set(null);
-        sessionStorage.removeItem('user');
+        localStorage.removeItem('user');
         this.authService.isLoginSubmitSuccessful.set(false);
         this.authGuard.authState.set(false);
         this.cd.detectChanges();

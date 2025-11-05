@@ -14,8 +14,10 @@ import { AuthService } from '../services/auth-service';
   providedIn: 'root',
 })
 export class AuthCaGuard implements CanActivate, CanActivateChild {
-  authState = signal(sessionStorage.getItem('user') !== null);
-  constructor(private authService: AuthService, private router: Router) {}
+  authState = signal(localStorage.getItem('user') !== null);
+  constructor(private authService: AuthService, private router: Router) {
+    this.authState.set(localStorage.getItem('user') !== null);
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
     return this.isAuth();
