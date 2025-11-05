@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, signal, OnDestroy } from '@angular/core';
 import { DashboardBase } from '../dashboard-base/dashboard-base';
 import { AdafruitService } from '../../../services/adafruit-service';
 import { AdafruitData } from '../../../interfaces/adafruit-interface';
@@ -10,9 +10,8 @@ import { SharedService } from '../../../services/shared-service';
   templateUrl: './dashboard-humidity.html',
   styleUrl: './dashboard-humidity.css',
 })
-export class DashboardHumidity implements OnInit {
+export class DashboardHumidity implements OnInit, OnDestroy {
   data!: AdafruitData[];
-  feedName: string = 'Humidity';
   subscription: Subscription = new Subscription();
   lightDarkMode = signal('Light');
 
