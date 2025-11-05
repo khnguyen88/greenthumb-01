@@ -82,24 +82,20 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
 
     this.lightDarkEffect = effect(() => {
       this.lightDarkMode.set(lightDarkObservableSignal());
-      this.initChart();
     });
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.windowWidth.set(event.target.innerWidth);
-    this.loadFeedData(this.feedName, () => {
-      this.initChart();
-    });
     this.cd.detectChanges();
   }
 
   ngOnInit() {
+    this.windowWidth.set(window.innerWidth);
     this.loadFeedData(this.feedName, () => {
       this.initChart();
     });
-    this.windowWidth.set(window.innerWidth);
     this.cd.detectChanges();
   }
 
@@ -107,16 +103,16 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
     this.simplifyYAxisSignal.set(this.simplifyYAxis);
 
     if (changes['data'] && this.data?.length) {
-      this.loadFeedData(this.feedName, () => {
-        this.initChart();
-      });
+      this.initChart();
     }
 
     this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {
-    this.loadFeedData(this.feedName, () => {});
+    this.loadFeedData(this.feedName, () => {
+      this.initChart();
+    });
     this.cd.detectChanges();
   }
 
