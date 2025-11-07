@@ -480,3 +480,8 @@ FodyWeavers.xsd
 *.msp
 frontend/greenthumb-app/src/app/environments/environment.ts
 
+# Ignore environment-specific appsettings files
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+!appsettings.json
