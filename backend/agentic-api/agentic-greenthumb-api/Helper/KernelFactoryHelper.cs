@@ -14,10 +14,13 @@ namespace AgenticGreenthumbApi.Helper
     {
         public static Kernel masterKernel;
         public static IKernelMemory masterKernelMemory;
+        private static IConfiguration _config;
 
-        static KernelFactoryHelper()
+
+
+        public static void Initialize(IConfiguration config)
         {
-            var config = new ConfigurationBuilder().AddUserSecrets("4f91f0a7-edfa-4d74-b7d8-6f7a324e86fb").Build();
+            _config = config;
 
             // Configuration Files Values
             string textDeploymentName = config["AzureAIFoundry:AIModel:Name"]!;

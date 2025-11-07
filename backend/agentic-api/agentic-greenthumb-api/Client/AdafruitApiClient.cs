@@ -16,13 +16,14 @@ namespace AgenticGreenthumbApi.Client
     {
         private readonly ILogger<AdafruitAPIClient> _logger;
         private static HttpClient _client = new();
-        private static readonly IConfigurationRoot _config = new ConfigurationBuilder()
-            .AddUserSecrets("4f91f0a7-edfa-4d74-b7d8-6f7a324e86fb")
-            .Build();
+        private readonly IConfiguration _config;
 
-        public AdafruitAPIClient(ILogger<AdafruitAPIClient> logger) { 
+
+        public AdafruitAPIClient(ILogger<AdafruitAPIClient> logger, IConfiguration config) { 
             _logger = logger;
+            _config = config;
         }
+
 
         private async Task<IEnumerable<AdafruitFeedModel<T>>> GetFeedData<T>(string feedName, string feedKeyPrefixMacAddress = "", string feedKeyPrefixStartDate = "")
         {

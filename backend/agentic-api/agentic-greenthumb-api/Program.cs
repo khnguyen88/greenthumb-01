@@ -8,10 +8,35 @@ using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Plugins;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Read environment variables
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+var url = $"http://0.0.0.0:{port}";
+var target = Environment.GetEnvironmentVariable("TARGET") ?? "World";
 
+
+// Determine environment
+var environment = builder.Environment.EnvironmentName;
+
+// Load configuration based on environment
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true);
+
+if (environment == "Development")
+{
+    builder.Configuration.AddUserSecrets<Program>(optional: true);
+}
+
+builder.Configuration.AddEnvironmentVariables();
+
+
+
+// Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,6 +62,10 @@ builder.Services.AddScoped<ChatModeratorAgentRegistry>();
 builder.Services.AddScoped<PlantInfoAgentRegistry>();
 builder.Services.AddScoped<ChatMagenticOrchestration>();
 builder.Services.AddScoped<ChatHandoffOrchestration>();
+
+//Initialize Static Class
+KernelFactoryHelper.Initialize(builder.Configuration);
+
 
 builder.Services.AddDbContext<PlantInfoContext>(opt =>
     opt.UseInMemoryDatabase("PlantInfo"));
@@ -69,6 +98,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseRouting();
 app.UseCors();
 // app.UseCors("AdafruitPolicy");
@@ -83,4 +118,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => "Hello from Cloud Run!");
+
+//For deployment
+//app.Run(url);
+
+//For Local run
 app.Run();
