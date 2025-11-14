@@ -9,6 +9,9 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
+# Copy raw .cs files from Domain into runtime image
+COPY Domain/*.cs ./Domain/
+
 # Set environment and port for Cloud Run
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV PORT=8080
