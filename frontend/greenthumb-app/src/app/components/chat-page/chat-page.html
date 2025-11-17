@@ -1,6 +1,6 @@
-<div class="h-full bg-surface-50 dark:bg-surface-950 px-6 py-5 md:px-20 md:py-10 lg:px-20 lg:py-20">
+<div class="h-full px-6 py-5 md:px-20 md:py-10 lg:px-20 lg:py-20">
   <div
-    class="bg-surface-0 dark:bg-surface-900 shadow-sm rounded-2xl w-full max-w-3xl mx-auto flex flex-col gap-8 p-4 md:p-12"
+    class="shadow-sm rounded-2xl w-full max-w-3xl mx-auto flex flex-col gap-8 p-4 md:p-12 content-container"
   >
     <div class="flex flex-col items-center gap-4">
       <app-chat-container
@@ -11,7 +11,7 @@
   </div>
 
   <div
-    class="bg-surface-0 dark:bg-surface-900 shadow-sm rounded-2xl w-full max-w-3xl mx-auto flex flex-col gap-8 p-4 md:p-12 mt-5 md:mt-10"
+    class="shadow-sm rounded-2xl w-full max-w-3xl mx-auto flex flex-col gap-8 p-4 md:p-12 mt-5 md:mt-10 content-container"
   >
     <div class="flex flex-row items-center gap-4">
       <app-chat-form (recieveChatMessage)="handleChatResponse($event)"></app-chat-form>

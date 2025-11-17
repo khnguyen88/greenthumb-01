@@ -77,40 +77,54 @@ export const MyPreset = definePreset(Aura, {
       },
     },
   },
-  // components: {
-  //   menubar: {
-  //     colorScheme: {
-  //       light: {
-  //         root: {
-  //           background: 'blue',
-  //         },
-  //         item: {
-  //           focusBackground: 'red',
-  //         },
-  //       },
-  //       dark: {
-  //         root: {
-  //           background: 'purple',
-  //         },
-  //         item: {
-  //           focusBackground: 'green',
-  //         },
-  //       },
-  //     },
-  //   },
-  //   button: {
-  //     extend: {
-  //       accent: {
-  //         color: 'yellow',
-  //         inverseColor: '#ffffff',
-  //       },
-  //     },
-  //     css: ({ dt }) => `
-  //   .p-button {
-  //     background: ${dt('button.accent.color')};
-  //     color: ${dt('button.accent.inverse.color')};
-  //     transition-duration: ${dt('my.transition.fast')};
-  //   }`,
-  //   },
-  // },
+  components: {
+    textarea: {
+      colorScheme: {
+        light: {
+          root: {
+            background: '{surface.50}',
+          },
+        },
+        dark: {
+          root: {
+            background: '{surface.900}',
+          },
+        },
+      },
+    },
+    //   menubar: {
+    //     colorScheme: {
+    //       light: {
+    //         root: {
+    //           background: 'blue',
+    //         },
+    //         item: {
+    //           focusBackground: 'red',
+    //         },
+    //       },
+    //       dark: {
+    //         root: {
+    //           background: 'purple',
+    //         },
+    //         item: {
+    //           focusBackground: 'green',
+    //         },
+    //       },
+    //     },
+    //   },
+    //   button: {
+    //     extend: {
+    //       accent: {
+    //         color: 'yellow',
+    //         inverseColor: '#ffffff',
+    //       },
+    //     },
+    //     css: ({ dt }) => `
+    //   .p-button {
+    //     background: ${dt('button.accent.color')};
+    //     color: ${dt('button.accent.inverse.color')};
+    //     transition-duration: ${dt('my.transition.fast')};
+    //   }`,
+    //   },
+  },
 });

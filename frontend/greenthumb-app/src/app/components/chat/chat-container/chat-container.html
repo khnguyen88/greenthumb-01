@@ -5,10 +5,10 @@
       class="p-2"
       [ngClass]="[
         message.role === 'assistant' ? 'chat-assistant' : 'chat-user',
-        message.role === 'assistant' && lightDarkMode === 'Light' ? 'bg-purple-200' : '',
-        message.role === 'assistant' && lightDarkMode === 'Dark' ? 'bg-purple-600' : '',
-        message.role === 'user' && lightDarkMode === 'Light' ? 'bg-green-200' : '',
-        message.role === 'user' && lightDarkMode === 'Dark' ? 'bg-green-600' : ''
+        message.role === 'assistant' && lightDarkMode === 'Light' ? 'bg-purple-300' : '',
+        message.role === 'assistant' && lightDarkMode === 'Dark' ? 'bg-purple-700' : '',
+        message.role === 'user' && lightDarkMode === 'Light' ? 'bg-green-300' : '',
+        message.role === 'user' && lightDarkMode === 'Dark' ? 'bg-green-700' : ''
       ]"
     >
       {{ message.message }}
