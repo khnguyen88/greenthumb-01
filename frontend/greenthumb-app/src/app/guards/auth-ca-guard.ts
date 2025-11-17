@@ -35,7 +35,7 @@ export class AuthCaGuard implements CanActivate, CanActivateChild {
     if (this.authService.isUserLogin()) {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth']);
       return false;
     }
   }

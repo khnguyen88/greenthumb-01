@@ -106,7 +106,7 @@ export class TopMenubar implements OnInit, OnChanges, AfterViewInit {
       {
         label: initialLabel,
         icon: 'pi pi-sign-in',
-        routerLink: '/login',
+        routerLink: '/auth',
         command: () => {
           this.checkRoute();
         },

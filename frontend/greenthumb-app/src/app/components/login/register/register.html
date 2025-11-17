@@ -1,7 +1,7 @@
 <!-- https://primeblocks.org/free -->
-<div class="h-full bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-20 lg:px-80">
+<div class="h-fullpx-6 py-20 md:px-20 lg:px-80">
   <div
-    class="bg-surface-0 dark:bg-surface-900 p-8 md:p-12 shadow-sm rounded-2xl w-full max-w-sm mx-auto flex flex-col gap-8"
+    class="p-8 md:p-12 shadow-sm rounded-2xl w-full max-w-sm mx-auto flex flex-col gap-8 content-container"
   >
     <div class="flex flex-col items-center gap-4">
       <div class="flex items-center gap-4">
@@ -9,12 +9,12 @@
       </div>
       <div class="flex flex-col items-center gap-2 w-full">
         <div
-          class="text-surface-900 dark:text-surface-0 text-2xl font-semibold leading-tight text-center w-full"
+          class="text-2xl font-semibold leading-tight text-center w-full"
         >
           Hello There!
         </div>
         <div class="text-center w-full">
-          <span class="text-surface-700 dark:text-surface-200 leading-normal">Already A User?</span>
+          <span class="leading-normal">Already A User?</span>
           <a
             class="text-primary font-medium ml-1 cursor-pointer hover:text-primary-emphasis"
             (click)="onLinkClick()"
@@ -28,7 +28,7 @@
         <div class="flex flex-col gap-2 w-full">
           <label
             for="firstName"
-            class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+            class="font-medium leading-normal"
             >First Name</label
           >
           <input
@@ -43,7 +43,7 @@
         <div class="flex flex-col gap-2 w-full">
           <label
             for="lastName"
-            class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+            class="font-medium leading-normal"
             >Last Name</label
           >
           <input
@@ -56,7 +56,7 @@
           />
         </div>
         <div class="flex flex-col gap-2 w-full">
-          <label for="email" class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+          <label for="email" class="font-medium leading-normal"
             >Email Address</label
           >
           <input
@@ -71,7 +71,7 @@
         <div class="flex flex-col gap-2 w-full">
           <label
             for="password"
-            class="text-surface-900 dark:text-surface-0 font-medium leading-normal"
+            class="font-medium leading-normal"
             >Password</label
           >
           <input
@@ -96,7 +96,7 @@
       </div>
     </form>
     @if(errorMessage()){
-    <div class="text-surface-700 dark:text-surface-200">
+    <div class="message-error">
       Error: {{ errorMessage() }}; Please Try Again!
     </div>
     }

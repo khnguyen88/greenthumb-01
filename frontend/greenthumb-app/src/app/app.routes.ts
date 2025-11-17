@@ -32,5 +32,5 @@ export const routes: Routes = [
     canActivateChild: [AuthCaGuard],
   },
   { path: 'chat', component: ChatPage, canActivate: [AuthCaGuard] },
-  { path: 'login', component: LoginPage },
+  { path: 'auth', component: LoginPage },
 ];
