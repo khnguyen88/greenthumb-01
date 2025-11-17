@@ -71,6 +71,7 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
   subscription = new Subscription();
 
   //Consider replacing constructor with using inject();
+
   constructor(
     private adafruitService: AdafruitService,
     private sharedService: SharedService,
@@ -82,6 +83,9 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
 
     this.lightDarkEffect = effect(() => {
       this.lightDarkMode.set(lightDarkObservableSignal());
+      if (this.data?.length) {
+        this.initChart();
+      }
     });
   }
 
@@ -105,8 +109,6 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
     if (changes['data'] && this.data?.length) {
       this.initChart();
     }
-
-    this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {
@@ -198,7 +200,7 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
     if (isPlatformBrowser(this.platformId)) {
       const documentStyle = getComputedStyle(document.documentElement);
       const textColor = documentStyle.getPropertyValue('--p-text-color');
-      const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+      const textColorSecondary = documentStyle.getPropertyValue('--p-text-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
       this.chartData.labels = this.chartLabelBuilder(this.data);

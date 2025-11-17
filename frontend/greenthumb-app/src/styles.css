@@ -36,6 +36,7 @@
   --content-secondary-text: var(--p-surface-500);
   --content-border: var(--p-primary-300);
   --messege-error: var(--color-red-600);
+  --custom-chart-text: blue;
 }
 
 .my-app-dark:root {
@@ -45,6 +46,7 @@
   --content-secondary-text: var(--p-surface-400);
   --content-border: var(--p-primary-800);
   --messege-error: var(--color-red-500);
+  --custom-chart-text: red;
 }
 
 .canvas-container {
