@@ -29,22 +29,43 @@
   background-color: var(--canvas-bg);
 } */
 
-.my-app-dark {
-  --canvas-bg: var(--p-surface-900);
+:root {
+  --canvas-bg: var(--p-surface-0);
+  --content-bg: var(--p-surface-100);
+  --content-divider: var(--p-primary-200);
+  --content-secondary-text: var(--p-surface-500);
+  --content-border: var(--p-primary-200);
 }
 
-:root {
-  --canvas-bg: var(--p-surface-100);
+.my-app-dark:root {
+  --canvas-bg: var(--p-surface-900);
+  --content-bg: var(--p-surface-800);
+  --content-divider: var(--p-primary-700);
+  --content-secondary-text: var(--p-surface-400);
+  --content-border: var(--p-primary-800);
 }
 
 .canvas-container {
   background-color: var(--canvas-bg);
 }
 
-html {
+.content-container {
+  background-color: var(--content-bg);
+  border: 1px solid var(--content-border);
+}
+
+.content-divider {
+  background-color: var(--content-divider);
+}
+
+.content-secondary-text {
+  color: var(--content-secondary-text);
+}
+
+html:root {
   background-color: var(--p-surface-0);
 }
 
-html.my-app-dark {
+html.my-app-dark:root {
   background-color: var(--p-surface-900);
 }

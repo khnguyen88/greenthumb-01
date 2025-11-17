@@ -1,28 +1,20 @@
 <!-- Placeholder Free HTML Template from PrimeNG's Primeblock -->
-<div
-  class="page-container bg-surface-50 dark:bg-surface-950 px-6 py-5 md:px-20 md:py-10 lg:px-20 lg:py-20"
->
-  <div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
-    <div class="flex flex-col gap-4 items-center justify-center mb-12">
-      <div
-        class="text-surface-900 dark:text-surface-0 font-bold text-4xl lg:text-5xl text-center leading-tight"
-      >
+<div class="page-container px-6 py-5 md:px-20 md:py-10 lg:px-20 lg:py-20">
+  <div class="canvas-container px-6 py-20 md:px-12 lg:px-20">
+    <div class="content-containerflex flex-col gap-4 items-center justify-center mb-12">
+      <div class="font-bold text-4xl lg:text-5xl text-center leading-tight">
         Welcome to the Greenthumb App!
       </div>
-      <div class="text-surface-500 dark:text-surface-400 text-lg text-center leading-normal">
+      <div class="text-lg text-center leading-normal content-secondary-text">
         This app has two main features: A dashboard section and an AI chat messenger section.
       </div>
     </div>
 
     <div class="flex lg:flex-row flex-col gap-8 max-w-7xl mx-auto">
-      <div
-        class="w-full flex-1 p-8 flex rounded-2xl flex-col bg-surface-0 dark:bg-surface-800 shadow-sm gap-6"
-      >
+      <div class="w-full flex-1 p-8 flex rounded-2xl flex-col shadow-sm gap-6 content-container">
         <div class="flex flex-col gap-2">
-          <h4 class="text-surface-900 dark:text-surface-0 font-medium text-2xl leading-tight">
-            Dashboard
-          </h4>
-          <p class="text-surface-500 dark:text-surface-400 leading-normal">
+          <h4 class="font-medium text-2xl leading-tight">Dashboard</h4>
+          <p class="leading-normal content-secondary-text">
             The dashboard section consists of multiple dashboard pages that displays sensor
             readings, from the IoT Gardening System, in tabular and graphical format. The sensor
             readings shown on the dashboards are collected from the entirety of one growing session
@@ -30,74 +22,58 @@
           </p>
         </div>
 
-        <div class="w-full h-px bg-surface-200 dark:bg-surface-600"></div>
+        <div class="w-full h-px content-divider"></div>
         <ul class="list-none flex flex-col gap-4 flex-1">
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
+            <span class="leading-tight">
               Provides measurement values, unit, and captured dates
             </span>
           </li>
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
-              View on Line Graph or Data Table
-            </span>
+            <span class="leading-tight"> View on Line Graph or Data Table </span>
           </li>
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
-              Simple and Elegant
-            </span>
+            <span class="leading-tight"> Simple and Elegant </span>
           </li>
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight"> Reponsive </span>
+            <span class="leading-tight"> Reponsive </span>
           </li>
         </ul>
         <button pButton [rounded]="true" class="w-full" (click)="routeToDashboard()">
           <span pButtonLabel>Go To Dashboard</span>
         </button>
       </div>
-      <div
-        class="w-full flex-1 p-8 flex rounded-2xl flex-col bg-surface-0 dark:bg-surface-800 shadow-sm gap-6"
-      >
+      <div class="w-full flex-1 p-8 flex rounded-2xl flex-col shadow-sm gap-6 content-container">
         <div class="flex flex-col gap-2">
-          <h4 class="text-surface-900 dark:text-surface-0 font-medium text-2xl leading-tight">
-            AI Chat Messenger
-          </h4>
-          <p class="text-surface-500 dark:text-surface-400 leading-normal">
+          <h4 class="font-medium text-2xl leading-tight">AI Chat Messenger</h4>
+          <p class="leading-normal content-secondary-text">
             The AI Chat Messenger is a chat messenger that has utilized Microsoft's Semantic
             Kernel's Agent and Handoff Orchestration frameworks and Kernel Functions to pull data
             from Adafruit IO and local JSON files to provide users analytical or factual information
             about the IoT Gardening System.
           </p>
         </div>
-        <div class="w-full h-px bg-surface-200 dark:bg-surface-600"></div>
+        <div class="w-full h-px content-divider"></div>
         <ul class="list-none flex flex-col gap-4 flex-1">
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
-              General Project Information
-            </span>
+            <span class="leading-tight"> General Project Information </span>
           </li>
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
-              Sensor Hardware Information
-            </span>
+            <span class="leading-tight"> Sensor Hardware Information </span>
           </li>
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
-              Sensor Data Information and Analysis
-            </span>
+            <span class="leading-tight"> Sensor Data Information and Analysis </span>
           </li>
           <li class="flex items-center gap-2">
             <i class="pi pi-sparkles text-lg! text-green-500"></i>
-            <span class="text-surface-800 dark:text-surface-100 leading-tight">
-              General Plant Information
-            </span>
+            <span class="leading-tight"> General Plant Information </span>
           </li>
         </ul>
         <button pButton [rounded]="true" class="w-full" (click)="routeToChat()">
