@@ -6,29 +6,29 @@ import Aura from '@primeuix/themes/aura';
 export const MyPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '{purple.50}',
-      100: '{purple.100}',
-      200: '{purple.200}',
-      300: '{purple.300}',
-      400: '{purple.400}',
-      500: '{purple.500}',
-      600: '{purple.600}',
-      700: '{purple.700}',
-      800: '{purple.800}',
-      900: '{purple.900}',
-      950: '{purple.950}',
+      50: '{green.50}',
+      100: '{green.100}',
+      200: '{green.200}',
+      300: '{green.300}',
+      400: '{green.400}',
+      500: '{green.500}',
+      600: '{green.600}',
+      700: '{green.700}',
+      800: '{green.800}',
+      900: '{green.900}',
+      950: '{green.950}',
     },
     colorScheme: {
       light: {
         primary: {
-          color: '{purple.800}',
+          color: '{green.700}',
           inverseColor: '#ffffff',
-          hoverColor: '{purple.600}',
-          activeColor: '{purple.800}',
+          hoverColor: '{purple.500}',
+          activeColor: '{purple.700}',
         },
         highlight: {
-          background: '{purple.950}',
-          focusBackground: '{purple.700}',
+          background: '{green.950}',
+          focusBackground: '{green.700}',
           color: '#ffffff',
           focusColor: '#ffffff',
         },
@@ -49,10 +49,10 @@ export const MyPreset = definePreset(Aura, {
       },
       dark: {
         primary: {
-          color: '{purple.400}',
-          inverseColor: '{purple.950}',
-          hoverColor: '{purple.100}',
-          activeColor: '{purple.200}',
+          color: '{green.500}',
+          inverseColor: '{green.950}',
+          hoverColor: '{purple.200}',
+          activeColor: '{purple.300}',
         },
         highlight: {
           background: 'rgba(250, 250, 250, .16)',
@@ -104,7 +104,7 @@ export const MyPreset = definePreset(Aura, {
     //       },
     //       dark: {
     //         root: {
-    //           background: 'purple',
+    //           background: 'green',
     //         },
     //         item: {
     //           focusBackground: 'green',

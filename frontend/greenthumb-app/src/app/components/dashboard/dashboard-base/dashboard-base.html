@@ -1,13 +1,13 @@
 @if(data.length > 0){
-<div (window:resize)="onResize($event)">
-  <div class="text-2xl text-center font-bold pb-8 pt-4">{{ feedName }} Feed Data</div>
+<div class="page-container" (window:resize)="onResize($event)">
+  <div class="text-2xl text-center font-bold pb-8 pt-4">{{ feedName }} Feed Data Graph</div>
   <div class="canvas-container">
     <p-chart [type]="chartType" [data]="chartData" [options]="options" class="h-[30rem]" />
   </div>
-  <p-table [value]="data" stripedRows [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="data" stripedRows [tableStyle]="{ 'min-width': '30rem' }">
     <ng-template #caption>
-      <div class="flex items-center justify-between">
-        <span class="text-xl font-bold">{{ feedName }} Feed Data</span>
+      <div class="flex items-center justify-between mt-5">
+        <span class="text-xl font-bold">{{ feedName }} Feed Data Table</span>
         <p-button icon="pi pi-refresh" rounded raised />
       </div>
     </ng-template>

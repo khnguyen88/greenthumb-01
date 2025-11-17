@@ -207,7 +207,7 @@ export class DashboardBase implements OnInit, OnChanges, OnDestroy, AfterViewIni
       var chartDataSet: ChartDataset = this.chartDataSetBuilder(
         'line',
         this.feedName,
-        '--p-purple-500', // CSS variable name
+        '--p-green-500', // CSS variable name
         this.data,
         false, // fill
         this.isLineDash ? [5, 5] : [5, 0],

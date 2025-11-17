@@ -32,16 +32,16 @@
 :root {
   --canvas-bg: var(--p-surface-0);
   --content-bg: var(--p-surface-100);
-  --content-divider: var(--p-primary-200);
+  --content-divider: var(--p-primary-300);
   --content-secondary-text: var(--p-surface-500);
-  --content-border: var(--p-primary-200);
+  --content-border: var(--p-primary-300);
   --messege-error: var(--color-red-600);
 }
 
 .my-app-dark:root {
   --canvas-bg: var(--p-surface-900);
   --content-bg: var(--p-surface-800);
-  --content-divider: var(--p-primary-700);
+  --content-divider: var(--p-primary-800);
   --content-secondary-text: var(--p-surface-400);
   --content-border: var(--p-primary-800);
   --messege-error: var(--color-red-500);
