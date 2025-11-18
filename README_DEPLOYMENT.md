@@ -48,7 +48,7 @@ ENTRYPOINT ["dotnet", "AgenticGreenthumbApi.dll"]
 
 ## 5. Build the Docker Image
 
-Run this from the root project folder containing your Dockerfile:
+Run this from the root project folder containing your Dockerfile. Make sure Docker Desktop is Running:
 
 ```powershell
 docker build -t gcr.io/{google-cloud-project-name}/{image-name} .
@@ -93,7 +93,7 @@ gcloud run deploy agentic-greenthumb-api \
 # Deploying ANGULAR FRONTEND via Google Cloud Platform's Cloud Run
 
 -   **Note:**
-   -   Before starting these steps, make sure you have the production build (`dist` folder) of your web application and a valid `app.yaml` configuration file.
+-   Before starting these steps, make sure you have the production build (`dist` folder) of your web application and a valid `app.yaml` configuration file.
 
 ## 1. Clone the App Engine Frontend Folder
 
@@ -143,18 +143,6 @@ Run the deployment command:
 
 ```cloud shell
 gcloud app deploy
-```
-
-## 6A. Alternatively Deploy to Cloud Run
-
-Run the deployment command:
-
-```cloud shell
-gcloud run deploy frontend-app \
-  --source . \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated
 ```
 
 ## 7. Choose Hosting Region

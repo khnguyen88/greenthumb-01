@@ -75,17 +75,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AdafruitPolicy",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200")
+            policy.WithOrigins("http://localhost:4200", "https://nguyen-iot-prototype.uc.r.appspot.com")
               .AllowAnyHeader()
-              .AllowAnyMethod(); //Update and just use "GET" AND "OPTIONS" in the future.
+              .AllowAnyMethod();
         });
 
     options.AddPolicy("ChatPolicy",
     policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "https://nguyen-iot-prototype.uc.r.appspot.com")
           .AllowAnyHeader()
-          .AllowAnyMethod(); //Update and just use "GET" AND "OPTIONS" in the future.
+          .AllowAnyMethod(); 
     });
 });
 
