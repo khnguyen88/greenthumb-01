@@ -22,14 +22,15 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.65.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.66.0" />
     <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.65.0" />
-	<PackageReference Include="Microsoft.SemanticKernel.Agents.Magentic" Version="1.63.0-preview" />
-	<PackageReference Include="Microsoft.SemanticKernel.Agents.Orchestration" Version="1.63.0-preview" />
-	<PackageReference Include="Microsoft.SemanticKernel.Agents.Runtime.InProcess" Version="1.63.0-preview" />
-	<PackageReference Include="Microsoft.SemanticKernel.Process.Runtime.Dapr" Version="1.46.0-alpha" />
-	<PackageReference Include="Microsoft.SemanticKernel.Process.Abstractions" Version="1.47.0-alpha" />
-	<PackageReference Include="Microsoft.SemanticKernel.Process.Core" Version="1.47.0-alpha" />
-	<PackageReference Include="Microsoft.SemanticKernel.Process.LocalRuntime" Version="1.47.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Magentic" Version="1.63.0-preview" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Orchestration" Version="1.63.0-preview" />
+    <PackageReference Include="Microsoft.SemanticKernel.Agents.Runtime.InProcess" Version="1.63.0-preview" />
+    <PackageReference Include="Microsoft.SemanticKernel.Process.Runtime.Dapr" Version="1.46.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Process.Abstractions" Version="1.47.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Process.Core" Version="1.47.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Process.LocalRuntime" Version="1.47.0-alpha" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+	  <PackageReference Include="Microsoft.SemanticKernel.Connectors.Ollama" Version="1.67.0-alpha" />
     <PackageReference Include="Spectre.Console" Version="0.51.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
