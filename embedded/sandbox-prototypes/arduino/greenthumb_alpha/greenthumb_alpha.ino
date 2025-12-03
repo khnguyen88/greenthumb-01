@@ -322,6 +322,13 @@ void loop() {
       isGrowlightActive = true;
       digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
 
+      currentPhotoResistorReadingRaw = analogRead(photoResistorPin);
+      currentPhotoResistorReadingPct = (float)map(currentPhotoResistorReadingRaw, photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100); // Brighter light, higher value;
+      
+      mqttHelper.AdaMqttClientConnect();
+      mqttHelper.PublishToFeed<int32_t>(pub_growLight, "grow-light-bool", isGrowlightActive);
+      mqttHelper.PublishToFeed<float>(pub_photoResistor, "photo-resistor-pct", currentPhotoResistorReadingPct);
+
       growlightActiveTimer.resetTaskConditions();
     }
     else{
@@ -337,6 +344,13 @@ void loop() {
       isGrowlightActive = true;
       digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
 
+      currentPhotoResistorReadingRaw = analogRead(photoResistorPin);
+      currentPhotoResistorReadingPct = (float)map(currentPhotoResistorReadingRaw, photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100); // Brighter light, higher value;
+      
+      mqttHelper.AdaMqttClientConnect();
+      mqttHelper.PublishToFeed<int32_t>(pub_growLight, "grow-light-bool", isGrowlightActive);
+      mqttHelper.PublishToFeed<float>(pub_photoResistor, "photo-resistor-pct", currentPhotoResistorReadingPct);
+
       growlightActiveTimer.resetTaskConditions();
       isUserForceGrowLightActive = false;
   }
@@ -347,6 +361,14 @@ void loop() {
       Serial.println("Growlight has been active for X hours, turning off growlight now.");
       isGrowlightActive = false;
       digitalWrite(growLightPin, isGrowlightActive ? HIGH : LOW);
+
+      currentPhotoResistorReadingRaw = analogRead(photoResistorPin);
+      currentPhotoResistorReadingPct = (float)map(currentPhotoResistorReadingRaw, photoResistoMaxDarkRawValue, photoResistorMaxBrightRawValue, 0, 100); // Brighter light, higher value;
+      
+      mqttHelper.AdaMqttClientConnect();
+      mqttHelper.PublishToFeed<int32_t>(pub_growLight, "grow-light-bool", isGrowlightActive);
+      mqttHelper.PublishToFeed<float>(pub_photoResistor, "photo-resistor-pct", currentPhotoResistorReadingPct);
+
 
     }
   }
@@ -365,6 +387,10 @@ void loop() {
         Serial.println("Activating water pump");
         isPumpActive = true;
         digitalWrite(waterPumpPin, isPumpActive ? HIGH : LOW);
+
+        mqttHelper.AdaMqttClientConnect();
+        mqttHelper.PublishToFeed<int32_t>(pub_pump, "pump-bool", isPumpActive);
+
         pumpActiveTimer.resetTaskConditions();
       }
       else{
@@ -386,6 +412,10 @@ void loop() {
         Serial.println("Activating water pump");
         isPumpActive = true;
         digitalWrite(waterPumpPin, isPumpActive ? HIGH : LOW);
+
+        mqttHelper.AdaMqttClientConnect();
+        mqttHelper.PublishToFeed<int32_t>(pub_pump, "pump-bool", isPumpActive);
+
         pumpActiveTimer.resetTaskConditions();
       }
       else{
@@ -401,6 +431,8 @@ void loop() {
       isPumpActive = false;
       digitalWrite(waterPumpPin, isPumpActive ? HIGH : LOW);
 
+      mqttHelper.AdaMqttClientConnect();
+      mqttHelper.PublishToFeed<int32_t>(pub_pump, "pump-bool", isPumpActive);
     }
   }
 
