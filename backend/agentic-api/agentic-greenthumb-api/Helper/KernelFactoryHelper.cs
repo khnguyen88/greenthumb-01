@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AgenticGreenthumbApi.Semantic.Plugins;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.PromptTemplates.Handlebars;
-using Microsoft.Extensions.Http.Resilience;
 using System.Net;
 
 
@@ -16,62 +17,70 @@ namespace AgenticGreenthumbApi.Helper
         public static IKernelMemory masterKernelMemory;
         private static IConfiguration _config;
 
-
-
         public static void Initialize(IConfiguration config)
         {
             _config = config;
 
-            // Configuration Files Values
-            string textDeploymentName = config["AzureAIFoundry:AIModel:Name"]!;
-            string endpoint = config["AzureAIFoundry:AIModel:Uri"]!;
-            string apiKey = config["AzureAIFoundry:AIModel:ApiKey"]!;
 
-            string embeddingDeploymentName = config["AzureAIFoundry:AIEmbedding:Name"]!;
-            string embeddingEndpoint = config["AzureAIFoundry:AIEmbedding:Uri"]!;
-            string embeddingApiKey = config["AzureAIFoundry:AIEmbedding:ApiKey"]!;
+            IConfigurationSection azureFoundarySection = config.GetSection("AzureAIFoundry");
 
-            string searchEndpoint = config["AzureAIFoundry:AISearch:Uri"]!;
-            string searchApiKey = config["AzureAIFoundry:AISearch:ApiKey"]!;
+            Dictionary<string, string> ReadSection(IConfigurationSection configurationSection, string name)
+            {
+                return configurationSection.GetSection(name)
+                    .GetChildren()
+                    .ToDictionary(c => c.Key, c => c.Value!);
+            }
 
-            string blobStorageAccount = config["AzureAIFoundry:AzureBlobStorage:AccountName"]!;
-            string blobStorageContainerName = config["AzureAIFoundry:AzureBlobStorage:ContainerName"]!;
-            string blobStorageEndpoint = config["AzureAIFoundry:AzureBlobStorage:Uri"]!;
-            string blobStorageKey = config["AzureAIFoundry:AzureBlobStorage:ApiKey"]!;
+            var model = ReadSection(azureFoundarySection, "AIModel");
+            var miniModel = ReadSection(azureFoundarySection, "AIModelMini");
+            var embedding = ReadSection(azureFoundarySection, "AIEmbedding");
+            var search = ReadSection(azureFoundarySection, "AISearch");
+            var blob = ReadSection(azureFoundarySection, "AzureBlobStorage");
 
             // Configuration Files
             AzureOpenAIConfig textAzureOpenAIConfig = new()
             {
-                APIKey = apiKey,
-                Endpoint = endpoint,
+                APIKey = model["ApiKey"],
+                Endpoint = model["Uri"],
                 Tokenizer = "o200k",
-                Deployment = textDeploymentName,
+                Deployment = model["Name"],
+                APIType = AzureOpenAIConfig.APITypes.TextCompletion,
+                Auth = AzureOpenAIConfig.AuthTypes.APIKey
+
+            };
+
+            AzureOpenAIConfig textAzureOpenAIMiniConfig = new()
+            {
+                APIKey = miniModel["ApiKey"],
+                Endpoint = miniModel["Uri"],
+                Tokenizer = "o200k",
+                Deployment = miniModel["Name"],
                 APIType = AzureOpenAIConfig.APITypes.TextCompletion,
                 Auth = AzureOpenAIConfig.AuthTypes.APIKey
 
             };
             AzureOpenAIConfig embeddingAzureOpenAIConfig = new()
             {
-                APIKey = apiKey,
-                Endpoint = endpoint,
+                APIKey = embedding["ApiKey"],
+                Endpoint = embedding["Uri"],
                 Tokenizer = "o200k",
-                Deployment = embeddingDeploymentName,
+                Deployment = embedding["Name"],
                 APIType = AzureOpenAIConfig.APITypes.EmbeddingGeneration,
                 Auth = AzureOpenAIConfig.AuthTypes.APIKey
             };
 
             AzureAISearchConfig azureAISearchConfig = new()
             {
-                APIKey = searchApiKey,
-                Endpoint = searchEndpoint,
+                APIKey = search["ApiKey"],
+                Endpoint = search["Uri"],
                 Auth = AzureAISearchConfig.AuthTypes.APIKey
             };
 
             AzureBlobsConfig azureBlobsConfig = new()
             {
-                Account = blobStorageAccount,
-                AccountKey = blobStorageKey,
-                Container = blobStorageContainerName,
+                Account = blob["AccountName"],
+                AccountKey = blob["ApiKey"],
+                Container = blob["ContainerName"],
                 Auth = AzureBlobsConfig.AuthTypes.AccountKey,
             };
 
@@ -79,7 +88,7 @@ namespace AgenticGreenthumbApi.Helper
             // Create a kernel with Azure OpenAI chat completion
             IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
 
-            kernelBuilder.AddAzureOpenAIChatCompletion(textDeploymentName, endpoint, apiKey);
+            kernelBuilder.AddAzureOpenAIChatCompletion(textAzureOpenAIConfig.Deployment, textAzureOpenAIConfig.Endpoint, textAzureOpenAIConfig.APIKey);
 
             masterKernel = kernelBuilder.Build();
 
