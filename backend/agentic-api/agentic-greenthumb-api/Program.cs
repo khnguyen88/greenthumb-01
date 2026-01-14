@@ -3,6 +3,7 @@ using AgenticGreenthumbApi.Models;
 using AgenticGreenthumbApi.Services;
 using AgenticGreenthumbApi.Repos;
 using AgenticGreenthumbApi.Client;
+using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Plugins;
@@ -43,17 +44,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Should Persists for the entirety for the lifespan of an object
-builder.Services.AddSingleton<AgenticMemoryService>();
-builder.Services.AddSingleton<KernelFactoryHelper>();
-builder.Services.AddSingleton<AdafruitAPIClient>();
-builder.Services.AddSingleton<AdafruitService>();
-builder.Services.AddSingleton<UserChatHistoryService>();
-builder.Services.AddSingleton<ChatCompletionService>();
+builder.Services.AddScoped<AgenticMemoryService>();
+builder.Services.AddScoped<KernelFactory>();
+builder.Services.AddScoped<KernelFactoryHelper>();
+builder.Services.AddScoped<AdafruitAPIClient>();
+builder.Services.AddScoped<AdafruitService>();
+builder.Services.AddScoped<UserChatHistoryService>();
+builder.Services.AddScoped<ChatCompletionService>();
 
 //Should Only Persist for the lifespan of a single request
 builder.Services.AddScoped<RagService>();
 builder.Services.AddScoped<PlantInfoService>();
 builder.Services.AddScoped<PlantInfoRepo>();
+builder.Services.AddScoped<PlantInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoAgentRegistry>();
 builder.Services.AddScoped<AdafruitPlugin>();
