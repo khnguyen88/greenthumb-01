@@ -1,5 +1,6 @@
 ﻿using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Dtos;
+using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Mappers;
 using AgenticGreenthumbApi.Semantic.Agents;
@@ -28,8 +29,9 @@ namespace AgenticGreenthumbApi.Services
         private readonly UserChatHistoryService _userChatHistoryService;
         private readonly AdafruitService _adafruitService;
         private const string userName = "nguyekhi"; //Eventually pass this in
+        private KernelFactory _kernelFactory;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, UserChatHistoryService userChatHistoryService, AdafruitService adafruitService)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, UserChatHistoryService userChatHistoryService, AdafruitService adafruitService, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, KernelFactory kernelFactory)
         {
             _logger = logger;
             _userChatHistoryService = userChatHistoryService;
@@ -42,7 +44,7 @@ namespace AgenticGreenthumbApi.Services
             ProjectInfoAgentRegistry projectInfoAgentRegistry = new ProjectInfoAgentRegistry(new ProjectInfoPlugin());
             AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
             PlantInfoAgentRegistry plantInfoAgentRegistry = new PlantInfoAgentRegistry();
-            ChatEditorAgentRegistry chatEditorRegistry = new ChatEditorAgentRegistry();
+            ChatEditorAgentRegistry chatEditorRegistry = new ChatEditorAgentRegistry(_kernelFactory);
 
             //ChatMagenticOrchestration chatOrchestration = new ChatMagenticOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
             ChatHandoffOrchestration chatOrchestration = new ChatHandoffOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);

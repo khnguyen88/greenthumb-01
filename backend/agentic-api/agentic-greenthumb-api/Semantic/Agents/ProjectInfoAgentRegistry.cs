@@ -1,4 +1,5 @@
-﻿using AgenticGreenthumbApi.Helper;
+﻿using AgenticGreenthumbApi.Factory;
+using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Plugins;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -26,7 +27,7 @@ namespace AgenticGreenthumbApi.Semantic.Agents
 
         public ChatCompletionAgent ChatEditorAgent { get; private set; }
 
-        public ChatEditorAgentRegistry()
+        public ChatEditorAgentRegistry(KernelFactory kernelFactory)
         {
             var context = "";
 
