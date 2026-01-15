@@ -1,6 +1,6 @@
-﻿namespace AgenticGreenthumbApi.Models
+﻿namespace AgenticGreenthumbApi.Domain
 {
-    public class AgentModel
+    public class AgentTemplate
     {
         public string Name { get; set; } = string.Empty;
         public string Instruction { get; set; } = string.Empty;

@@ -84,7 +84,9 @@ namespace AgenticGreenthumbApi.Factory
 
             _masterKernel = kernelBuilder.Build();
 
-            AddAllPluginsFromNamespace(_masterKernel, _sp);
+            // Load Kernel Tools
+            string? pluginNamespace = _config["Kernel:PluginNamespace"];
+            AddAllPluginsFromNamespace(_masterKernel, _sp, pluginNamespace);
 
             // Build Memory
             IKernelMemoryBuilder memoryBuilder = new KernelMemoryBuilder()
@@ -110,18 +112,14 @@ namespace AgenticGreenthumbApi.Factory
 
         public IKernelMemory GetMasterKernelMemory() => _masterKernelMemory;
 
-        public static void AddAllPluginsFromNamespace(Kernel kernel, IServiceProvider sp)
+        public void AddAllPluginsFromNamespace(Kernel kernel, IServiceProvider sp, string? pluginNamespace)
         {
             var pluginTypes = typeof(Program).Assembly
                 .GetTypes()
                 .Where(t =>
                     t.IsClass &&
                     !t.IsAbstract &&
-                    t.Namespace == "AgenticGreenthumbApi.Semantic.Plugins");
-
-            Console.WriteLine("hi");
-            Console.WriteLine(pluginTypes.ToList().Count);
-
+                    t.Namespace == pluginNamespace);
             foreach (var type in pluginTypes)
             {
                 var instance = sp.GetRequiredService(type);

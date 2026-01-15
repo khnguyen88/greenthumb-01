@@ -26,14 +26,16 @@ namespace AgenticGreenthumbApi.Services
     public class ChatCompletionService
     {
         private readonly ILogger<ChatCompletionService> _logger;
+        private readonly IConfiguration _config;
         private readonly UserChatHistoryService _userChatHistoryService;
         private readonly AdafruitService _adafruitService;
         private const string userName = "nguyekhi"; //Eventually pass this in
         private KernelFactory _kernelFactory;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, UserChatHistoryService userChatHistoryService, AdafruitService adafruitService, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, KernelFactory kernelFactory)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AdafruitService adafruitService, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, KernelFactory kernelFactory)
         {
             _logger = logger;
+            _config = config;
             _userChatHistoryService = userChatHistoryService;
             _adafruitService = adafruitService;
         }
@@ -63,8 +65,19 @@ namespace AgenticGreenthumbApi.Services
 
             try
             {
-                //string output = await chatMagenticOrchestration.GetResponse(userPrompt);
-                string output = await chatOrchestration.GetResponse(userPrompt);
+
+                int numRetries = 1;
+                int.TryParse(_config["Kernel:PromptRetries"], out numRetries);
+                string output = string.Empty;
+
+                while (output == string.Empty && numRetries > 0)
+                {
+                    Console.WriteLine("Response Retries: " + numRetries);
+
+                    //output = await chatMagenticOrchestration.GetResponse(userPrompt);
+                    output = await chatOrchestration.GetResponse(userPrompt);
+                    numRetries--;
+                }
 
                 Console.WriteLine("# of Content Before Updating User Chat History: " + agentThread.ChatHistory.Count);
                 Console.WriteLine();
