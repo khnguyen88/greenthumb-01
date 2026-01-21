@@ -1,0 +1,38 @@
+{
+  "Name": "ChatCompletionAgent",
+  "Instruction": "Help with chat completion for an IoT Gardening System",
+  "ContextDetails": {
+    "IsContextRequired": true,
+    "IsContextFromFile": true,
+    "ContextFileDirectory": "Semantic/Agents",
+    "ContextFileName": "chat-context.json",
+    "ContextText": ""
+  },
+  "Description": "A chat completion moderator agent for an IoT Automated Gardening System",
+  "KernelTools": {
+    "UseSpecificFunctionsOnly": false,
+    "KernelPlugins": [
+      "ChatCompletionPlugin"
+    ],
+    "KernelFunctions": [
+      {
+        "PluginName": "",
+        "FunctionName": ""
+      },
+      {
+        "PluginName": "",
+        "FunctionName": ""
+      }
+    ]
+  },
+  "KernelArguments": {
+    "ServiceId": "azure-openai",
+    "ModelId": "gpt-4.1-mini",
+    "FunctionChoiceBehavior": "Auto",
+    "Temperature": 0.7,
+    "TopP": 1,
+    "MaxTokens": 2048,
+    "PresencePenalty": 0,
+    "FrequencyPenalty": 0
+  }
+}

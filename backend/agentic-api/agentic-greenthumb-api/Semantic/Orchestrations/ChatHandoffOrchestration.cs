@@ -1,12 +1,16 @@
-﻿using AgenticGreenthumbApi.Helper;
+﻿using AgenticGreenthumbApi.Domain;
+using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Agents;
+using Microsoft.ML.OnnxRuntimeGenAI;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Magentic;
 using Microsoft.SemanticKernel.Agents.Orchestration;
 using Microsoft.SemanticKernel.Agents.Orchestration.Handoff;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using System.Text.Json;
 
 
 #pragma warning disable
@@ -17,7 +21,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
         public HandoffOrchestration HandoffOrchestration { get; set; }
         public ChatHistory ChatHistory { get; set; } = [];
 
-        public ChatHandoffOrchestration(ChatModeratorAgentRegistry chatModeratorAgentRegistry, ProjectInfoAgentRegistry projectInfoAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, PlantInfoAgentRegistry plantInfoAgentRegistry)
+        public ChatHandoffOrchestration(OrchestrationConfig orchestrationConfig, params Agent[] agents)
         {
             //Kernel
             Kernel managerKernel = KernelFactoryHelper.GetNewKernel();
@@ -37,22 +41,24 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             }
 
             //Agents
-            var chatModeratorAgent = chatModeratorAgentRegistry.ChatModeratorAgent;
-            var projectInfoAgent = projectInfoAgentRegistry.ProjectInfoAgent;
-            var adafruitFeedAgent = adafruitFeedAgentRegistry.AdafruitFeedAgent;
-            var plantInfoAgent = plantInfoAgentRegistry.PlantInfoAgent;
+            Agent[] orchestrationAgents = agents.Where(a => orchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
+            Agent orchestrationLeadAgent = orchestrationAgents.FirstOrDefault(a => orchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == true && a.Name == oa.Name));
+            Agent[] orchestrationWorkerAgents = orchestrationAgents.Where(a => orchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == false && a.Name != orchestrationLeadAgent.Name)).ToArray();
 
-            //Handoff Setup
+
+            //Handoff Setup (TODO, SET UP AN ORCHESTRATION TEMPLATE 
             OrchestrationHandoffs handoffs = OrchestrationHandoffs
-                .StartWith(chatModeratorAgent)
-                .Add(chatModeratorAgent, projectInfoAgent, adafruitFeedAgent, plantInfoAgent)
-                .Add(projectInfoAgent, chatModeratorAgent, "Transfer to this agent if the prompts is not related to IoT gardening system or project information.")
-                .Add(adafruitFeedAgent, chatModeratorAgent, "Transfer to this agent if the prompts is is not related to sensor feed data (humidity, temperature, etc.) or adafruit IO related.")
-                .Add(plantInfoAgent, chatModeratorAgent, "Transfer to this agent if the prompts is not related plant information or plant related questions or prompts.");
+                .StartWith(orchestrationLeadAgent)
+                .Add(orchestrationLeadAgent, orchestrationWorkerAgents);
 
+
+            foreach (var workerAgent in orchestrationWorkerAgents)
+            {
+                handoffs.Add(workerAgent, orchestrationLeadAgent, $"Transfer to {orchestrationLeadAgent.Name.ToLower()} if the issue is not {workerAgent.Name.ToLower()} related");
+            }
 
             //Handoff Orchestration
-            HandoffOrchestration = new HandoffOrchestration(handoffs, chatModeratorAgent, projectInfoAgent, adafruitFeedAgent, plantInfoAgent)
+            HandoffOrchestration = new HandoffOrchestration(handoffs, agents)
             {
                 ResponseCallback = ResponseCallback,
             };

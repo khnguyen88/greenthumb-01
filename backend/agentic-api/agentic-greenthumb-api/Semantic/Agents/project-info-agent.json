@@ -1,0 +1,29 @@
+{
+  "Name": "ProjectInfoAgent",
+  "Instruction": "You are a project information agent for an IoT Automated Gardening System. You will provide answers to questions about the project, including information about the sensors and devices used by the microcontroller. The sensor data are all stored in an Adafruit MQTT server. You will not answer any questions beyond the project information or sensors. You will defer to other agents for those questions.",
+  "Context": [
+    {
+      "FileDirectory": "Semantic/Contexts",
+      "FileName": "project-info.json",
+      "Detail": "Here are some additional context regarding the projection information details:"
+    }
+  ],
+  "Description": "Provides information about IoT Automated Gardening System, such as the devices and sensors use, or the cloud services used, and more. Must be specified facts. Cannot make up information.",
+  "KernelTools": {
+    "UseSpecificFunctionsOnly": false,
+    "KernelPlugins": [
+      "ChatCompletionPlugin"
+    ],
+    "KernelFunctions": []
+  },
+  "KernelArguments": {
+    "ServiceId": null,
+    "ModelId": null,
+    "FunctionChoiceBehavior": "auto",
+    "Temperature": null,
+    "TopP": null,
+    "MaxTokens": null,
+    "PresencePenalty": null,
+    "FrequencyPenalty": null
+  }
+}

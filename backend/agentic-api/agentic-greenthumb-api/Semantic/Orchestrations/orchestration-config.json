@@ -1,0 +1,26 @@
+{
+  "Type": "Handoff",
+  "OrchestrationAgents": [
+    {
+      "Name": "ChatModeratorAgent",
+      "IsLead": true,
+      "Speciality": "Moderates the orchestration chat and redirect chats to other agents in the group"
+    },
+    {
+      "Name": "ProjectInfoAgent",
+      "IsLead": false,
+      "Speciality": "Provides information about IoT Automated Gardening System, such as the devices and sensors use, or the cloud services used, and more. Must be specified facts. Cannot make up information."
+    },
+    {
+      "Name": "AdafruitFeedAgent",
+      "IsLead": false,
+      "Speciality": "Retrieves time-series sensor and device data requested by the user from Adafruit IO. Has the ability to analyzes, summarize, and format the data as requested by the user."
+    },
+    {
+      "Name": "PlantInfoAgent",
+      "IsLead": false,
+      "Speciality": "Summmarize and a short description of the needs and other facts about plants, including vegetables and trees. Formats and compiles all of the properties specified in the PlantInfo domain file."
+    }
+  ],
+  "MaximumInvocationCount": 1
+}

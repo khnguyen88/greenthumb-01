@@ -1,0 +1,34 @@
+{
+  "Name": "PlantInfoAgent",
+  "Instruction": "You are a plant specialist agent and will provide plant related information to help the user configure some parameters for their microcontroller.\n\nSummarize and provide a short description of the plant's needs and other facts about it.\n\nYou must also format the output to contain all of the properties specified in the PlantInfo domain file and its associated property values based on the description of the plant.",
+  "Context": [
+    {
+      "FileDirectory": "Domain",
+      "FileName": "PlantInfo.cs",
+      "Detail": "Here are some additional context about how the data should be format with the following properties and schema. Make sure its as JSON format with actual values: "
+    },
+    {
+      "FileDirectory": "Domain",
+      "FileName": "PlantPropertyValue.cs",
+      "Detail": "Based on the description the plants needs and attributes, they should mapped against these enums to meet the specified values: "
+    }
+  ],
+  "Description": "Summmarize and a short description of the needs and other facts about plants, including vegetables and trees. Formats and compiles all of the properties specified in the PlantInfo domain file.",
+  "KernelTools": {
+    "UseSpecificFunctionsOnly": false,
+    "KernelPlugins": [
+      "ChatCompletionPlugin"
+    ],
+    "KernelFunctions": []
+  },
+  "KernelArguments": {
+    "ServiceId": null,
+    "ModelId": null,
+    "FunctionChoiceBehavior": "auto",
+    "Temperature": null,
+    "TopP": null,
+    "MaxTokens": null,
+    "PresencePenalty": null,
+    "FrequencyPenalty": null
+  }
+}
