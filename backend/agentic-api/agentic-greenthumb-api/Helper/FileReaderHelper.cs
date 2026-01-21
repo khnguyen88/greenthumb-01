@@ -8,6 +8,19 @@ namespace AgenticGreenthumbApi.Helper
 {
     public static class FileReaderHelper
     {
+        public static string GetFileFromDirectory(string[] subDirectoryPath, string filename)
+        {
+            string subPath = Path.Combine(subDirectoryPath);
+            string path = Path.Combine(Environment.CurrentDirectory, subPath, filename);
+            return GetFile(path, filename);
+        }
+
+        public static string GetFileFromDirectory(string subDirectoryPath, string filename)
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, subDirectoryPath, filename);
+            return GetFile(path, filename);
+        }
+
         public static string GetContextFile(string filename)
         {
             string path = Path.Combine(Environment.CurrentDirectory, "Semantic", "Contexts", filename);
@@ -45,10 +58,10 @@ namespace AgenticGreenthumbApi.Helper
             return "";
         }
 
-        public static List<AgentTemplate> GetAgentTemplateFiles(params string[] subDirectories)
+        public static List<AgentTemplate> GetAgentTemplates(params string[] subDirectories)
         {
             string[] directories = { Environment.CurrentDirectory };
-            directories.Concat(subDirectories);
+            directories = directories.Concat(subDirectories).ToArray();
 
             string path = Path.Combine(directories);
 

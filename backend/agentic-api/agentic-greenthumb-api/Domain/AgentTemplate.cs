@@ -4,19 +4,21 @@
     {
         public string Name { get; set; } = string.Empty;
         public string Instruction { get; set; } = string.Empty;
-        public ContextDetails ContextDetails { get; set; } = new();
+
+        public List<ContextItem> Context { get; set; } = new();
+
         public string Description { get; set; } = string.Empty;
         public KernelTools KernelTools { get; set; } = new();
-        public KernelArguments KernelArguments { get; set; } = new();
+        public KernelArgumentDetails KernelArguments { get; set; } = new();
     }
 
-    public class ContextDetails
+    public class ContextItem
     {
-        public bool UseContextFileOnly { get; set; }
-        public string ContextFileDirectory { get; set; } = string.Empty;
-        public string ContextFileName { get; set; } = string.Empty;
-        public string ContextText { get; set; } = string.Empty;
+        public string FileDirectory { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
+        public string Detail { get; set; } = string.Empty;
     }
+
 
     public class KernelTools
     {
@@ -31,7 +33,7 @@
         public string FunctionName { get; set; } = string.Empty;
     }
 
-    public class KernelArguments
+    public class KernelArgumentDetails
     {
         public string ServiceId { get; set; } = string.Empty;
         public string ModelId { get; set; } = string.Empty;

@@ -1,9 +1,10 @@
 ﻿using Microsoft.SemanticKernel.Agents;
+using Microsoft.SemanticKernel.Agents.Runtime;
 
 namespace AgenticGreenthumbApi.Domain
 {
     public class AgentRegistry
     {
-        public List<Agent> Agents { get; set; } = new();
+        public Agent[] Agents { get; set; } = [];
     }
 }

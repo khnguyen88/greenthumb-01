@@ -114,6 +114,9 @@ namespace AgenticGreenthumbApi.Factory
 
         public void AddAllPluginsFromNamespace(Kernel kernel, IServiceProvider sp, string? pluginNamespace)
         {
+            using var scope = sp.CreateScope();
+            var scopedProvider = scope.ServiceProvider;
+
             var pluginTypes = typeof(Program).Assembly
                 .GetTypes()
                 .Where(t =>
@@ -122,7 +125,7 @@ namespace AgenticGreenthumbApi.Factory
                     t.Namespace == pluginNamespace);
             foreach (var type in pluginTypes)
             {
-                var instance = sp.GetRequiredService(type);
+                var instance = scopedProvider.GetRequiredService(type);
                 kernel.Plugins.AddFromObject(instance, type.Name);
                 Console.WriteLine(type.Name);
             }

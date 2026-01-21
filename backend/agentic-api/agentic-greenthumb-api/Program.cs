@@ -1,13 +1,16 @@
-using Microsoft.EntityFrameworkCore;
-using AgenticGreenthumbApi.Models;
-using AgenticGreenthumbApi.Services;
-using AgenticGreenthumbApi.Repos;
 using AgenticGreenthumbApi.Client;
+using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
+using AgenticGreenthumbApi.Models;
+using AgenticGreenthumbApi.Repos;
 using AgenticGreenthumbApi.Semantic.Agents;
-using AgenticGreenthumbApi.Semantic.Plugins;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
+using AgenticGreenthumbApi.Semantic.Plugins;
+using AgenticGreenthumbApi.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 
 
@@ -45,7 +48,6 @@ builder.Services.AddSwaggerGen();
 
 //Should Persists for the entirety for the lifespan of an object
 builder.Services.AddScoped<AgenticMemoryService>();
-builder.Services.AddScoped<KernelFactory>();
 builder.Services.AddScoped<KernelFactoryHelper>();
 builder.Services.AddScoped<AdafruitAPIClient>();
 builder.Services.AddScoped<AdafruitService>();
@@ -63,8 +65,9 @@ builder.Services.AddScoped<AdafruitPlugin>();
 builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
 builder.Services.AddScoped<ChatModeratorAgentRegistry>();
 builder.Services.AddScoped<PlantInfoAgentRegistry>();
-builder.Services.AddScoped<ChatMagenticOrchestration>();
-builder.Services.AddScoped<ChatHandoffOrchestration>();
+builder.Services.AddScoped<AgentRegistry>();
+builder.Services.AddScoped<KernelFactory>();
+builder.Services.AddScoped<AgentFactory>();
 
 //Initialize Static Class
 KernelFactoryHelper.Initialize(builder.Configuration);

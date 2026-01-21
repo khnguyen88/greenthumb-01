@@ -6,6 +6,7 @@ using AgenticGreenthumbApi.Mappers;
 using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Magentic;
@@ -18,6 +19,7 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.PromptTemplates;
 using Spectre.Console;
 using System.Text.Json;
+using AgentFactory = AgenticGreenthumbApi.Factory.AgentFactory;
 
 
 #pragma warning disable
@@ -30,26 +32,27 @@ namespace AgenticGreenthumbApi.Services
         private readonly UserChatHistoryService _userChatHistoryService;
         private readonly AdafruitService _adafruitService;
         private const string userName = "nguyekhi"; //Eventually pass this in
-        private KernelFactory _kernelFactory;
+        private readonly AgentFactory _agentFactory;
+        private readonly AgentRegistry _agentRegistry;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AdafruitService adafruitService, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, KernelFactory kernelFactory)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AgentFactory agentFactory)
         {
             _logger = logger;
             _config = config;
             _userChatHistoryService = userChatHistoryService;
-            _adafruitService = adafruitService;
+            _agentFactory = agentFactory;
+            _agentRegistry = agentFactory.GetAgentRegistry();
+
+
         }
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
-            ChatModeratorAgentRegistry chatModeratorAgentRegistry = new ChatModeratorAgentRegistry();
-            ProjectInfoAgentRegistry projectInfoAgentRegistry = new ProjectInfoAgentRegistry(new ProjectInfoPlugin());
-            AdafruitFeedAgentRegistry adafruitFeedAgentRegistry = new AdafruitFeedAgentRegistry(new AdafruitPlugin(_adafruitService));
-            PlantInfoAgentRegistry plantInfoAgentRegistry = new PlantInfoAgentRegistry();
-            ChatEditorAgentRegistry chatEditorRegistry = new ChatEditorAgentRegistry(_kernelFactory);
+            OrchestrationConfig orchestrationConfig = GetOrchestrationConfig(_config);
 
-            //ChatMagenticOrchestration chatOrchestration = new ChatMagenticOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
-            ChatHandoffOrchestration chatOrchestration = new ChatHandoffOrchestration(chatModeratorAgentRegistry, projectInfoAgentRegistry, adafruitFeedAgentRegistry, plantInfoAgentRegistry);
+            Agent chatEditorAgent = _agentRegistry.Agents.FirstOrDefault(a => a.Name == "ChatEditorAgent");
+              
+            ChatHandoffOrchestration chatOrchestration = new ChatHandoffOrchestration(orchestrationConfig, _agentRegistry.Agents);
 
             ChatHistoryAgentThread agentThread = new();
 
@@ -70,7 +73,7 @@ namespace AgenticGreenthumbApi.Services
                 int.TryParse(_config["Kernel:PromptRetries"], out numRetries);
                 string output = string.Empty;
 
-                while (output == string.Empty && numRetries > 0)
+                while (output.IsNullOrEmpty() && numRetries > 0)
                 {
                     Console.WriteLine("Response Retries: " + numRetries);
 
@@ -83,11 +86,11 @@ namespace AgenticGreenthumbApi.Services
                 Console.WriteLine();
 
 
-                string trueOrchestrationOutput =  chatOrchestration.OutputAssistentResponseContent();
+                string trueOrchestrationOutput = chatOrchestration.OutputAssistentResponseContent();
                 Console.WriteLine(trueOrchestrationOutput);
                 chatOrchestration.ClearChatHistory();
 
-                ChatMessageContent santitizedOutput = await chatEditorRegistry.ChatEditorAgent.InvokeAsync(trueOrchestrationOutput).FirstAsync();
+                ChatMessageContent santitizedOutput = await chatEditorAgent.InvokeAsync(trueOrchestrationOutput).FirstAsync();
 
                 agentThread.ChatHistory.Add(santitizedOutput);
                 _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
@@ -136,6 +139,24 @@ namespace AgenticGreenthumbApi.Services
 
             return chatHistoryDto;
 
+        }
+
+        public OrchestrationConfig GetOrchestrationConfig(IConfiguration config)
+        {
+            IConfigurationSection templateSection = config.GetSection("Template");
+
+            var agentTemplateSubdirectories = templateSection.GetSection("Orchestration")
+                .GetSection("SubDirectories")
+                .Get<string[]>();
+
+            var orchestrationConfigFileName = templateSection.GetSection("Orchestration")
+                .GetSection("Filename")
+                .Get<string>();
+
+
+            var configJson = FileReaderHelper.GetFileFromDirectory(agentTemplateSubdirectories, orchestrationConfigFileName);
+
+            return JsonSerializer.Deserialize<OrchestrationConfig>(configJson);
         }
     }
 }
