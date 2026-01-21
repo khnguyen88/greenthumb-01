@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <Folder Include="Enums\" />
-    <Folder Include="Semantic\Agents\Templates\" />
+    <Folder Include="Semantic\Orchestrations\Template\" />
   </ItemGroup>
 
     <ItemGroup>
