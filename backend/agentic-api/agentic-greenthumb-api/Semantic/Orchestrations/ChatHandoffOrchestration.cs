@@ -1,6 +1,7 @@
 ﻿using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Agents;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.ML.OnnxRuntimeGenAI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -36,7 +37,6 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
                 Console.WriteLine();
                 ChatHistory.Add(response);
 
-
                 return ValueTask.CompletedTask;
             }
 
@@ -54,7 +54,9 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             foreach (var workerAgent in orchestrationWorkerAgents)
             {
-                handoffs.Add(workerAgent, orchestrationLeadAgent, $"Transfer to {orchestrationLeadAgent.Name.ToLower()} if the issue is not {workerAgent.Name.ToLower()} related");
+                var agentConfigInfo = orchestrationConfig.OrchestrationAgents.FirstOrDefault(oa => oa.Name == workerAgent.Name);
+                var agentConfigDescription = (bool)(agentConfigInfo.Speciality.IsNullOrEmpty()) ? workerAgent.Description : agentConfigInfo?.Speciality.ToString();
+                handoffs.Add(workerAgent, orchestrationLeadAgent, $"Transfer to {orchestrationLeadAgent.Name.ToLower()} if the issue is not {workerAgent.Name.ToLower()} related. Specifically if the issue is not related to {agentConfigDescription}.");
             }
 
             //Handoff Orchestration
@@ -78,9 +80,9 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
         {
             string combinedResponse = "";
 
-            foreach (var assistentContent in ChatHistory.Where(c => c.Role == AuthorRole.Assistant))
+            foreach (var assistantContent in ChatHistory)
             {
-                combinedResponse = combinedResponse + $"#{assistentContent.Content}" + "\n\n";
+                combinedResponse = combinedResponse + $"#{assistantContent.Content}" + "\n\n";
             }
 
             return combinedResponse;
@@ -95,6 +97,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt, runtime);
             string output = await result.GetValueAsync(TimeSpan.FromSeconds(180)); //Very important settings
             Console.WriteLine("//----------------//");
+            ChatHistory.AddAssistantMessage(output);
             Console.WriteLine(output);
 
             await runtime.RunUntilIdleAsync();

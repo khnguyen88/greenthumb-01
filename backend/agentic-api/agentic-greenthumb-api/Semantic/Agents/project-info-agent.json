@@ -12,7 +12,7 @@
   "KernelTools": {
     "UseSpecificFunctionsOnly": false,
     "KernelPlugins": [
-      "ChatCompletionPlugin"
+      "ProjectInfoPlugin"
     ],
     "KernelFunctions": []
   },

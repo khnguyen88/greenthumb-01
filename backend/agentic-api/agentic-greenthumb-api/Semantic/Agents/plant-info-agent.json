@@ -1,6 +1,6 @@
 {
   "Name": "PlantInfoAgent",
-  "Instruction": "You are a plant specialist agent and will provide plant related information to help the user configure some parameters for their microcontroller.\n\nSummarize and provide a short description of the plant's needs and other facts about it.\n\nYou must also format the output to contain all of the properties specified in the PlantInfo domain file and its associated property values based on the description of the plant.",
+  "Instruction": "You are a plant specialist agent and will provide plant related information to help the user configure some parameters for their microcontroller.\n\nSummarize and provide a short description of the plant's needs and other facts about it.\n\nYou must also format the output to contain all of the properties specified in the PlantInfo domain file and its associated property values based on the description of the plant in a JSON format.",
   "Context": [
     {
       "FileDirectory": "Domain",
@@ -16,9 +16,7 @@
   "Description": "Summmarize and a short description of the needs and other facts about plants, including vegetables and trees. Formats and compiles all of the properties specified in the PlantInfo domain file.",
   "KernelTools": {
     "UseSpecificFunctionsOnly": false,
-    "KernelPlugins": [
-      "ChatCompletionPlugin"
-    ],
+    "KernelPlugins": [],
     "KernelFunctions": []
   },
   "KernelArguments": {

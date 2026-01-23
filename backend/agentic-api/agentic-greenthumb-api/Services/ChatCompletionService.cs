@@ -85,7 +85,6 @@ namespace AgenticGreenthumbApi.Services
                 Console.WriteLine("# of Content Before Updating User Chat History: " + agentThread.ChatHistory.Count);
                 Console.WriteLine();
 
-
                 string trueOrchestrationOutput = chatOrchestration.OutputAssistentResponseContent();
                 Console.WriteLine(trueOrchestrationOutput);
                 chatOrchestration.ClearChatHistory();
