@@ -4,7 +4,6 @@ using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Models;
 using AgenticGreenthumbApi.Repos;
-using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
 using AgenticGreenthumbApi.Services;
@@ -60,14 +59,10 @@ builder.Services.AddScoped<PlantInfoService>();
 builder.Services.AddScoped<PlantInfoRepo>();
 builder.Services.AddScoped<PlantInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoPlugin>();
-builder.Services.AddScoped<ProjectInfoAgentRegistry>();
 builder.Services.AddScoped<AdafruitPlugin>();
-builder.Services.AddScoped<AdafruitFeedAgentRegistry>();
-builder.Services.AddScoped<ChatModeratorAgentRegistry>();
-builder.Services.AddScoped<PlantInfoAgentRegistry>();
-builder.Services.AddScoped<AgentRegistry>();
-builder.Services.AddScoped<KernelFactory>();
-builder.Services.AddScoped<AgentFactory>();
+builder.Services.AddSingleton<AgentRegistry>();
+builder.Services.AddSingleton<KernelFactory>();
+builder.Services.AddSingleton<AgentFactory>();
 
 //Initialize Static Class
 KernelFactoryHelper.Initialize(builder.Configuration);

@@ -1,7 +1,6 @@
 ﻿using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Models;
-using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Services;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;

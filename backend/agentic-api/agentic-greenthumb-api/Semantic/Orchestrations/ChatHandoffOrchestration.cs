@@ -1,6 +1,5 @@
 ﻿using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Helper;
-using AgenticGreenthumbApi.Semantic.Agents;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.ML.OnnxRuntimeGenAI;
 using Microsoft.SemanticKernel;
@@ -96,8 +95,13 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt, runtime);
             string output = await result.GetValueAsync(TimeSpan.FromSeconds(180)); //Very important settings
+
+            if (!ChatHistory.Select(x => x.Content).ToList().Contains(output))
+            {
+                ChatHistory.AddAssistantMessage(output);
+            }
+
             Console.WriteLine("//----------------//");
-            ChatHistory.AddAssistantMessage(output);
             Console.WriteLine(output);
 
             await runtime.RunUntilIdleAsync();

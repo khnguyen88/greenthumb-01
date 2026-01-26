@@ -1,8 +1,9 @@
-﻿using AgenticGreenthumbApi.Helper;
-using AgenticGreenthumbApi.Semantic.Agents;
+﻿using AgenticGreenthumbApi.Domain;
+using AgenticGreenthumbApi.Helper;
 using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
 using Azure;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Magentic;
 using Microsoft.SemanticKernel.Agents.Orchestration;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
@@ -17,7 +18,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
         public MagenticOrchestration MagenticOrchestration { get; set; }
         public ChatHistory ChatHistory {get; set;} = [];
 
-        public ChatMagenticOrchestration(ChatModeratorAgentRegistry chatModeratorAgentRegistry, ProjectInfoAgentRegistry projectInfoAgentRegistry, AdafruitFeedAgentRegistry adafruitFeedAgentRegistry, PlantInfoAgentRegistry plantInfoAgentRegistry)
+        public ChatMagenticOrchestration(OrchestrationConfig orchestrationConfig, params Agent[] agents)
         {
             //Kernel
             Kernel managerKernel = KernelFactoryHelper.GetNewKernel();
@@ -36,6 +37,13 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
                 return ValueTask.CompletedTask;
             }
 
+
+            //Agents
+            Agent[] orchestrationAgents = agents.Where(a => orchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
+            Agent orchestrationLeadAgent = orchestrationAgents.FirstOrDefault(a => orchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == true && a.Name == oa.Name));
+            Agent[] orchestrationWorkerAgents = orchestrationAgents.Where(a => orchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == false && a.Name != orchestrationLeadAgent.Name)).ToArray();
+
+
             //Manager
             StandardMagenticManager manager = new StandardMagenticManager(
                 managerKernel.GetRequiredService<IChatCompletionService>(),
@@ -44,21 +52,9 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
                 MaximumInvocationCount = 2, //Very important settings
             };
 
-            //Agents
-            var chatModeratorAgent = chatModeratorAgentRegistry.ChatModeratorAgent;
-            var projectInfoAgent = projectInfoAgentRegistry.ProjectInfoAgent;
-            var adafruitFeedAgent = adafruitFeedAgentRegistry.AdafruitFeedAgent;
-            var plantInfoAgent = plantInfoAgentRegistry.PlantInfoAgent;
-
             //Orchestration
             // =====================================================================================
-            MagenticOrchestration = new MagenticOrchestration(
-                manager,
-                chatModeratorAgent,
-                projectInfoAgent,
-                adafruitFeedAgent,
-                plantInfoAgent
-            )
+            MagenticOrchestration = new MagenticOrchestration(manager, orchestrationAgents)
             {
                 ResponseCallback = ResponseCallback,
             };
@@ -94,6 +90,12 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             OrchestrationResult<string> result = await MagenticOrchestration.InvokeAsync(userPrompt, runtime);
             string output = await result.GetValueAsync(TimeSpan.FromSeconds(180)); //Very important settings
+
+            if (!ChatHistory.Select(x => x.Content).ToList().Contains(output))
+            {
+                ChatHistory.AddAssistantMessage(output);
+            }
+                
             Console.WriteLine("//----------------//");
             Console.WriteLine(output);
 

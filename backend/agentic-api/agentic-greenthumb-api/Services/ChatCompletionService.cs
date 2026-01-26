@@ -3,7 +3,6 @@ using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Mappers;
-using AgenticGreenthumbApi.Semantic.Agents;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
 using Microsoft.IdentityModel.Tokens;
