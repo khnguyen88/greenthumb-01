@@ -156,6 +156,66 @@ namespace AgenticGreenthumbApi.Services
 
             return JsonSerializer.Deserialize<OrchestrationConfig>(configJson);
         }
+
+        public async Task<ChatHistoryDto> GetPlantImageAnalysis(string userPrompt)
+        {
+
+            Agent gardenerAgent = _agentRegistry.Agents.FirstOrDefault(a => a.Name == "GardenerAgent");
+
+            Agent plantHealthImageAnalystAgent = _agentRegistry.Agents.FirstOrDefault(a => a.Name == "PlantHealthImageAnalyzerAgent");
+
+            ChatHistory chatMessages = new();
+
+            //GET LOCAL IMAGE
+            //var image = @"c:\temp\test.png";
+            //var bytes = System.IO.File.ReadAllBytes(image);
+            //var imageData = new ReadOnlyMemory<byte>(bytes);
+
+            //GET URL IMAGE
+            var imageURL = userPrompt.IsNullOrEmpty() ? "https://upload.wikimedia.org/wikipedia/commons/e/e5/Tomatoes_in_a_screen_house_02.jpg" : userPrompt;
+            var imageData2 = await GetImageBytesFromUrlAsync(imageURL);
+
+
+            var message = new ChatMessageContentItemCollection
+            {
+                new TextContent("What is the health of the plant in the image provided?"),
+                new ImageContent(imageData2, "image/png")
+            };
+
+            chatMessages.AddUserMessage(message);
+
+            ChatHistory copyChatHistory = new ChatHistory(chatMessages);
+
+            ChatMessageContent response = await plantHealthImageAnalystAgent.InvokeAsync(chatMessages).FirstAsync();
+
+            Console.WriteLine(response.Content.ToString());
+
+            ChatMessageContent response2 = await gardenerAgent.InvokeAsync(copyChatHistory).FirstAsync();
+
+            Console.WriteLine(response2.Content.ToString());
+
+            ChatHistoryDto chatHistoryDto = new()
+            {
+                ChatMessages = ChatHistoryMapper.DomainToDtoMapper(new List<ChatMessageContent>() { response, response2 })
+            };
+
+            return chatHistoryDto;
+        }
+
+        public async Task<byte[]> GetImageBytesFromUrlAsync(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                // Using GetByteArrayAsync is a concise way to get the data directly as a byte array
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                    "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                    "Chrome/120.0.0.0 Safari/537.36");
+
+                byte[] imageBytes = await client.GetByteArrayAsync(url);
+                return imageBytes;
+            }
+        }
     }
 }
 #pragma warning restore

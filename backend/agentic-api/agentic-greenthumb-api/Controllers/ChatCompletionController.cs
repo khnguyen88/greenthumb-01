@@ -39,5 +39,11 @@ namespace AgenticGreenthumbApi.Controllers
         {
             return _chatCompletionService.GetPartialChatHistory(chatRequest.Prompt);
         }
+
+        [HttpPost("GetPlantImageAnalysis", Name = "GetPlantImageAnalysis")]
+        public Task<ChatHistoryDto> GetPlantImageAnalysis([FromBody] string url)
+        {
+            return _chatCompletionService.GetPlantImageAnalysis(url);
+        }
     }
 }

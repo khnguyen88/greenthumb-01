@@ -49,16 +49,16 @@ namespace AgenticGreenthumbApi.Helper
 
             };
 
-            AzureOpenAIConfig textAzureOpenAIMiniConfig = new()
-            {
-                APIKey = miniModel["ApiKey"],
-                Endpoint = miniModel["Uri"],
-                Tokenizer = "o200k",
-                Deployment = miniModel["Name"],
-                APIType = AzureOpenAIConfig.APITypes.TextCompletion,
-                Auth = AzureOpenAIConfig.AuthTypes.APIKey
+            //AzureOpenAIConfig textAzureOpenAIMiniConfig = new()
+            //{
+            //    APIKey = miniModel["ApiKey"],
+            //    Endpoint = miniModel["Uri"],
+            //    Tokenizer = "o200k",
+            //    Deployment = miniModel["Name"],
+            //    APIType = AzureOpenAIConfig.APITypes.TextCompletion,
+            //    Auth = AzureOpenAIConfig.AuthTypes.APIKey
 
-            };
+            //};
             AzureOpenAIConfig embeddingAzureOpenAIConfig = new()
             {
                 APIKey = embedding["ApiKey"],
