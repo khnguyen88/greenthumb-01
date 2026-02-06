@@ -5,6 +5,6 @@ namespace AgenticGreenthumbApi.Domain
 {
     public class AgentRegistry
     {
-        public Agent[] Agents { get; set; } = [];
+        public Dictionary<string, Agent> Agents { get; set; } = new();
     }
 }

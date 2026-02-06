@@ -15,7 +15,7 @@ namespace AgenticGreenthumbApi.Factory
     {
         private readonly IConfiguration _config;
         private readonly KernelFactory _kernelFactory;
-        private AgentRegistry _agentRegistry;
+        private readonly AgentRegistry _agentRegistry;
 
         public AgentFactory(IConfiguration config, KernelFactory kernelFactory, AgentRegistry agentRegistry) {
             _config = config;
@@ -33,7 +33,7 @@ namespace AgenticGreenthumbApi.Factory
                 .GetSection("SubDirectories")
                 .Get<string[]>();
 
-            List<AgentTemplate> agentTemplates= FileReaderHelper.GetAgentTemplates(agentTemplateSubdirectories);
+            List<AgentConfigTemplate> agentTemplates= FileReaderHelper.GetTemplateFiles<AgentConfigTemplate>(agentTemplateSubdirectories);
             agentTemplates.ForEach(template => {
                 try
                 {
@@ -58,7 +58,7 @@ namespace AgenticGreenthumbApi.Factory
                             kernelTools.KernelFunctions.ForEach(f => {
                                 kernel.Plugins.TryGetFunction(f.PluginName, f.FunctionName, out kernelFunction);
 
-                                if (kernelFunction != null){
+                                if (kernelFunction is not null){
                                     kernelFunctions.Add(kernelFunction);
                                 }
                             });
@@ -126,20 +126,20 @@ namespace AgenticGreenthumbApi.Factory
                     }
 
 
-                    Agent[] agent = [
-                        new ChatCompletionAgent
+                    Agent agent = 
+                    new ChatCompletionAgent
                     {
                         Name = template.Name,
                         Instructions = instructions,
                         Description = template.Description,
                         Kernel = kernel,
                         Arguments = new KernelArguments(openAIPromptExecutionSettings),
-                    }
-                    ];
-                    Console.WriteLine("Before Adding Agents: " + _agentRegistry.Agents.ToList().Count);
-                    _agentRegistry.Agents = _agentRegistry.Agents.Concat(agent).ToArray();
-                    Console.WriteLine("After Adding Agents: " + _agentRegistry.Agents.ToList().Count);
-                    Console.WriteLine("Let's count agents added to the Registry from the factory: " + _agentRegistry.Agents.ToList().Count);
+                    };
+
+                    Console.WriteLine("Before Adding Agents: " + _agentRegistry.Agents.Count);
+                    _agentRegistry.Agents.TryAdd(agent.Name, agent);
+                    Console.WriteLine("After Adding Agents: " + _agentRegistry.Agents.Count);
+                    Console.WriteLine("Let's count agents added to the Registry from the factory: " + _agentRegistry.Agents.Count);
                 }
                 catch (Exception ex)
                 {

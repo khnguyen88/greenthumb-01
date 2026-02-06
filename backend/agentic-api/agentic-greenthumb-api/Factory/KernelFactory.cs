@@ -18,8 +18,6 @@ namespace AgenticGreenthumbApi.Factory
             _sp = sp;
 
             Initialize();
-
-            Console.WriteLine("Hi");
         }
 
         private void Initialize()
