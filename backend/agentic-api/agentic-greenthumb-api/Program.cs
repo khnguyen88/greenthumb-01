@@ -46,23 +46,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Should Persists for the entirety for the lifespan of an object
+builder.Services.AddSingleton<AgentRegistry>();
+builder.Services.AddSingleton<OrchestrationRegistry>();
+builder.Services.AddSingleton<KernelFactory>();
+builder.Services.AddSingleton<AgentFactory>();
+builder.Services.AddSingleton<OrchestrationFactory>();
+
+
+//Should Only Persist for the lifespan of a single request
 builder.Services.AddScoped<AgenticMemoryService>();
 builder.Services.AddScoped<KernelFactoryHelper>();
 builder.Services.AddScoped<AdafruitAPIClient>();
 builder.Services.AddScoped<AdafruitService>();
 builder.Services.AddScoped<UserChatHistoryService>();
 builder.Services.AddScoped<ChatCompletionService>();
-
-//Should Only Persist for the lifespan of a single request
 builder.Services.AddScoped<RagService>();
 builder.Services.AddScoped<PlantInfoService>();
 builder.Services.AddScoped<PlantInfoRepo>();
 builder.Services.AddScoped<PlantInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoPlugin>();
 builder.Services.AddScoped<AdafruitPlugin>();
-builder.Services.AddSingleton<AgentRegistry>();
-builder.Services.AddSingleton<KernelFactory>();
-builder.Services.AddSingleton<AgentFactory>();
+
 
 //Initialize Static Class
 KernelFactoryHelper.Initialize(builder.Configuration);
