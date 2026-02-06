@@ -1,4 +1,5 @@
 {
+  "Name": "Main",
   "Type": "Handoff",
   "OrchestrationAgents": [
     {
@@ -22,5 +23,6 @@
       "Speciality": "Summmarize and a short description of the needs and other facts about plants, including vegetables and trees. Formats and compiles all of the properties specified in the PlantInfo domain file."
     }
   ],
-  "MaximumInvocationCount": 1
+  "MaximumInvocationCount": 1,
+  "InvocationTimeLimitSecs": 180
 }
