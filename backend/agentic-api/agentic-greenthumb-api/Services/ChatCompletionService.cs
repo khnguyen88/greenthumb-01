@@ -31,42 +31,39 @@ namespace AgenticGreenthumbApi.Services
         private readonly UserChatHistoryService _userChatHistoryService;
         private readonly AdafruitService _adafruitService;
         private const string userName = "nguyekhi"; //Eventually pass this in
-        private readonly AgentFactory _agentFactory;
         private readonly AgentRegistry _agentRegistry;
+        private readonly OrchestrationRegistry _orchestrationRegistry;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AgentFactory agentFactory)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AgentFactory agentFactory, OrchestrationFactory orchestrationFactory)
         {
             _logger = logger;
             _config = config;
             _userChatHistoryService = userChatHistoryService;
-            _agentFactory = agentFactory;
             _agentRegistry = agentFactory.GetAgentRegistry();
+            _orchestrationRegistry = orchestrationFactory.GetOrchestrationRegistry();
 
 
         }
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
-            OrchestrationConfig orchestrationConfig = GetOrchestrationConfig(_config);
-
-            Agent chatEditorAgent = _agentRegistry.Agents.FirstOrDefault(a => a.Name == "ChatEditorAgent");
-              
-            ChatHandoffOrchestration chatOrchestration = new ChatHandoffOrchestration(orchestrationConfig, _agentRegistry.Agents);
-
-            ChatHistoryAgentThread agentThread = new();
-
-            bool isUserHistoryExpired = _userChatHistoryService.IsUserChatHistoryRecordExpired(userName);
-
-            if (!isUserHistoryExpired)
-            {
-                ChatHistory userChatHistory = _userChatHistoryService.GetUserChatHistory(userName).ChatHistory ?? new ChatHistory();
-                _userChatHistoryService.PopulateAgentThread(agentThread, userChatHistory);
-            }
-
-            agentThread.ChatHistory.AddUserMessage(userPrompt);
-
             try
             {
+                _agentRegistry.Agents.TryGetValue("ChatEditorAgent", out Agent chatEditorAgent);
+
+                _orchestrationRegistry.Orchestrations.TryGetValue("Main", out ChatOrchestration chatOrchestration);
+
+                ChatHistoryAgentThread agentThread = new();
+
+                bool isUserHistoryExpired = _userChatHistoryService.IsUserChatHistoryRecordExpired(userName);
+
+                if (!isUserHistoryExpired)
+                {
+                    ChatHistory userChatHistory = _userChatHistoryService.GetUserChatHistory(userName).ChatHistory ?? new ChatHistory();
+                    _userChatHistoryService.PopulateAgentThread(agentThread, userChatHistory);
+                }
+
+                agentThread.ChatHistory.AddUserMessage(userPrompt);
 
                 int numRetries = 1;
                 int.TryParse(_config["Kernel:PromptRetries"], out numRetries);
@@ -76,7 +73,6 @@ namespace AgenticGreenthumbApi.Services
                 {
                     Console.WriteLine("Response Retries: " + numRetries);
 
-                    //output = await chatMagenticOrchestration.GetResponse(userPrompt);
                     output = await chatOrchestration.GetResponse(userPrompt);
                     numRetries--;
                 }
@@ -84,7 +80,7 @@ namespace AgenticGreenthumbApi.Services
                 Console.WriteLine("# of Content Before Updating User Chat History: " + agentThread.ChatHistory.Count);
                 Console.WriteLine();
 
-                string trueOrchestrationOutput = chatOrchestration.OutputAssistentResponseContent();
+                string trueOrchestrationOutput = chatOrchestration.OutputAssistantResponseContent();
                 Console.WriteLine(trueOrchestrationOutput);
                 chatOrchestration.ClearChatHistory();
 
@@ -139,30 +135,12 @@ namespace AgenticGreenthumbApi.Services
 
         }
 
-        public OrchestrationConfig GetOrchestrationConfig(IConfiguration config)
-        {
-            IConfigurationSection templateSection = config.GetSection("Template");
-
-            var agentTemplateSubdirectories = templateSection.GetSection("Orchestration")
-                .GetSection("SubDirectories")
-                .Get<string[]>();
-
-            var orchestrationConfigFileName = templateSection.GetSection("Orchestration")
-                .GetSection("Filename")
-                .Get<string>();
-
-
-            var configJson = FileReaderHelper.GetFileFromDirectory(agentTemplateSubdirectories, orchestrationConfigFileName);
-
-            return JsonSerializer.Deserialize<OrchestrationConfig>(configJson);
-        }
-
         public async Task<ChatHistoryDto> GetPlantImageAnalysis(string userPrompt)
         {
 
-            Agent gardenerAgent = _agentRegistry.Agents.FirstOrDefault(a => a.Name == "GardenerAgent");
+            _agentRegistry.Agents.TryGetValue("GardenerAgent", out Agent gardenerAgent);
 
-            Agent plantHealthImageAnalystAgent = _agentRegistry.Agents.FirstOrDefault(a => a.Name == "PlantHealthImageAnalyzerAgent");
+            _agentRegistry.Agents.TryGetValue("PlantHealthImageAnalyzerAgent", out Agent plantHealthImageAnalystAgent);
 
             ChatHistory chatMessages = new();
 
