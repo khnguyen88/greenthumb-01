@@ -5,7 +5,7 @@
         //https://learn.microsoft.com/en-us/dotnet/api/system.convert.changetype?view=net-9.0
         public static T ChangeType<T>(object value)
         {
-            if(value == null)
+            if(value is null)
             {
                 return default;
             }

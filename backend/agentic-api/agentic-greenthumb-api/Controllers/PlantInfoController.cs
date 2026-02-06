@@ -36,7 +36,7 @@ namespace AgenticGreenthumbApi.Controllers
         {
             var plantInfoModel = await _plantInfoService.GetPlantInfoModel(id);
 
-            if (plantInfoModel == null)
+            if (plantInfoModel is null)
             {
                 return NotFound();
             }

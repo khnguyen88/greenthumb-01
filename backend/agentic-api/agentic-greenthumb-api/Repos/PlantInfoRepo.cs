@@ -27,7 +27,7 @@ namespace AgenticGreenthumbApi.Repos
         {
             var plantInfoModel = await _context.PlantInfos.FindAsync(id);
 
-            if (plantInfoModel == null)
+            if (plantInfoModel is null)
             {
                 return null;
             }
@@ -81,7 +81,7 @@ namespace AgenticGreenthumbApi.Repos
         public async Task<HttpStatusCode> DeletePlantInfoModel(long id)
         {
             var plantInfoModel = await _context.PlantInfos.FindAsync(id);
-            if (plantInfoModel == null)
+            if (plantInfoModel is null)
             {
                 return HttpStatusCode.NotFound;
             }

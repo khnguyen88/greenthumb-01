@@ -22,7 +22,7 @@ namespace AgenticGreenthumbApi.Services
         {
             InMemUserChatHistory.TryGetValue(username, out UserChatHistory? userChatHistoryRecord);
 
-            if (userChatHistoryRecord == null)
+            if (userChatHistoryRecord is null)
             {
                 return true;
             }
@@ -42,7 +42,7 @@ namespace AgenticGreenthumbApi.Services
         {
             InMemUserChatHistory.TryGetValue(username, out UserChatHistory? userChatHistoryRecord);
 
-            if (userChatHistoryRecord == null)
+            if (userChatHistoryRecord is null)
             {
                 return new UserChatHistory()
                 {
