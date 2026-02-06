@@ -1,23 +1,21 @@
 ﻿using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Helper;
-using Amazon.Runtime.Internal.Endpoints.StandardLibrary;
-using Azure;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
-using Microsoft.SemanticKernel.Agents.Magentic;
 using Microsoft.SemanticKernel.Agents.Orchestration;
+using Microsoft.SemanticKernel.Agents.Orchestration.Sequential;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 #pragma warning disable
 namespace AgenticGreenthumbApi.Semantic.Orchestrations
 {
-    public class ChatMagenticOrchestration: ChatOrchestration
+    public class ChatSequentialOrchestration: ChatOrchestration
     {
-        public MagenticOrchestration MagenticOrchestration { get; set; }
+        public SequentialOrchestration SequentialOrchestration { get; set; }
 
-        public ChatMagenticOrchestration(OrchestrationConfigTemplate orchestrationConfig, Kernel kernel, params Agent[] agents)
+        public ChatSequentialOrchestration(OrchestrationConfigTemplate orchestrationConfig, params Agent[] agents)
         {
             //Orchestration Config
             OrchestrationConfig = orchestrationConfig;
@@ -28,17 +26,8 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             //Agents
             Agent[] orchestrationAgents = agents.Where(a => OrchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
 
-            //Manager
-            StandardMagenticManager manager = new StandardMagenticManager(
-                kernel.GetRequiredService<IChatCompletionService>(),
-                new OpenAIPromptExecutionSettings())
-            {
-                MaximumInvocationCount = 2, //Very important settings
-            };
-
-            //Orchestration
-            // =====================================================================================
-            MagenticOrchestration = new MagenticOrchestration(manager, orchestrationAgents)
+            //Sequential Orchestration
+            SequentialOrchestration = new SequentialOrchestration(orchestrationAgents)
             {
                 ResponseCallback = ResponseCallback,
             };
@@ -50,11 +39,10 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             await runtime.StartAsync();
 
-            OrchestrationResult<string> result = await MagenticOrchestration.InvokeAsync(userPrompt, runtime);
+            OrchestrationResult<string> result = await SequentialOrchestration.InvokeAsync(userPrompt, runtime);
             string output = await result.GetValueAsync(TimeSpan.FromSeconds(OrchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
 
             AppendChatHistory(output);
-
 
             Console.WriteLine("//----------------//");
             Console.WriteLine(output);
@@ -65,4 +53,4 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
         }
     }
 }
-#pragma warning enable
+#pragma warning restore
