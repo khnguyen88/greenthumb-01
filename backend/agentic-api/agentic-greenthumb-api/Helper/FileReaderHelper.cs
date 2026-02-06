@@ -58,14 +58,14 @@ namespace AgenticGreenthumbApi.Helper
             return "";
         }
 
-        public static List<AgentTemplate> GetAgentTemplates(params string[] subDirectories)
+        public static List<T> GetTemplateFiles<T>(params string[] subDirectories)
         {
             string[] directories = { Environment.CurrentDirectory };
             directories = directories.Concat(subDirectories).ToArray();
 
             string path = Path.Combine(directories);
 
-            List<AgentTemplate> agentTemplates = new List<AgentTemplate>();
+            List<T> templates = new List<T>();
             try
             {
                 string[] files = Directory.GetFiles(path, "*.json");
@@ -78,12 +78,12 @@ namespace AgenticGreenthumbApi.Helper
                         {
                             string fileContent = File.ReadAllText(file);
 
-                            AgentTemplate agentTemplate = JsonSerializer.Deserialize<AgentTemplate>(fileContent);
-                            if (agentTemplate != null)
+                            T agentTemplate = JsonSerializer.Deserialize<T>(fileContent);
+                            if (agentTemplate is not null)
                             {
-                                agentTemplates.Add(agentTemplate);
+                                templates.Add(agentTemplate);
 
-                                Console.WriteLine($"Successfully read the agent template file, {file}, for the {agentTemplate.Name}");
+                                Console.WriteLine($"Successfully read the template file, {file}.");
                             }
                         }
                         catch (JsonException ex)
@@ -98,8 +98,8 @@ namespace AgenticGreenthumbApi.Helper
                 Console.WriteLine($"An unexpected error occurred: {ex.Message}");
             }
 
-            Console.WriteLine($"There are no agent template files found in the following path: '{path}' .");
-            return agentTemplates;
+            Console.WriteLine($"There are no template files found in the following path: '{path}' .");
+            return templates;
         }
     }
 }
