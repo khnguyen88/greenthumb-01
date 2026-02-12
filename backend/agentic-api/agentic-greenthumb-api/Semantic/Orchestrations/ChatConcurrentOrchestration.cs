@@ -15,6 +15,8 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
     {
         public ConcurrentOrchestration ConcurrentOrchestration { get; set; }
 
+        public override string Type { get; set; } = OrchestrationType.Concurrent.ToString();
+
         public ChatConcurrentOrchestration(OrchestrationConfigTemplate orchestrationConfig, params Agent[] agents)
         {
             //Orchestration Config

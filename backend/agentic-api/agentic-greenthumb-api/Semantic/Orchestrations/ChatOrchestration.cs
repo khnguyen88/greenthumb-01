@@ -7,11 +7,13 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 {
     public abstract class ChatOrchestration
     {
-        public OrchestrationConfigTemplate OrchestrationConfig { get; set; } = new();
+        public string Name { get; set; } = string.Empty;
+
+        public abstract string Type { get; set; }
 
         public ChatHistory ChatHistory { get; protected set; } = new();
 
-
+        protected OrchestrationConfigTemplate OrchestrationConfig;
 
         public void ClearChatHistory()
         {

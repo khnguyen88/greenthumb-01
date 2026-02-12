@@ -15,6 +15,8 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
     {
         public SequentialOrchestration SequentialOrchestration { get; set; }
 
+        public override string Type { get; set; } = OrchestrationType.Sequential.ToString();
+
         public ChatSequentialOrchestration(OrchestrationConfigTemplate orchestrationConfig, params Agent[] agents)
         {
             //Orchestration Config

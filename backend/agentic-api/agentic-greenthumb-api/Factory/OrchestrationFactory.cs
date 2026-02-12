@@ -26,11 +26,11 @@ namespace AgenticGreenthumbApi.Factory
         {
             IConfigurationSection templateSection = _config.GetSection("Template");
 
-            var agentTemplateSubdirectories = templateSection.GetSection("Orchestration")
+            var orchestrationTemplateSubdirectories = templateSection.GetSection("Orchestration")
                 .GetSection("SubDirectories")
                 .Get<string[]>();
 
-            List<OrchestrationConfigTemplate> orchestrationTemplates = FileReaderHelper.GetTemplateFiles<OrchestrationConfigTemplate>(agentTemplateSubdirectories);
+            List<OrchestrationConfigTemplate> orchestrationTemplates = FileReaderHelper.GetTemplateFiles<OrchestrationConfigTemplate>(orchestrationTemplateSubdirectories);
 
             foreach (var template in orchestrationTemplates)
             {

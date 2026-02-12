@@ -17,6 +17,8 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
     {
         public MagenticOrchestration MagenticOrchestration { get; set; }
 
+        public override string Type { get; set; } = OrchestrationType.Magnetic.ToString();
+
         public ChatMagenticOrchestration(OrchestrationConfigTemplate orchestrationConfig, Kernel kernel, params Agent[] agents)
         {
             //Orchestration Config
