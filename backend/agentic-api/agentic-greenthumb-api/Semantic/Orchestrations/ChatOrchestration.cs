@@ -15,25 +15,6 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
         protected OrchestrationConfigTemplate OrchestrationConfig;
 
-        public void ClearChatHistory()
-        {
-            ChatHistory.Clear();
-        }
-
-        public void SetChatHistory(ChatHistory userChatHistory)
-        {
-            ChatHistory = userChatHistory ?? new ChatHistory();
-        }
-
-        public void AppendChatHistory(string output)
-        {
-            if (!ChatHistory.Select(x => x.Content).ToList().Contains(output))
-            {
-                ChatHistory.AddAssistantMessage(output);
-            }
-
-        }
-
         public string OutputAssistantResponseContent()
         {
             var sb = new StringBuilder();

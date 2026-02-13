@@ -24,6 +24,9 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
         public ChatHandoffOrchestration(OrchestrationConfigTemplate orchestrationConfig, params Agent[] agents)
         {
+            //Name
+            Name = orchestrationConfig.Name;
+
             //Orchestration Config
             OrchestrationConfig = orchestrationConfig;
 
@@ -65,7 +68,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt, runtime);
             string output = await result.GetValueAsync(TimeSpan.FromSeconds(OrchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
 
-            AppendChatHistory(output);
+            ChatHistoryHelper.AppendChatResponseMessage(ChatHistory, output);
 
             Console.WriteLine("//----------------//");
             Console.WriteLine(output);

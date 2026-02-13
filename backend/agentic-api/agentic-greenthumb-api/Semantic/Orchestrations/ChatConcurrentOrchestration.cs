@@ -19,6 +19,9 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
         public ChatConcurrentOrchestration(OrchestrationConfigTemplate orchestrationConfig, params Agent[] agents)
         {
+            //Name
+            Name = orchestrationConfig.Name;
+
             //Orchestration Config
             OrchestrationConfig = orchestrationConfig;
 
@@ -51,7 +54,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
                 output.AppendLine(item);
                 output.AppendLine("\n\n");
             }
-            AppendChatHistory(output.ToString());
+            ChatHistoryHelper.AppendChatResponseMessage(ChatHistory, output.ToString());
 
             Console.WriteLine("//----------------//");
             Console.WriteLine(output.ToString());

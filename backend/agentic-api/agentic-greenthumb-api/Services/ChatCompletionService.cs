@@ -82,7 +82,7 @@ namespace AgenticGreenthumbApi.Services
 
                 string trueOrchestrationOutput = chatOrchestration.OutputAssistantResponseContent();
                 Console.WriteLine(trueOrchestrationOutput);
-                chatOrchestration.ClearChatHistory();
+                ChatHistoryHelper.ClearChatHistory(chatOrchestration.ChatHistory);
 
                 ChatMessageContent santitizedOutput = await chatEditorAgent.InvokeAsync(trueOrchestrationOutput).FirstAsync();
 
