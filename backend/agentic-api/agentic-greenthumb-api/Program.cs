@@ -48,9 +48,11 @@ builder.Services.AddSwaggerGen();
 //Should Persists for the entirety for the lifespan of an object
 builder.Services.AddSingleton<AgentRegistry>();
 builder.Services.AddSingleton<OrchestrationRegistry>();
+builder.Services.AddSingleton<JointEnsembleRegistry>();
 builder.Services.AddSingleton<KernelFactory>();
 builder.Services.AddSingleton<AgentFactory>();
 builder.Services.AddSingleton<OrchestrationFactory>();
+builder.Services.AddSingleton<JointEnsembleFactory>();
 
 
 //Should Only Persist for the lifespan of a single request

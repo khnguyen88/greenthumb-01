@@ -5,15 +5,15 @@ using System.Text;
 
 namespace AgenticGreenthumbApi.Semantic.Orchestrations
 {
-    public abstract class ChatOrchestration
+    public abstract class ChatOrchestration: IChatOrchestration
     {
         public string Name { get; set; } = string.Empty;
 
         public abstract string Type { get; set; }
 
-        public ChatHistory ChatHistory { get; protected set; } = new();
+        public ChatHistory ChatHistory { get; set; }
 
-        protected OrchestrationConfigTemplate OrchestrationConfig;
+        protected OrchestrationConfigTemplate _orchestrationConfig;
 
         public string OutputAssistantResponseContent()
         {

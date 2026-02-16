@@ -1,0 +1,7 @@
+{
+  "Name": "MainJointEnsemble",
+  "ChatOrchestrationNames": [
+    "MainOrchestration",
+    "EditorOrchestration"
+  ]
+}

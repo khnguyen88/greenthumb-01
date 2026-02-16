@@ -1,0 +1,13 @@
+{
+  "Name": "EditorOrchestration",
+  "Type": "Single",
+  "OrchestrationAgents": [
+    {
+      "Name": "ChatEditorAgent",
+      "IsLead": true,
+      "Speciality": "Consolidate duplicate information and remove unnecessary markdown or headers"
+    }
+  ],
+  "MaximumInvocationCount": 1,
+  "InvocationTimeLimitSecs": 180
+}

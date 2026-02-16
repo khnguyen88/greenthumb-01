@@ -25,13 +25,13 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             Name = orchestrationConfig.Name;
 
             //Orchestration Config
-            OrchestrationConfig = orchestrationConfig;
+            _orchestrationConfig = orchestrationConfig;
 
             //Chat History
             ChatHistory = [];
 
             //Agents
-            Agent[] orchestrationAgents = agents.Where(a => OrchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
+            Agent[] orchestrationAgents = agents.Where(a => _orchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
 
             //Manager
             StandardMagenticManager manager = new StandardMagenticManager(
@@ -56,7 +56,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             await runtime.StartAsync();
 
             OrchestrationResult<string> result = await MagenticOrchestration.InvokeAsync(userPrompt, runtime);
-            string output = await result.GetValueAsync(TimeSpan.FromSeconds(OrchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
+            string output = await result.GetValueAsync(TimeSpan.FromSeconds(_orchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
 
             ChatHistoryHelper.AppendChatResponseMessage(ChatHistory, output);
 

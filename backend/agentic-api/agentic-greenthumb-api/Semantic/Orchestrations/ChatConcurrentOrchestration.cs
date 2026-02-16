@@ -23,13 +23,13 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             Name = orchestrationConfig.Name;
 
             //Orchestration Config
-            OrchestrationConfig = orchestrationConfig;
+            _orchestrationConfig = orchestrationConfig;
 
             //Chat History
             ChatHistory = [];
 
             //Agents
-            Agent[] orchestrationAgents = agents.Where(a => OrchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
+            Agent[] orchestrationAgents = agents.Where(a => _orchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
 
             //Concurrent Orchestration
             ConcurrentOrchestration = new ConcurrentOrchestration(orchestrationAgents)
@@ -45,7 +45,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             await runtime.StartAsync();
 
             OrchestrationResult<string[]> results = await ConcurrentOrchestration.InvokeAsync(userPrompt, runtime);
-            string[] outputs = await results.GetValueAsync(TimeSpan.FromSeconds(OrchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
+            string[] outputs = await results.GetValueAsync(TimeSpan.FromSeconds(_orchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
 
             StringBuilder output = new StringBuilder();
 

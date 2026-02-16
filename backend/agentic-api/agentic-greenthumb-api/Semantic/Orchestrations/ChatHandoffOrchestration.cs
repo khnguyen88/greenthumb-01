@@ -28,15 +28,15 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             Name = orchestrationConfig.Name;
 
             //Orchestration Config
-            OrchestrationConfig = orchestrationConfig;
+            _orchestrationConfig = orchestrationConfig;
 
             //Chat History
             ChatHistory = [];
 
             //Agents
-            Agent[] orchestrationAgents = agents.Where(a => OrchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
-            Agent orchestrationLeadAgent = orchestrationAgents.FirstOrDefault(a => OrchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == true && a.Name == oa.Name));
-            Agent[] orchestrationWorkerAgents = orchestrationAgents.Where(a => OrchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == false && a.Name != orchestrationLeadAgent.Name)).ToArray();
+            Agent[] orchestrationAgents = agents.Where(a => _orchestrationConfig.OrchestrationAgents.Any(oa => oa.Name == a.Name)).ToArray();
+            Agent orchestrationLeadAgent = orchestrationAgents.FirstOrDefault(a => _orchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == true && a.Name == oa.Name));
+            Agent[] orchestrationWorkerAgents = orchestrationAgents.Where(a => _orchestrationConfig.OrchestrationAgents.Any(oa => oa.IsLead == false && a.Name != orchestrationLeadAgent.Name)).ToArray();
 
 
             //Handoff Setup
@@ -47,7 +47,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             foreach (var workerAgent in orchestrationWorkerAgents)
             {
-                var agentConfigInfo = OrchestrationConfig.OrchestrationAgents.FirstOrDefault(oa => oa.Name == workerAgent.Name);
+                var agentConfigInfo = _orchestrationConfig.OrchestrationAgents.FirstOrDefault(oa => oa.Name == workerAgent.Name);
                 var agentConfigDescription = (bool)(agentConfigInfo.Speciality.IsNullOrEmpty()) ? workerAgent.Description : agentConfigInfo?.Speciality.ToString();
                 handoffs.Add(workerAgent, orchestrationLeadAgent, $"Transfer to {orchestrationLeadAgent.Name.ToLower()} if the issue is not {workerAgent.Name.ToLower()} related. Specifically if the issue is not related to {agentConfigDescription}.");
             }
@@ -66,7 +66,7 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
             await runtime.StartAsync();
 
             OrchestrationResult<string> result = await HandoffOrchestration.InvokeAsync(userPrompt, runtime);
-            string output = await result.GetValueAsync(TimeSpan.FromSeconds(OrchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
+            string output = await result.GetValueAsync(TimeSpan.FromSeconds(_orchestrationConfig.InvocationTimeLimitSecs)); //Very important settings
 
             ChatHistoryHelper.AppendChatResponseMessage(ChatHistory, output);
 

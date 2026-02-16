@@ -1,12 +1,14 @@
 ﻿using AgenticGreenthumbApi.Domain;
-using Microsoft.SemanticKernel;
+using AgenticGreenthumbApi.Semantic.Orchestrations;
 using Microsoft.SemanticKernel.ChatCompletion;
 
-namespace AgenticGreenthumbApi.Semantic.Orchestrations
+namespace AgenticGreenthumbApi.Semantic.JointEnsembles
 {
-    public interface IChatOrchestration
+    public interface IChatJointEnsemble
     {
         ChatHistory ChatHistory { get; set; }
+
+        List<ChatOrchestration> JointEnsemble { get; set; }
 
         string OutputAssistantResponseContent();
 

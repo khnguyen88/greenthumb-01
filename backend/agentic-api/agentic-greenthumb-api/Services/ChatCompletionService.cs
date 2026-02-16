@@ -3,6 +3,7 @@ using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Mappers;
+using AgenticGreenthumbApi.Semantic.JointEnsembles;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
 using Microsoft.IdentityModel.Tokens;
@@ -32,15 +33,15 @@ namespace AgenticGreenthumbApi.Services
         private readonly AdafruitService _adafruitService;
         private const string userName = "nguyekhi"; //Eventually pass this in
         private readonly AgentRegistry _agentRegistry;
-        private readonly OrchestrationRegistry _orchestrationRegistry;
+        private readonly JointEnsembleRegistry _jointEnsembleRegistry;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AgentFactory agentFactory, OrchestrationFactory orchestrationFactory)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AgentFactory agentFactory, JointEnsembleFactory jointEnsembleFactory)
         {
             _logger = logger;
             _config = config;
             _userChatHistoryService = userChatHistoryService;
             _agentRegistry = agentFactory.GetAgentRegistry();
-            _orchestrationRegistry = orchestrationFactory.GetOrchestrationRegistry();
+            _jointEnsembleRegistry = jointEnsembleFactory.GetOrchestrationRegistry();
 
 
         }
@@ -49,9 +50,7 @@ namespace AgenticGreenthumbApi.Services
         {
             try
             {
-                _agentRegistry.Agents.TryGetValue("ChatEditorAgent", out Agent chatEditorAgent);
-
-                _orchestrationRegistry.Orchestrations.TryGetValue("Main", out ChatOrchestration chatOrchestration);
+                _jointEnsembleRegistry.JointEnsembles.TryGetValue("MainJointEnsemble", out ChatJointEnsemble jointEnsemble);
 
                 ChatHistoryAgentThread agentThread = new();
 
@@ -73,25 +72,22 @@ namespace AgenticGreenthumbApi.Services
                 {
                     Console.WriteLine("Response Retries: " + numRetries);
 
-                    output = await chatOrchestration.GetResponse(userPrompt);
+                    output = await jointEnsemble.GetResponse(userPrompt);
                     numRetries--;
                 }
 
                 Console.WriteLine("# of Content Before Updating User Chat History: " + agentThread.ChatHistory.Count);
                 Console.WriteLine();
 
-                string trueOrchestrationOutput = chatOrchestration.OutputAssistantResponseContent();
+                string trueOrchestrationOutput = jointEnsemble.OutputAssistantResponseContent();
                 Console.WriteLine(trueOrchestrationOutput);
-                ChatHistoryHelper.ClearChatHistory(chatOrchestration.ChatHistory);
-
-                ChatMessageContent santitizedOutput = await chatEditorAgent.InvokeAsync(trueOrchestrationOutput).FirstAsync();
-
-                agentThread.ChatHistory.Add(santitizedOutput);
+                ChatHistoryHelper.ClearChatHistory(jointEnsemble.ChatHistory);
+                ChatHistoryHelper.AppendChatMessage(agentThread.ChatHistory,AuthorRole.Assistant, output);
                 _userChatHistoryService.AddUpdateUserChatHistory(userName, agentThread.ChatHistory);
                 Console.WriteLine("# of Content After Updating User Chat History: " + agentThread.ChatHistory.Count);
                 Console.WriteLine();
 
-                return santitizedOutput.Content;
+                return output;
             }
             catch(Exception ex)
             {
