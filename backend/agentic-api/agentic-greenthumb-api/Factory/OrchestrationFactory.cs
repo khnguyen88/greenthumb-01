@@ -2,6 +2,8 @@
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using Elastic.Clients.Elasticsearch.QueryDsl;
+using Microsoft.ML.OnnxRuntimeGenAI;
+using Microsoft.SemanticKernel.Agents;
 
 namespace AgenticGreenthumbApi.Factory
 {
@@ -18,11 +20,20 @@ namespace AgenticGreenthumbApi.Factory
             _kernelFactory = kernelFactory;
             _agentRegistry = agentFactory.GetAgentRegistry();
             _orchestrationRegistry = orchestrationRegistry;
-
-            Initialize(_agentRegistry, _orchestrationRegistry);
         }
 
-        private void Initialize(AgentRegistry agentRegistry, OrchestrationRegistry orchestrationRegistry)
+        public static async Task<OrchestrationFactory> CreateAsync(IConfiguration config, KernelFactory kernelFactory, AgentFactory agentFactory, OrchestrationRegistry orchestrationRegistry)
+        {
+            await agentFactory.InitializeAsync();
+
+            var orchestrationFactory = new OrchestrationFactory(config, kernelFactory, agentFactory, orchestrationRegistry);
+
+            await orchestrationFactory.InitializeAsync();
+
+            return orchestrationFactory;
+        }
+
+        public async Task InitializeAsync()
         {
             IConfigurationSection templateSection = _config.GetSection("Template");
 
@@ -30,7 +41,7 @@ namespace AgenticGreenthumbApi.Factory
                 .GetSection("SubDirectories")
                 .Get<string[]>();
 
-            List<OrchestrationConfigTemplate> orchestrationTemplates = FileReaderHelper.GetTemplateFiles<OrchestrationConfigTemplate>(orchestrationTemplateSubdirectories);
+            List<OrchestrationConfigTemplate> orchestrationTemplates = await FileHelper.GetTemplateFilesAsync<OrchestrationConfigTemplate>(orchestrationTemplateSubdirectories);
 
             foreach (var template in orchestrationTemplates)
             {

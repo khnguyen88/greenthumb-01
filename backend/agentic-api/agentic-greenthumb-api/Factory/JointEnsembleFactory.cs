@@ -15,18 +15,24 @@ namespace AgenticGreenthumbApi.Factory
             _config = config;
             _orchestrationFactory = orchestrationFactory;
             _jointEnsembleRegistry = jointEnsembleRegistry;
-
-            Initialize();
         }
 
-        private void Initialize() {
+        public static async Task<JointEnsembleFactory> CreateAsync(IConfiguration config, OrchestrationFactory orchestrationFactory, JointEnsembleRegistry jointEnsembleRegistry)
+        {
+            var jointEnsembleFactory = new JointEnsembleFactory(config, orchestrationFactory, jointEnsembleRegistry);
+
+            await jointEnsembleFactory.InitializeAsync();
+
+            return jointEnsembleFactory;
+        }
+        private async Task InitializeAsync() {
             IConfigurationSection templateSection = _config.GetSection("Template");
 
             var jointEnsembleTemplateSubdirectories = templateSection.GetSection("JointEnsemble")
                 .GetSection("SubDirectories")
                 .Get<string[]>();
 
-            List<JointEnsembleConfigTemplate> jointEnsembleConfigTemplates = FileReaderHelper.GetTemplateFiles<JointEnsembleConfigTemplate>(jointEnsembleTemplateSubdirectories);
+            List<JointEnsembleConfigTemplate> jointEnsembleConfigTemplates = await FileHelper.GetTemplateFilesAsync<JointEnsembleConfigTemplate>(jointEnsembleTemplateSubdirectories);
 
             foreach (var template in jointEnsembleConfigTemplates)
             {
@@ -44,7 +50,7 @@ namespace AgenticGreenthumbApi.Factory
             }
         }
 
-        public JointEnsembleRegistry GetOrchestrationRegistry()
+        public JointEnsembleRegistry GetJointEnsembleRegistry()
         {
             return _jointEnsembleRegistry;
         }

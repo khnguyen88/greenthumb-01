@@ -3,6 +3,7 @@ using AgenticGreenthumbApi.Dtos;
 using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Mappers;
+using AgenticGreenthumbApi.Providers;
 using AgenticGreenthumbApi.Semantic.JointEnsembles;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
@@ -31,25 +32,42 @@ namespace AgenticGreenthumbApi.Services
         private readonly IConfiguration _config;
         private readonly UserChatHistoryService _userChatHistoryService;
         private readonly AdafruitService _adafruitService;
-        private const string userName = "nguyekhi"; //Eventually pass this in
-        private readonly AgentRegistry _agentRegistry;
-        private readonly JointEnsembleRegistry _jointEnsembleRegistry;
+        private const string userName = "taco"; //Eventually pass this in
+        private AgentRegistry _agentRegistry;
+        private OrchestrationRegistry _orchestrationRegistry;
+        private JointEnsembleRegistry _jointEnsembleRegistry;
+        private readonly IFactoryProvider<AgentFactory> _agentFactoryProvider;
+        private readonly IFactoryProvider<OrchestrationFactory> _orchestrationFactoryProvider;
+        private readonly IFactoryProvider<JointEnsembleFactory> _jointEnsembleFactoryProvider;
 
-        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, AgentFactory agentFactory, JointEnsembleFactory jointEnsembleFactory)
+        public ChatCompletionService(ILogger<ChatCompletionService> logger, IConfiguration config, UserChatHistoryService userChatHistoryService, IFactoryProvider<AgentFactory> agentFactoryProvider, IFactoryProvider<OrchestrationFactory> orcestrationFactoryProvider, IFactoryProvider<JointEnsembleFactory> jointEnsembleFactoryProvider)
         {
             _logger = logger;
             _config = config;
             _userChatHistoryService = userChatHistoryService;
+            _agentFactoryProvider = agentFactoryProvider;
+            _orchestrationFactoryProvider = orcestrationFactoryProvider;
+            _jointEnsembleFactoryProvider = jointEnsembleFactoryProvider;
+        }
+
+        public async Task BuildRegistry()
+        {
+            var agentFactory = await _agentFactoryProvider.GetFactoryAsync();
             _agentRegistry = agentFactory.GetAgentRegistry();
-            _jointEnsembleRegistry = jointEnsembleFactory.GetOrchestrationRegistry();
 
+            var orchestrationFactory = await _orchestrationFactoryProvider.GetFactoryAsync();
+            _orchestrationRegistry = orchestrationFactory.GetOrchestrationRegistry();
 
+            var jointEnsembleFactory = await _jointEnsembleFactoryProvider.GetFactoryAsync();
+            _jointEnsembleRegistry = jointEnsembleFactory.GetJointEnsembleRegistry();
         }
 
         public async Task<string> GetChatResponse(string userPrompt)
         {
             try
             {
+                await BuildRegistry();
+
                 _jointEnsembleRegistry.JointEnsembles.TryGetValue("MainJointEnsemble", out ChatJointEnsemble jointEnsemble);
 
                 ChatHistoryAgentThread agentThread = new();
@@ -133,6 +151,7 @@ namespace AgenticGreenthumbApi.Services
 
         public async Task<ChatHistoryDto> GetPlantImageAnalysis(string userPrompt)
         {
+            await BuildRegistry();
 
             _agentRegistry.Agents.TryGetValue("GardenerAgent", out Agent gardenerAgent);
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.KernelMemory;
 using Microsoft.SemanticKernel;
+using System.Runtime.CompilerServices;
 
 namespace AgenticGreenthumbApi.Factory
 {
@@ -16,8 +17,13 @@ namespace AgenticGreenthumbApi.Factory
         {
             _config = config;
             _sp = sp;
+        }
 
-            Initialize();
+        public static Task<KernelFactory> CreateAsync(IConfiguration config, IServiceProvider sp)
+        {
+            var kernelFactory = new KernelFactory(config, sp);
+            kernelFactory.Initialize();
+            return Task.FromResult(kernelFactory);
         }
 
         private void Initialize()
@@ -120,7 +126,11 @@ namespace AgenticGreenthumbApi.Factory
                 .Where(t =>
                     t.IsClass &&
                     !t.IsAbstract &&
-                    t.Namespace == pluginNamespace);
+                    t.Namespace == pluginNamespace &&
+                    !t.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false) &&
+                    !t.Name.Contains("<") &&
+                    !t.Name.Contains(">"));
+
             foreach (var type in pluginTypes)
             {
                 var instance = scopedProvider.GetRequiredService(type);
