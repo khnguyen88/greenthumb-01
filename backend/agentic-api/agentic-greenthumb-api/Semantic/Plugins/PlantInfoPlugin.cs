@@ -19,7 +19,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         [return: Description("Returns a list of PlantInfoModel objects that fit the name of the plant")] //Optional
         public List<PlantInfoModel> SearchPlantInfosFromDatabase(string likeName)
         {
-            var results =  _plantInfoService.GetPlantInfoModelsByLike(likeName).Result.ToList();
+            var results = _plantInfoService.GetPlantInfoModelsByLike(likeName).Result.ToList();
 
             return results;
         }
