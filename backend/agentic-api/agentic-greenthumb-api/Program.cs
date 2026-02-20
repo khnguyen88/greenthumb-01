@@ -3,6 +3,7 @@ using AgenticGreenthumbApi.Domain;
 using AgenticGreenthumbApi.Factory;
 using AgenticGreenthumbApi.Helper;
 using AgenticGreenthumbApi.Models;
+using AgenticGreenthumbApi.Providers;
 using AgenticGreenthumbApi.Repos;
 using AgenticGreenthumbApi.Semantic.Orchestrations;
 using AgenticGreenthumbApi.Semantic.Plugins;
@@ -49,13 +50,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<AgentRegistry>();
 builder.Services.AddSingleton<OrchestrationRegistry>();
 builder.Services.AddSingleton<JointEnsembleRegistry>();
-builder.Services.AddSingleton<KernelFactory>();
-builder.Services.AddSingleton<AgentFactory>();
-builder.Services.AddSingleton<OrchestrationFactory>();
-builder.Services.AddSingleton<JointEnsembleFactory>();
+builder.Services.AddSingleton<IFactoryProvider<KernelFactory>, KernelFactoryProvider>();
+builder.Services.AddSingleton<IFactoryProvider<AgentFactory>, AgentFactoryProvider>();
+builder.Services.AddSingleton<IFactoryProvider<OrchestrationFactory>, OrchestrationFactoryProvider>();
+builder.Services.AddSingleton<IFactoryProvider<JointEnsembleFactory>, JointEnsembleFactoryProvider>();
 
 
 //Should Only Persist for the lifespan of a single request
+builder.Services.AddScoped<LocalStorageProvider>();
 builder.Services.AddScoped<AgenticMemoryService>();
 builder.Services.AddScoped<KernelFactoryHelper>();
 builder.Services.AddScoped<AdafruitAPIClient>();
@@ -68,6 +70,7 @@ builder.Services.AddScoped<PlantInfoRepo>();
 builder.Services.AddScoped<PlantInfoPlugin>();
 builder.Services.AddScoped<ProjectInfoPlugin>();
 builder.Services.AddScoped<AdafruitPlugin>();
+builder.Services.AddScoped<AgentCreatorPlugin>();
 
 
 //Initialize Static Class
