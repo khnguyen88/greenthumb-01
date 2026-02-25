@@ -1,5 +1,6 @@
 {
   "Name": "MainOrchestration",
+  "Filename": "main-orchestration.json",
   "Type": "Handoff",
   "OrchestrationAgents": [
     {
@@ -21,7 +22,12 @@
       "Name": "PlantInfoAgent",
       "IsLead": false,
       "Speciality": "Summmarize and a short description of the needs and other facts about plants, including vegetables and trees. Formats and compiles all of the properties specified in the PlantInfo domain file."
-    }
+    },
+		{
+			"Name": "AgentCreatorAgent",
+			"IsLead": false,
+			"Speciality": "Creates and saves agent based on user request."
+		}
   ],
   "MaximumInvocationCount": 1,
   "InvocationTimeLimitSecs": 180

@@ -6,6 +6,7 @@ namespace AgenticGreenthumbApi.Domain
     {
 
         public string Name { get; set; } = string.Empty;
+        public string Filename { get; set; } = string.Empty;
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public OrchestrationType Type { get; set; }

@@ -1,13 +1,13 @@
 {
   "Name": "ChatCompletionAgent",
   "Instruction": "Help with chat completion for an IoT Gardening System",
-  "ContextDetails": {
-    "IsContextRequired": true,
-    "IsContextFromFile": true,
-    "ContextFileDirectory": "Semantic/Agents",
-    "ContextFileName": "chat-context.json",
-    "ContextText": ""
-  },
+  "Context": [
+    {
+      "FileDirectory": "Semantic/Contexts",
+      "FileName": "adafruit-feed-info.json",
+      "Detail": "Here are some additional context regarding the adafruit feed details:"
+    }
+  ],
   "Description": "A chat completion moderator agent for an IoT Automated Gardening System",
   "KernelTools": {
     "UseSpecificFunctionsOnly": false,

@@ -6,6 +6,7 @@ namespace AgenticGreenthumbApi.Domain
     public class JointEnsembleConfigTemplate
     {
         public string Name { get; set; } = string.Empty;
+        public string Filename { get; set; } = string.Empty;
 
         public List<string> ChatOrchestrationNames { get; set; } = new();
     }

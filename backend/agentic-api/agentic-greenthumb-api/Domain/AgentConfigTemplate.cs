@@ -3,6 +3,7 @@
     public class AgentConfigTemplate
     {
         public string Name { get; set; } = string.Empty;
+        public string Filename { get; set; } = string.Empty;
         public string Instruction { get; set; } = string.Empty;
 
         public List<ContextItem> Context { get; set; } = new();
@@ -35,8 +36,8 @@
 
     public class KernelArgumentDetails
     {
-        public string ServiceId { get; set; } = string.Empty;
-        public string ModelId { get; set; } = string.Empty;
+        public string? ServiceId { get; set; } = string.Empty;
+        public string? ModelId { get; set; } = string.Empty;
         public string FunctionChoiceBehavior { get; set; } = "Auto";
         public double? Temperature { get; set; } = null;
         public double? TopP { get; set; } = null;

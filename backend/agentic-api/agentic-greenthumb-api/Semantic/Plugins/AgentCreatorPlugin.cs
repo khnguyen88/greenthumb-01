@@ -27,7 +27,7 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
         }
 
         [KernelFunction(AgentCreatorFunctions.SaveAgentAsync)]
-        [Description("Saves the generated agent to a designated storage location")]
+        [Description("Saves the generated agent to a designated storage location. Ensure that the 'Name' property is PascalCase. Ensure that the 'Filename' field is kebab-case and has the '.json' file extension at the end.")]
         public async Task<string> SaveAgentAsync(AgentConfigTemplate agentConfigTemplate)
         {
             IConfigurationSection templateSection = _config.GetSection("Template");
@@ -40,10 +40,10 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
             agentConfigTemplate.KernelArguments = new KernelArgumentDetails();
 
             var jsonString = JsonSerializer.Serialize(agentConfigTemplate);
-            Console.WriteLine(agentConfigTemplate);
+            Console.WriteLine(jsonString);
 
             var directoryPath = FileHelper.BuildPathFromProjectDirectory(agentTemplateSubdirectories);
-            var saveFilePath = FileHelper.BuildFilePath(directoryPath, agentConfigTemplate.Name + ".json");
+            var saveFilePath = FileHelper.BuildFilePath(directoryPath, agentConfigTemplate.Filename);
 
             await _storageProvider.SaveFileAsync<AgentConfigTemplate>(saveFilePath, agentConfigTemplate);
 
