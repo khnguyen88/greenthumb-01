@@ -47,43 +47,65 @@ namespace AgenticGreenthumbApi.Factory
             {
                 try
                 {
-                    ChatOrchestration chatOrchestration;
+                    ChatOrchestration chatOrchestration = BuildChatOrchestrationFromTemplate(template);
 
-                    switch (template.Type)
-                    {
-                        case OrchestrationType.Sequential:
-                            {
-                                chatOrchestration = new ChatSequentialOrchestration(template, _agentRegistry.Agents.Values.ToArray());
-                                break;
-                            }
-                        case OrchestrationType.Concurrent:
-                            {
-                                chatOrchestration = new ChatConcurrentOrchestration(template, _agentRegistry.Agents.Values.ToArray());
-                                break;
-                            }
-                        case OrchestrationType.Handoff:
-                            {
-                                chatOrchestration = new ChatHandoffOrchestration(template, _agentRegistry.Agents.Values.ToArray());
-                                break;
-                            }
-                        case OrchestrationType.Magnetic:
-                            {
-                                chatOrchestration = new ChatMagenticOrchestration(template, _kernelFactory.GetNewKernel(), _agentRegistry.Agents.Values.ToArray());
-                                break;
-                            }
-                        default:
-                            {
-                                chatOrchestration = new ChatSingleOrchestration(template, _agentRegistry.Agents.Values.ToArray());
-                                break;
-                            }
-                    }
-
-                    _orchestrationRegistry.Orchestrations.TryAdd(template.Name, chatOrchestration);
+                    AddOrchestrationToRegistry(template.Name, chatOrchestration);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Attempts to generate orchestrations have falled due this error: {ex.Message}");
                 }
+            }
+        }
+
+        public ChatOrchestration BuildChatOrchestrationFromTemplate(OrchestrationConfigTemplate orchestrationConfigTemplate)
+        {
+            ChatOrchestration chatOrchestration;
+
+            switch (orchestrationConfigTemplate.Type)
+            {
+                case OrchestrationType.Sequential:
+                    {
+                        chatOrchestration = new ChatSequentialOrchestration(orchestrationConfigTemplate, _agentRegistry.Agents.Values.ToArray());
+                        break;
+                    }
+                case OrchestrationType.Concurrent:
+                    {
+                        chatOrchestration = new ChatConcurrentOrchestration(orchestrationConfigTemplate, _agentRegistry.Agents.Values.ToArray());
+                        break;
+                    }
+                case OrchestrationType.Handoff:
+                    {
+                        chatOrchestration = new ChatHandoffOrchestration(orchestrationConfigTemplate, _agentRegistry.Agents.Values.ToArray());
+                        break;
+                    }
+                case OrchestrationType.Magnetic:
+                    {
+                        chatOrchestration = new ChatMagenticOrchestration(orchestrationConfigTemplate, _kernelFactory.GetNewKernel(), _agentRegistry.Agents.Values.ToArray());
+                        break;
+                    }
+                default:
+                    {
+                        chatOrchestration = new ChatSingleOrchestration(orchestrationConfigTemplate, _agentRegistry.Agents.Values.ToArray());
+                        break;
+                    }
+            }
+
+            return chatOrchestration;
+        }
+
+        public void AddOrchestrationToRegistry(string orchestrationName,  ChatOrchestration chatOrchestration)
+        {
+            _orchestrationRegistry.Orchestrations.TryAdd(orchestrationName, chatOrchestration);
+        }
+
+        public void UpdateOrchestrationInRegistry(string orchestrationName, OrchestrationConfigTemplate orchestrationConfigTemplate)
+        {
+            var isExists = _orchestrationRegistry.Orchestrations.ContainsKey(orchestrationName);
+
+            if (isExists)
+            {
+                _orchestrationRegistry.Orchestrations[orchestrationName] = BuildChatOrchestrationFromTemplate(orchestrationConfigTemplate);
             }
         }
 

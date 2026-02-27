@@ -40,5 +40,10 @@ namespace AgenticGreenthumbApi.Semantic.Orchestrations
 
             return ValueTask.CompletedTask;
         }
+
+        public OrchestrationConfigTemplate GetTemplateConfigFromOrchestrationObj()
+        {
+            return _orchestrationConfig;
+        }
     }
 }

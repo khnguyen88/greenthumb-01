@@ -50,7 +50,7 @@ namespace AgenticGreenthumbApi.Factory
             }
         }
 
-        private async Task BuildAgentAsync(AgentConfigTemplate template)
+        public async Task BuildAgentAsync(AgentConfigTemplate template)
         {
             try
             {

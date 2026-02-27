@@ -54,10 +54,11 @@ builder.Services.AddSingleton<IFactoryProvider<KernelFactory>, KernelFactoryProv
 builder.Services.AddSingleton<IFactoryProvider<AgentFactory>, AgentFactoryProvider>();
 builder.Services.AddSingleton<IFactoryProvider<OrchestrationFactory>, OrchestrationFactoryProvider>();
 builder.Services.AddSingleton<IFactoryProvider<JointEnsembleFactory>, JointEnsembleFactoryProvider>();
+builder.Services.AddSingleton<LocalStorageProvider>();
+builder.Services.AddSingleton<SemanticKernelService>();
 
 
 //Should Only Persist for the lifespan of a single request
-builder.Services.AddScoped<LocalStorageProvider>();
 builder.Services.AddScoped<AgenticMemoryService>();
 builder.Services.AddScoped<KernelFactoryHelper>();
 builder.Services.AddScoped<AdafruitAPIClient>();

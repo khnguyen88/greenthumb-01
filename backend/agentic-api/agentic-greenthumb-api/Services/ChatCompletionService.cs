@@ -68,7 +68,7 @@ namespace AgenticGreenthumbApi.Services
             {
                 await BuildRegistry();
 
-                _jointEnsembleRegistry.JointEnsembles.TryGetValue("MainJointEnsemble", out ChatJointEnsemble jointEnsemble);
+                _jointEnsembleRegistry.JointEnsembles.TryGetValue("AgentJointEnsemble", out ChatJointEnsemble jointEnsemble);
 
                 ChatHistoryAgentThread agentThread = new();
 

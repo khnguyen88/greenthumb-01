@@ -13,41 +13,65 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
     public class AgentCreatorPlugin
     {
         private readonly IConfiguration _config;
-        private readonly IStorageProvider _storageProvider;
+        private readonly SemanticKernelService _semanticKernelService;
 
         public static class AgentCreatorFunctions
         {
             public const string SaveAgentAsync = nameof(SaveAgentAsync);
+            public const string AddAgentToExistingOrchestrationAsync = nameof(AddAgentToExistingOrchestrationAsync);
         }
 
-        public AgentCreatorPlugin(IConfiguration config, LocalStorageProvider localStorageProvider)
+        public AgentCreatorPlugin(IConfiguration config, SemanticKernelService semanticKernelService)
         {
             _config = config;
-            _storageProvider = localStorageProvider;
+            _semanticKernelService = semanticKernelService;
         }
 
         [KernelFunction(AgentCreatorFunctions.SaveAgentAsync)]
-        [Description("Saves the generated agent to a designated storage location. Ensure that the 'Name' property is PascalCase. Ensure that the 'Filename' field is kebab-case and has the '.json' file extension at the end.")]
+        [Description("Saves the generated agent to a designated storage location. Ensure that the 'Name' property is PascalCase and include the word 'Agent' at the end. Ensure that the 'Filename' field is kebab-case and has the '.json' file extension at the end.")]
         public async Task<string> SaveAgentAsync(AgentConfigTemplate agentConfigTemplate)
         {
-            IConfigurationSection templateSection = _config.GetSection("Template");
-
-            var agentTemplateSubdirectories = templateSection
-                .GetSection("Agent")
-                .GetSection("SubDirectories")
-                .Get<string[]>();
-
             agentConfigTemplate.KernelArguments = new KernelArgumentDetails();
+            try
+            {
+                await _semanticKernelService.UpdateAgentRegistry(agentConfigTemplate);
 
-            var jsonString = JsonSerializer.Serialize(agentConfigTemplate);
-            Console.WriteLine(jsonString);
+                await _semanticKernelService.SaveAgentConfigFile(agentConfigTemplate);
 
-            var directoryPath = FileHelper.BuildPathFromProjectDirectory(agentTemplateSubdirectories);
-            var saveFilePath = FileHelper.BuildFilePath(directoryPath, agentConfigTemplate.Filename);
+                return "Agent saved successfully";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return $"Agent failed to save. Due to error: {ex.ToString()}";
+            }
+        }
 
-            await _storageProvider.SaveFileAsync<AgentConfigTemplate>(saveFilePath, agentConfigTemplate);
+        [KernelFunction(AgentCreatorFunctions.AddAgentToExistingOrchestrationAsync)]
+        [Description("Update an existing orchestration and adds a new agent to it. Call this function if user specifies adding to an orchestration and provides a name in PascalCase. If the user does not specify an orchestration name, do not execute function. Ensure that the 'Name' property is PascalCase and include the word 'Agent' at the end. Ensure that the 'Filename' field is kebab-case and has the '.json' file extension at the end. Orchestration name as user specified, but must be in PascalCase.")]
+        public async Task<string> AddAgentToExistingOrchestrationAsync(AgentConfigTemplate agentConfigTemplate, string orchestrationName)
+        {
+            agentConfigTemplate.KernelArguments = new KernelArgumentDetails();
+            try
+            {
+                OrchestrationConfigTemplate? orchestrationConfigTemplate = _semanticKernelService.GetOrchestrationConfigFromRegistry(orchestrationName);
 
-            return "Agent saved successfully";
+                if(orchestrationConfigTemplate is not null)
+                {
+                    await _semanticKernelService.UpdateOrchestrationRegistryAddAgents(agentConfigTemplate, orchestrationConfigTemplate.Name);
+
+                    await _semanticKernelService.SaveOrchestrationConfigFile(orchestrationConfigTemplate);
+
+                    return $"Agent has been successfully added to the {orchestrationName} in the registry and in the config file, successfully";
+                }
+
+                return $"Agent was not successfully added to {orchestrationName}. Either {agentConfigTemplate.Name} or {orchestrationName} does not exist in the registries. Please try again.";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return $"Process to add agent to an existing orchestation has failed, due to error: {ex.ToString()}";
+            }
         }
     }
 }

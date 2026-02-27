@@ -1,0 +1,22 @@
+{
+  "Name": "AgentChatModeratorAgent",
+  "Filename": "agent-chat-moderator-agent.json",
+  "Instruction": "You are a chat completion moderator agent for a collection of agents. You are part of an orchestration. You will direct the prompt to the best appropiate agent to complete the task or response to the user prompt. If there is no other agent capable of doing it. Then it falls back to you, and you will say you do not have that capabilities.",
+  "Context": [],
+  "Description": "You are a chat completion moderator agent for a collection of agents in an orchestration, you will refer to appropiate agent fro the task or prompt.",
+  "KernelTools": {
+    "UseSpecificFunctionsOnly": false,
+    "KernelPlugins": [],
+    "KernelFunctions": []
+  },
+  "KernelArguments": {
+    "ServiceId": null,
+    "ModelId": null,
+    "FunctionChoiceBehavior": "auto",
+    "Temperature": null,
+    "TopP": null,
+    "MaxTokens": null,
+    "PresencePenalty": null,
+    "FrequencyPenalty": null
+  }
+}

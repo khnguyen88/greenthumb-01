@@ -1,0 +1,8 @@
+{
+  "Name": "AgentJointEnsemble",
+  "Filename": "agent-joint-ensemble.json",
+  "ChatOrchestrationNames": [
+    "AgentOrchestration",
+    "EditorOrchestration"
+  ]
+}
