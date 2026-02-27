@@ -58,7 +58,13 @@ namespace AgenticGreenthumbApi.Semantic.Plugins
 
                 if(orchestrationConfigTemplate is not null)
                 {
-                    await _semanticKernelService.UpdateOrchestrationRegistryAddAgents(agentConfigTemplate, orchestrationConfigTemplate.Name);
+                    
+                    bool updateCheck = await _semanticKernelService.UpdateOrchestrationRegistryAddAgents(agentConfigTemplate, orchestrationConfigTemplate.Name);
+
+                    if (!updateCheck) 
+                    {
+                        return "Agent was not successfully added to the Orchestration Registry. Please try again.";
+                    }
 
                     await _semanticKernelService.SaveOrchestrationConfigFile(orchestrationConfigTemplate);
 

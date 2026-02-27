@@ -72,29 +72,43 @@ namespace AgenticGreenthumbApi.Services
             Console.WriteLine("Agent has been saved, successfully!");
         }
 
-        public async Task UpdateOrchestrationRegistryAddAgents(AgentConfigTemplate agentConfig, string orchestrationConfigName)
+        public async Task<bool> UpdateOrchestrationRegistryAddAgents(AgentConfigTemplate agentConfig, string orchestrationConfigName)
         {
             await BuildRegistry();
 
             var agentRegistryUpdateCheck = _agentRegistry.Agents.ContainsKey(agentConfig.Name);
             var orchestrationRegistryExistCheck = _orchestrationRegistry.Orchestrations.TryGetValue(orchestrationConfigName, out ChatOrchestration? chatOrchestration);
 
-
+            Console.WriteLine("Betafish");
             if (agentRegistryUpdateCheck)
             {
-                if (orchestrationRegistryExistCheck || chatOrchestration is not null)
+                Console.WriteLine("Dogfish" + agentRegistryUpdateCheck);
+                if (orchestrationRegistryExistCheck && chatOrchestration is not null)
                 {
+                    Console.WriteLine("Catfish");
                     var orchestrationTemplateConfig = chatOrchestration.GetTemplateConfigFromOrchestrationObj();
 
-                    OrchestrationAgent orchestrationAgent = new()
+                    if (!orchestrationTemplateConfig.OrchestrationAgents.Any(a => a.Name == agentConfig.Name))
                     {
-                        Name = agentConfig.Name,
-                        Speciality = agentConfig.Description,
-                    };
+                        OrchestrationAgent orchestrationAgent = new()
+                        {
+                            Name = agentConfig.Name,
+                            Speciality = agentConfig.Description,
+                        };
 
-                    orchestrationTemplateConfig.OrchestrationAgents.Add(orchestrationAgent);
+                        orchestrationTemplateConfig.OrchestrationAgents.Add(orchestrationAgent);
+                    }
+
+
+
+                    var orchestrationFactory = await _orchestrationFactoryProvider.GetFactoryAsync();
+
+                    chatOrchestration = orchestrationFactory.BuildChatOrchestrationFromTemplate(orchestrationTemplateConfig);
+
+                    return true;
                 }
             }
+            return false;
         }
 
         public OrchestrationConfigTemplate? GetOrchestrationConfigFromRegistry(string orchestrationName)
